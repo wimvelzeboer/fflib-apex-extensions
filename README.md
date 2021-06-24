@@ -12,3 +12,6 @@ This extension pack includes the following features
 - [Primitive domains](./docs/primitive-domains.md)
 - [A common criteria based filter](./docs/criteria-based-filter.md) for Domains and Selector
 
+## Documentation
+
+- [How to adapt](./docs/how-to-adapt.md) when coming from fflib-apex-common 
