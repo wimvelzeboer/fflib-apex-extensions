@@ -1,7 +1,7 @@
 {
   "packageDirectories": [
     {
-      "path": "sfdx-source/force-app",
+      "path": "sfdx-source/apex-extensions",
       "default": true
     }
   ],

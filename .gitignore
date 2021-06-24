@@ -37,9 +37,18 @@ $RECYCLE.BIN/
 # Local environment variables
 .env
 
+# Ignore VSCode config files
+.vscode/
+
 # Ignore Intellij config files
 .idea/
 *.iml
 *.iws
 IlluminatedCloud/
 .project.license
+temp/
+
+# Ignore other fflib packages
+sfdx-source/apex-mocks
+sfdx-source/apex-common
+sfdx-source/apex-extensions-examples
