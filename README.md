@@ -9,7 +9,7 @@ This extension package is dependent on the following packages:
 ## Contents
 This extension pack includes the following features
 
-- [Application Class](.docs/application-factories.md) based on interface structure
+- [Application Class](./docs/application-factories.md) based on interface structure
 - [Primitive domains](./docs/primitive-domains.md)
 - [A common criteria based filter](./docs/criteria-based-filter.md) for Domains and Selector
 
