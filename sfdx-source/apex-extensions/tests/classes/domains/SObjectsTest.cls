@@ -28,9 +28,33 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@IsTest
+@IsTest(IsParallel=true)
 private class SObjectsTest
 {
+	@IsTest
+	static void itShouldAddErrorMessage()
+	{
+		SObjectType accountSObjectType = Schema.Account.SObjectType;
+		final Id idA = fflib_IDGenerator.generate(accountSObjectType);
+		final Id idB = fflib_IDGenerator.generate(accountSObjectType);
+
+		DomainAccounts domain = new DomainAccounts(
+				new List<SObject>
+				{
+						new Account(Id = idA),
+						new Account(Id = idB)
+				}
+		);
+
+		domain.addError('Oops');
+		domain.addError(Schema.Account.Name,'Oops');
+
+		System.assertEquals(
+				4,
+				fflib_SObjects.Errors.getAll().size()
+		);
+	}
+
 	@IsTest
 	static void itShouldClearTheField()
 	{
@@ -43,7 +67,7 @@ private class SObjectsTest
 		System.assert(domain.selectByShippingCountry('Holland').isEmpty(), 'Field should have been nullified');
 	}
 
-    @IsTest
+	@IsTest
 	static void itShouldReturnTheDomainsType()
 	{
 		System.assertEquals(
@@ -59,6 +83,31 @@ private class SObjectsTest
 				'Unexpected Domain SObjectType'
 		);
 	}
+
+	@IsTest
+	static void itShouldReturnRecordByIds()
+	{
+		SObjectType accountSObjectType = Schema.Account.SObjectType;
+		final Id idA = fflib_IDGenerator.generate(accountSObjectType);
+		final Id idB = fflib_IDGenerator.generate(accountSObjectType);
+		final Id idC = fflib_IDGenerator.generate(accountSObjectType);
+
+		DomainAccounts domain = new DomainAccounts(
+				new List<SObject>
+				{
+						new Account(Id = idA),
+						new Account(Id = idB),
+						new Account(Id = idC)
+				}
+		);
+
+		Set<Id> recordIds = new Set<Id> {idA, idB, idC};
+		System.assert(
+				domain.getSObjectById().keySet().containsAll(recordIds),
+				'The domain should return all the record Ids'
+		);
+	}
+
 
 	@IsTest
 	static void itShouldReturnRecordsIds()
@@ -82,6 +131,79 @@ private class SObjectsTest
 				domain.getRecordIds().containsAll(recordIds),
 				'The domain should return all the record Ids'
 		);
+	}
+
+	@IsTest
+	static void itShouldReturnRecords()
+	{
+		DomainAccounts domain = generateDomain();
+
+		System.assert(domain.getRecords().size() == 6);
+	}
+
+	@IsTest
+	static void itShouldReturnRecordByCriteria()
+	{
+		final Id idA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Name = 'A', Id = idA),
+						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
+				});
+
+		System.assertEquals(
+				'A',
+				domain.getRecords(
+						new fflib_Criteria()
+						.equalTo(Schema.Account.Id, idA)
+				)
+						.get(0)
+						.get('Name')
+		);
+	}
+
+	@IsTest
+	static void itShouldReturnRecordById()
+	{
+		final Id idA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Name = 'A', Id = idA),
+						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
+				});
+
+		System.assertEquals('A', domain.getRecord(idA).get('Name'));
+	}
+
+	@IsTest
+	static void itShouldReturnRecordsById()
+	{
+		final Id idA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		final Ids ids = new Ids(new Set<Id> {idA});
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Name = 'A', Id = idA),
+						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
+				});
+
+		System.assertEquals('A', domain.getRecords(ids).get(0).get('Name'));
+	}
+
+	@IsTest
+	static void itShouldReturnRecordsByIds()
+	{
+		final Id idA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Name = 'A', Id = idA),
+						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
+				});
+
+		System.assertEquals('A', domain.getRecords(new Set<Id> {idA}).get(0).get('Name'));
 	}
 
 	@IsTest
@@ -132,7 +254,8 @@ private class SObjectsTest
 		System.assert(
 				domain.getStringFieldValues(Schema.Account.ShippingCountry)
 						.containsAll(
-						new Set<Object>{
+						new Set<Object>
+						{
 								'USA',
 								'Ireland',
 								'UK',
@@ -157,7 +280,7 @@ private class SObjectsTest
 	{
 		DomainAccounts domain = generateDomain();
 		domain.setRatingByShippingCountry(
-				new Map<Object,Object>
+				new Map<Object, Object>
 				{
 						'USA' => 'Hot'
 				}
@@ -166,7 +289,7 @@ private class SObjectsTest
 		System.assert(domain.selectByRating('Hot').size() == 1);
 	}
 
-    private static DomainAccounts generateDomain()
+	private static DomainAccounts generateDomain()
 	{
 		DomainAccounts domain = new DomainAccounts(
 				new List<Account>
@@ -194,7 +317,7 @@ private class SObjectsTest
 		{
 			return (List<Account>) getRecordsByFieldValues(
 					Schema.Account.ShippingCountry,
-					new Set<Object>{ country }
+					new Set<Object> {country}
 			);
 		}
 

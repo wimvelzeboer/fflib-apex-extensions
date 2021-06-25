@@ -320,14 +320,14 @@ public virtual with sharing class fflib_Criteria
 	 */
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Object> values)
 	{
-		return inSet(field, new Objects(values));
+		return inSet(field, new fflib_Objects(new List<Object>(values)));
 	}
 	// Method overrides
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Date> values)
 	{
 		return inSet(field, new Dates(values));
 	}
-	public fflib_Criteria inSet(Schema.SObjectField field, Set<DateTime> values)
+	public fflib_Criteria inSet(Schema.SObjectField field, Set<Datetime> values)
 	{
 		return inSet(field, new DateTimes(values));
 	}
@@ -370,7 +370,7 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      Account.Type IN ('Customer','Competitor','Partner')
 	 */
-	public fflib_Criteria inSet(Schema.SObjectField field, Objects values)
+	public fflib_Criteria inSet(Schema.SObjectField field, fflib_Objects values)
 	{
 		evaluators.add(new FieldSetEvaluator(field, fflib_Operator.INx, values));
 		return this;
@@ -395,7 +395,7 @@ public virtual with sharing class fflib_Criteria
 	{
 		return notInSet(field, new Dates(values));
 	}
-	public fflib_Criteria notInSet(Schema.SObjectField field, Set<DateTime> values)
+	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Datetime> values)
 	{
 		return notInSet(field, new DateTimes(values));
 	}
@@ -425,7 +425,7 @@ public virtual with sharing class fflib_Criteria
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Object> values)
 	{
-		return notInSet(field, new Objects(values));
+		return notInSet(field, new fflib_Objects(new List<Object>(values)));
 	}
 
 	/**
@@ -443,7 +443,7 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      Account.Type NOT IN ('Customer','Competitor','Partner')
 	 */
-	public fflib_Criteria notInSet(Schema.SObjectField field, Objects values)
+	public fflib_Criteria notInSet(Schema.SObjectField field, fflib_Objects values)
 	{
 		evaluators.add(new FieldSetEvaluator(field, fflib_Operator.NOT_IN, values));
 		return this;
@@ -552,7 +552,7 @@ public virtual with sharing class fflib_Criteria
 	 *
 	 * @return Returns the given values converted to literal string separated by a comma
 	 */
-	private static String toLiteral(final Objects values)
+	private static String toLiteral(final fflib_Objects values)
 	{
 		if (values.isEmpty()) return '';
 
@@ -574,10 +574,10 @@ public virtual with sharing class fflib_Criteria
 	private class FieldSetEvaluator implements Evaluator
 	{
 		private Schema.SObjectField sObjectField;
-		private Objects values;
+		private fflib_Objects values;
 		private fflib_Operator operator;
 
-		public FieldSetEvaluator(Schema.SObjectField sObjectField, fflib_Operator operator, Objects values)
+		public FieldSetEvaluator(Schema.SObjectField sObjectField, fflib_Operator operator, fflib_Objects values)
 		{
 			this.sObjectField = sObjectField;
 			this.values = values;

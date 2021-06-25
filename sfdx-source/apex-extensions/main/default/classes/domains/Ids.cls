@@ -46,7 +46,7 @@ public virtual with sharing class Ids
 		super(elements);
 	}
 
-	public Ids(Objects objects)
+	public Ids(fflib_Objects objects)
 	{
 		super(getIdList(objects));
 	}
@@ -61,7 +61,7 @@ public virtual with sharing class Ids
 		return (List<Id>) getObjects();
 	}
 
-	private static List<Id> getIdList(Objects objects)
+	private static List<Id> getIdList(fflib_Objects objects)
 	{
 		List<Id> result = new List<Id>();
 		for (Object obj : objects.getObjects())

@@ -68,6 +68,18 @@ public virtual class SObjects
 	}
 
 	/**
+	 * @param id Domain containing primary key (Id field) values
+	 *
+	 * @return Returns only the SObjects from the domain matching the given Ids.
+	 */
+	public virtual SObject getRecord(Id id)
+	{
+		List<SObject> result = getRecords(new Set<Id> {id});
+
+		return (result.size() == 0) ? null : result.get(0);
+	}
+
+	/**
 	 * @return Returns the contents of the Domain by their primary Key ('Id' field)
 	 */
 	public virtual Map<Id, SObject> getSObjectById()
@@ -83,7 +95,6 @@ public virtual class SObjects
 	public virtual List<SObject> getRecords(Ids ids)
 	{
 		return getRecords(ids.getIds());
-
 	}
 
 	/**
