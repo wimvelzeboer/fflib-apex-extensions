@@ -23,13 +23,13 @@ The criteria class is the place where all the filter conditions are stored for a
 ```apex
 public with sharing class AccountCriteria extends fflib_Criteria
 {
-    public AccountCriteria ShippingCountryEquals(String countryName)
+    public AccountCriteria shippingCountryEquals(String countryName)
     { 
         equalTo(Schema.Account.ShippingCountry, countryName);
         return this;                
     }
     
-    public AccountCriteria NumberOfEmployeesGreaterThan(Integer numberOfEmployees)
+    public AccountCriteria numberOfEmployeesGreaterThan(Integer numberOfEmployees)
     {
         greaterThan(Schema.Account.NumberOfEmployees, numberOfEmployees);
         return this;
@@ -50,7 +50,7 @@ public with sharing class Accounts
     {
         return new Accounts(
                 getRecords(
-                        new AccountCriteria().ShippingCountryEquals(countryName)
+                        new AccountCriteria().shippingCountryEquals(countryName)
                 )
         );
     }
@@ -59,7 +59,7 @@ public with sharing class Accounts
     {
         return new Accounts(
                 getRecords(
-                       new AccountCriteria().NumberOfEmployeesGreaterThan(numberOfEmployees)
+                       new AccountCriteria().numberOfEmployeesGreaterThan(numberOfEmployees)
                 )
         );
     }
@@ -69,8 +69,8 @@ public with sharing class Accounts
         return new Accounts(
                 getRecords(
                        new AccountCriteria()
-                               .ShippingCountryEquals(countryName)
-                               .NumberOfEmployeesGreaterThan(numberOfEmployees)
+                               .shippingCountryEquals(countryName)
+                               .numberOfEmployeesGreaterThan(numberOfEmployees)
                 )
         );
     }
@@ -97,6 +97,8 @@ public with sharing class AccountsSelector
                                 new AccountCriteria()
                                         .ShippingCountryEquals(country)
                                         .NumberOfEmployeesGreaterThan(minimalNumberOfEmployees)
+                                        .toSOQL()
+                        )
         );
     }
     ...
