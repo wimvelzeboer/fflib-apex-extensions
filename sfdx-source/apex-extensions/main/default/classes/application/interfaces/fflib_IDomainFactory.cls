@@ -42,6 +42,8 @@ public interface fflib_IDomainFactory
 	 **/
 	fflib_IDomain newInstance(Set<Id> recordIds);
 
+	fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType objectType);
+
 	/**
 	 * Dynamically constructs an instance of the Domain class for the given records
 	 *   Will return a Mock implementation if one has been provided via setMock

@@ -82,6 +82,14 @@ public interface fflib_ISelectorFactory
 	List<SObject> selectByRelationship(List<SObject> relatedRecords, SObjectField relationshipField);
 
 	/**
+	 * Creates or replaces an existing binding for another
+	 *
+	 * @param sObjectType The SObjectType of the selector to replace
+	 * @param replacementImplType The implementation type of the replacement
+	 */
+	void replaceWith(Schema.SObjectType sObjectType, Type replacementImplType);
+
+	/**
 	 * @param selectorInstance The instance of the mocked selector
 	 */
 	void setMock(fflib_ISObjectSelector selectorInstance);
