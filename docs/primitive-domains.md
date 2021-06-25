@@ -19,4 +19,14 @@ One other benefit is that you can encapsulate more logic as Lists. You can see t
 Take a look at the SObjects primitive domain, it is the new source for extending domain classes.
 
 
+### Available Primitive Domains
 
+- Dates
+- DateTimes
+- Decimals
+- Doubles
+- Ids
+- Integers
+- Longs
+- [SObjects](domains/sobject.md)
+- Strings

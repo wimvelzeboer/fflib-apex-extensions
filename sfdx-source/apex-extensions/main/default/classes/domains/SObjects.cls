@@ -68,12 +68,66 @@ public virtual class SObjects
 	}
 
 	/**
+	 * @return Returns the contents of the Domain by their primary Key ('Id' field)
+	 */
+	public virtual Map<Id, SObject> getSObjectById()
+	{
+		return new Map<Id, SObject>(getRecords());
+	}
+
+	/**
+	 * @param ids Domain containing primary key (Id field) values
+	 *
+	 * @return Returns only the SObjects from the domain matching the given Ids.
+	 */
+	public virtual List<SObject> getRecords(Ids ids)
+	{
+		return getRecords(ids.getIds());
+
+	}
+
+	/**
+	 * @param ids A Set containing primary key (Id field) values
+	 *
+	 * @return Returns only the SObjects from the domain matching the given Ids.
+	 */
+	public virtual List<SObject> getRecords(Set<Id> ids)
+	{
+		Map<Id, SObject> sObjectsByIds = getSObjectById();
+		List<SObject> result = new List<SObject>();
+		for (Id id : ids)
+		{
+			if (sObjectsByIds.containsKey(id) == false) continue;
+
+			result.add(sObjectsByIds.get(id));
+		}
+		return result;
+	}
+
+	/**
+	 * @param criteria The condition the returned record must meet
+	 *
+	 * @return Return the SObject records contained in the domain matching the criteria
+	 */
+	public virtual List<SObject> getRecords(fflib_Criteria criteria)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (!criteria.evaluate(record)) continue;
+
+			result.add(record);
+		}
+		return result;
+	}
+
+	/**
 	 * Adds an error message to the records in the domain
 	 *
 	 * @param message The error message to add to each record
 	 */
 	@TestVisible
-	protected void addError(String message)
+	protected virtual void addError(String message)
 	{
 		for (SObject record : getRecords())
 		{
@@ -88,7 +142,7 @@ public virtual class SObjects
 	 * @param message The error message to add to the given field on each record
 	 */
 	@TestVisible
-	protected void addError(Schema.SObjectField sObjectField, String message)
+	protected virtual void addError(Schema.SObjectField sObjectField, String message)
 	{
 		for (SObject record : getRecords())
 		{
@@ -101,7 +155,7 @@ public virtual class SObjects
 	 * @param sObjectField The field to nullify
 	 */
 	@TestVisible
-	protected void clearField(Schema.SObjectField sObjectField)
+	protected virtual void clearField(Schema.SObjectField sObjectField)
 	{
 		clearFields(new Set<Schema.SObjectField>{ sObjectField });
 	}
@@ -111,7 +165,7 @@ public virtual class SObjects
 	 * @param sObjectFields The fields to nullify
 	 */
 	@TestVisible
-	protected void clearFields(Set<Schema.SObjectField> sObjectFields)
+	protected virtual void clearFields(Set<Schema.SObjectField> sObjectFields)
 	{
 		for (SObject record : getRecords())
 		{
@@ -338,24 +392,6 @@ public virtual class SObjects
 	{
 		return new SObjects(getRecords(criteria))
 				.getLongFieldValues(sObjectField);
-	}
-
-	/**
-	 * @param criteria The condition the returned record must meet
-	 *
-	 * @return Return the SObject records contained in the domain
-	 */
-	@TestVisible
-	public virtual List<SObject> getRecords(fflib_Criteria criteria)
-	{
-		List<SObject> result = new List<SObject>();
-		for (SObject record : getRecords())
-		{
-			if (!criteria.evaluate(record)) continue;
-
-			result.add(record);
-		}
-		return result;
 	}
 
 	/**
