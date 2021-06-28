@@ -12,6 +12,7 @@ This extension pack includes the following features
 - [Application Class](./docs/application-factories.md) based on interface structure
 - [Primitive domains](./docs/primitive-domains.md)
 - [A common criteria based filter](./docs/criteria-based-filter.md) for Domains and Selector
+- [Misc Utils](./docs/utils.md)
 
 ## Documentation
 
