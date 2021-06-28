@@ -24,7 +24,7 @@ jobs:
       - run: sfdx shane:github:src:install -c -g apex-enterprise-patterns -r fflib-apex-mocks -p sfdx-source/apex-mocks
       - run: sfdx shane:github:src:install -c -g apex-enterprise-patterns -r fflib-apex-common -p sfdx-source/apex-common
       - run: sfdx force:source:push
-      - run: sfdx force:apex:test:run -w 5
+      - run: sfdx force:apex:test:run --codecoverage --resultformat human --wait 5
       - name: Destroy scratch org
         run: sfdx force:org:delete -p
         if: always()
