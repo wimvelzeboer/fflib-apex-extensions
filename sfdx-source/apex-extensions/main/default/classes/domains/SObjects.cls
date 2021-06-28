@@ -312,7 +312,126 @@ public virtual class SObjects
 	}
 
 	/**
+	 * Get a map with the values of two fields.
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The field to use as the Value of the Map
+	 * @param keyField The field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Accounts accounts = Accounts.newInstance(records);
+	 * Map<Object, Object> accountNameById = accounts.getFieldByField(Account.Name, Account.Id);
+	 */
+	protected virtual Map<Object, Object> getFieldByField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Object, Object> result = new Map<Object, Object>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(keyField) == null) continue;
+
+			result.put(
+					record.get(keyField),
+					record.get(valueField)
+			);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the values of two fields
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The field to use as the Value of the Map
+	 * @param keyField The field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Contacts contacts = Contacts.newInstance(records);
+	 * Map<Object, Set<Object>> contactIdByAccountId = contacts.getFieldsByField(Contact.Id, Contact.AccountId);
+	 */
+	protected virtual Map<Object, Set<Object>> getFieldsByField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Object, Set<Object>> result = new Map<Object, Set<Object>>();
+		for (SObject record : getRecords())
+		{
+			Object keyFieldValue = record.get(keyField);
+			if (keyFieldValue == null) continue;
+
+			if (!result.containsKey(keyFieldValue))
+			{
+				result.put(keyFieldValue, new Set<Object>());
+			}
+			result.get(keyFieldValue).add(record.get(valueField));
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the values of two Id fields
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Id field to use as the Value of the Map
+	 * @param keyField The Id field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Contacts contacts = Contacts.newInstance(records);
+	 * Map<Id, Id> accountIdByContactId = contacts.getIdFieldByIdField(Contact.AccountId, Contact.Id);
+	 */
+	protected virtual Map<Id, Id> getIdFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, Id> result = new Map<Id, Id>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(keyField) == null) continue;
+
+			result.put(
+					(Id) record.get(keyField),
+					(Id) record.get(valueField)
+			);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the values of two Id fields with a one to many relation
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Id field to use as the Value of the Map
+	 * @param keyField The Id field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Contacts contacts = Contacts.newInstance(records);
+	 * Map<Id, Set<Id>> contactIdByAccountId = contacts.getIdFieldsByIdField(Contact.Id, Contact.AccountId);
+	 */
+	protected virtual Map<Id, Set<Id>> getIdFieldsByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, Set<Id>> result = new Map<Id, Set<Id>>();
+		for (SObject record : getRecords())
+		{
+			Id keyFieldId = (Id) record.get(keyField);
+			if (keyFieldId == null) continue;
+
+			if (!result.containsKey(keyFieldId))
+			{
+				result.put(keyFieldId, new Set<Id>());
+			}
+			result.get(keyFieldId).add((Id) record.get(valueField));
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the values from the given Id field
+	 *
 	 * @param sObjectField The Schema.SObjectField to get their Id values
+	 * Fields containing null values are omitted
 	 *
 	 * @return The Id values of the given sObjectField, null values are omitted
 	 */
@@ -324,6 +443,7 @@ public virtual class SObjects
 		{
 			Object fieldValue = record.get(sObjectField);
 			if (fieldValue == null) continue;
+
 			result.add(Id.valueOf(String.valueOf(fieldValue)));
 		}
 		return new Ids(result);
@@ -356,6 +476,7 @@ public virtual class SObjects
 		{
 			Object fieldValue = record.get(sObjectField);
 			if (fieldValue == null) continue;
+
 			result.add(Integer.valueOf(fieldValue));
 		}
 		return new Integers(result);
@@ -406,6 +527,163 @@ public virtual class SObjects
 	}
 
 	/**
+	 * Get a map with the record mapped to the given Id field value
+	 * Key fields containing null values are omitted
+	 *
+	 * @param sObjectField The field to use as key for the map
+	 *
+	 * @return Returns a map with the record mapped to the given Id field value
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, SObject> accountById = account.getSObjectByIdField(Account.Id);
+	 */
+	protected virtual Map<Id, SObject> getSObjectByIdField(Schema.SObjectField sObjectField)
+	{
+		Map<Id, SObject> result = new Map<Id, SObject>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(sObjectField) == null) continue;
+
+			result.put((Id) record.get(sObjectField), record);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the records mapped to the given Id field value
+	 * Key fields containing null values are omitted
+	 *
+	 * @param sObjectField The field to use as key for the map
+	 *
+	 * @return Returns a map with the records mapped to the given Id field value
+	 *
+	 * @example
+	 * Contacts contacts = Contacts.newInstance(records);
+	 * Map<Id, List<SObject>> contactsByAccountId = contacts.getSObjectsByIdField(Contact.AccountId);
+	 */
+	protected virtual Map<Id, List<SObject>> getSObjectsByIdField(Schema.SObjectField sObjectField)
+	{
+		Map<Id, List<SObject>> result = new Map<Id, List<SObject>>();
+		for (SObject record : getRecords())
+		{
+			Id fieldId = (Id) record.get(sObjectField);
+			if (record.get(fieldId) == null) continue;
+
+			if (!result.containsKey(fieldId))
+			{
+				result.put(fieldId, new List<SObject>());
+			}
+			result.get(fieldId).add(record);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the record mapped to the given String field value
+	 * Key fields containing null values are omitted
+	 *
+	 * @param sObjectField The field to use as key for the map
+	 *
+	 * @return Returns a map with the record mapped to the given String field value
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<String, SObject> accountByNumber = account.getSObjectByStringField(Account.AccountNumber);
+	 */
+	protected virtual Map<String, SObject> getSObjectByStringField(Schema.SObjectField sObjectField)
+	{
+		Map<String, SObject> result = new Map<String, SObject>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(sObjectField) == null) continue;
+
+			String fieldValue = (String) record.get(sObjectField);
+			result.put(fieldValue, record);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the records mapped to the given String field value
+	 * Key fields containing null values are omitted
+	 *
+	 * @param sObjectField The field to use as key for the map
+	 *
+	 * @return Returns a map with the records mapped to the given String field value
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<String, SObject> accountByName = account.getSObjectsByStringField(Account.AccountName);
+	 */
+	protected virtual Map<String, List<SObject>> getSObjectsByStringField(Schema.SObjectField sObjectField)
+	{
+		Map<String, List<SObject>> result = new Map<String, List<SObject>>();
+		for (SObject record : getRecords())
+		{
+			String fieldValue = (String) record.get(sObjectField);
+			if (fieldValue == null) continue;
+
+			if (!result.containsKey(fieldValue))
+			{
+				result.put(fieldValue, new List<SObject>());
+			}
+			result.get(fieldValue).add(record);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the given String field value mapped to the given Id field
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The String field to use as value for the map
+	 * @param keyField The Id field to use as key for the map
+	 *
+	 * @return a map with the given String field value mapped to the given Id field
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, String> accountNameById = account.getStringFieldByIdField(Account.AccountName, Account.Id);
+	 */
+	protected virtual Map<Id, String> getStringFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, String> result = new Map<Id, String>();
+		Map<Object, Object> fieldByField = getFieldByField(keyField, valueField);
+		for (Object obj : fieldByField.keySet())
+		{
+			result.put((Id) obj, (String) fieldByField.get(obj));
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the records mapped to the given String field value
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The field to use as value for the map
+	 * @param keyField The field to use as key for the map
+	 *
+	 * @return Returns a map with the record mapped to the given Id field value
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, String> accountNameById = account.getStringFieldByStringField(Account.AccountName, Account.Id);
+	 */
+	protected virtual Map<String, String> getStringFieldByStringField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<String, String> result = new Map<String, String>();
+		Map<Object, Object> fieldByField = getFieldByField(keyField, valueField);
+		for (Object obj : fieldByField.keySet())
+		{
+			result.put((String) obj, (String) fieldByField.get(obj));
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the values for the provided String field
+	 *
 	 * @param sObjectField The Schema.SObjectField to get their values
 	 *
 	 * @return The String values of the given sObjectField
@@ -435,6 +713,8 @@ public virtual class SObjects
 	}
 
 	/**
+	 * Sets the given value to the given field only when the criteria is met for the record
+	 *
 	 * @param sObjectField The Schema.SObjectField to change its value
 	 * @param value The new value for the given sObjectField
 	 * @param criteria The criteria condition that must be met to include the value in the return
