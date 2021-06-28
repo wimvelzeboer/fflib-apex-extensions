@@ -16,3 +16,11 @@ This extension pack includes the following features
 ## Documentation
 
 - [How to adapt](./docs/how-to-adapt.md) when coming from fflib-apex-common 
+
+## Donations
+
+We are pleased to announce that the fflib-apex-extensions Project is accepting donations in the privacy-oriented cryptocurrency Monero (XMR) at the following address:
+
+> 8BMsQrdLiBvKaP87GFMPE9Wa1US79ygcp3b9kwoDq1iBW9JEYbcgpDS3hMp2p7ePWiCEKg2fdTucUbpNTtGbnvCCQZTMSu1
+
+Thank you for your donations!
