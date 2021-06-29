@@ -150,7 +150,7 @@ public virtual class fflib_ClassicDomainFactory
 	 *                    avoids the need to stub the mock to return its ObjectType
 	 * @param mockDomain The instance of the Domain mock
 	 */
-	public virtual void setMock(Type domainType, fflib_IDomain mockDomain)
+	public virtual void setMock(Object domainType, fflib_IDomain mockDomain)
 	{
 		mockDomainByObject.put(domainType, mockDomain);
 	}
