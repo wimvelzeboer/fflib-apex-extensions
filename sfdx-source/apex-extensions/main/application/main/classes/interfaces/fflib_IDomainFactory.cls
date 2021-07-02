@@ -42,7 +42,7 @@ public interface fflib_IDomainFactory
 	 **/
 	fflib_IDomain newInstance(Set<Id> recordIds);
 
-	fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType objectType);
+	fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType);
 
 	/**
 	 * Dynamically constructs an instance of the Domain class for the given records
@@ -95,5 +95,5 @@ public interface fflib_IDomainFactory
 	 *                    avoids the need to stub the mock to return its ObjectType
 	 * @param mockDomain The instance of the Domain mock
 	 */
-	void setMock(Type domainType, fflib_IDomain mockDomain);
+	void setMock(Object domainType, fflib_IDomain mockDomain);
 }
