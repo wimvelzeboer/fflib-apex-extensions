@@ -6,17 +6,16 @@ This extension package is dependent on the following packages:
 - [fflib-apex-mocks](https://github.com/apex-enterprise-patterns/fflib-apex-mocks)
 - [fflib-apex-common](https://github.com/apex-enterprise-patterns/fflib-apex-common)
 
-## Contents
-This extension pack includes the following features
+## Wiki
+A full overview of the features in this extension pack and how to use them 
+can be found in [the Wiki pages of this repository](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki)
 
-- [Application Class](./docs/application-factories.md) based on interface structure
-- [Primitive domains](./docs/primitive-domains.md)
-- [A common criteria based filter](./docs/criteria-based-filter.md) for Domains and Selector
-- [Misc Utils](./docs/utils.md)
-
-## Documentation
+## Migrating from apex-commons
 
 - [How to adapt](./docs/how-to-adapt.md) when coming from fflib-apex-common 
+
+## Contributing
+Anyone is welcome to fork this repository and propose changes via pull-requests.
 
 ## Donations
 
