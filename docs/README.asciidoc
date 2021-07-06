@@ -1,10 +1,53 @@
 = Method Reference
 
 == Core classes
-
-
+- fflib_ArrayUtils
+- fflib_Comparator
+- link:fflib_Criteria.asciidoc[fflib_Criteria]
+- fflib_Operator
+- fflib_OperatorUtils
 
 == Features
 
 === Application
-- link:fflib_AppBinding.asciidoc[fflib_AppBinding]
+* *Interfaces*
+  - fflib_IDomainFactory
+  - fflib_ISelectorFactory
+  - fflib_IServiceFactory
+  - fflib_IUnitOfWorkFactory
+* *Classic*
+  - fflib_ClassicDomainFactory
+  - fflib_ClassicSelectorFactory
+  - fflib_ClassicServiceFactory
+  - fflib_ClassicTriggerHandlerFactory
+  - fflib_ClassicUnitOfWorkFactory
+* *Dynamic*
+** *Interfaces*
+*** fflib_IAppBinding
+*** fflib_IAppBindingModule
+*** fflib_IAppBindingResolver
+*** fflib_IAppBindingRouter
+*** fflib_IAppBindings.cls
+** link:fflib_AppBinding.asciidoc[fflib_AppBinding]
+** fflib_AppBindingMetaDataModule
+** fflib_AppBindingModule
+** fflib_AppBindingResolver
+** fflib_AppBindings
+** fflib_AppBindingsSelector
+** fflib_AppBindingType
+** fflib_DynamicAppFactory
+** fflib_DynamicDomainFactory
+** fflib_DynamicSelectorFactory
+** fflib_DynamicServiceFactory
+** fflib_SharingMode
+
+=== Primitive Domains
+- Dates
+- DateTimes
+- Decimals
+- Doubles
+- Ids
+- Integers
+- Longs
+- SObjects
+- Strings

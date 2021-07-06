@@ -15,9 +15,8 @@ A hands-on training session is also available to learn how to translate a user-s
 
 ## Method Reference
 When you rather prefer the bare overview of classes, methods and their examples,
-instead of the nicely readable Wiki, 
 then you can find a full overview of the methods, their signatures and description in the
-[ApexDocs](./docs). 
+[ApexDocs](./docs/README.asciidoc). 
 
 
 ## Migrating from apex-commons
@@ -25,7 +24,9 @@ then you can find a full overview of the methods, their signatures and descripti
 - [How to adapt](./docs/how-to-adapt.md) when coming from fflib-apex-common 
 
 ## Contributing
-Anyone is welcome to fork this repository and propose changes via pull-requests.
+Anyone is welcome to fork this repository and propose changes or complete new features via raising a pull-requests. 
+
+You can also have a look at the open items in the [project(s)](./projects), feel free to pick an item from the kanban board!
 
 ## Donations
 

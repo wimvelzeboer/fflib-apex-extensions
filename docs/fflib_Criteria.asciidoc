@@ -1,0 +1,432 @@
+= fflib_Criteria Class
+:Author:    Wilhelmus G.J. Velzeboer
+:Email:     wim@velzeboer.nl
+:Date:      2021
+:Revision:  version 1
+
+A evaluator based on criteria
+
+== Methods
+
+- <<orCriteria, orCriteria()>> +
+Changes the default comparator for each criteria to OR
+- <<andCriteria, andCriteria()>> +
+Changes the default comparator for each criteria to AND
+- <<addOrCriteria, addOrCriteria(fflib_Criteria subCriteria)>> +
+Adds a sub criteria with OR comparator
+- <<addAndCriteria, addAndCriteria(fflib_Criteria subCriteria)>> +
+Adds a sub criteria with AND comparator
+- <<equalTo, equalTo(Schema.SObjectField field, Object value)>> +
+Add an equal to criteria comparing a fields value to a given value
+- <<evaluate, evaluate(Object record)>> +
+Evaluates the stored criteria based on the given SObject
+- <<greaterOrEqualTo, greaterOrEqualTo(Schema.SObjectField field, Object value)>> +
+Compares the fields values to be greater or equal to the given value
+- <<greaterThan, greaterThan(Schema.SObjectField field, Object value)>> +
+Compares the fields values to be greater or equal to the given value
+- <<inSet, inSet(Schema.SObjectField field, Set<Object> values)>> +
+Checks if the given sets contains the fields values
+- <<lessOrEqualTo, lessOrEqualTo(Schema.SObjectField field, Object value)>> +
+Compares the fields values to be less or equal to the given value
+- <<lessThan, lessThan(Schema.SObjectField field, Object value)>> +
+Compares the fields values to be greater or equal to the given value
+- <<notEqualTo, notEqualTo(Schema.SObjectField field, Object value)>> +
+Add an equal to criteria comparing a fields value to a given value
+- <<notInSet, notInSet(Schema.SObjectField field, Set<Date> values)>> +
+Checks if the given sets does not contain the fields values
+- <<toSQL, toSOQL()>> +
+Generates the SOQL equivalent of the criteria provided
+
+
+
+[[orCriteria]]
+=== orCriteria()
+Changes the default comparator for each criteria to OR
+
+==== _Signature_
+```java
+public virtual fflib_Criteria orCriteria()
+```
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .orCriteria()
+        .equalTo(Account.Name, 'Example')
+        .equalTo(Account.AccountNumber, '1234567')
+
+// Evaluates:
+// Name = 'Example' OR AccountNumber = '1234567'
+```
+
+___
+
+
+
+
+[[andCriteria]]
+=== andCriteria()
+Changes the default comparator for each criteria to AND. +
+By default the comparator is set to AND, so this method should only be used in custom implementations extended from fflib_Criteria.
+
+==== _Signature_
+```java
+public virtual fflib_Criteria andCriteria()
+```
+==== _Example_
+```java
+new fflib_Criteria()
+        .andCriteria()
+        .equalTo(Account.Name, 'Example')
+        .equalTo(Account.AccountNumber, '1234567')
+
+// Evaluates:
+// Name = 'Example' AND AccountNumber = '1234567'
+```
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+
+
+
+[[addOrCriteria]]
+=== addOrCriteria(fflib_Criteria subCriteria)
+Adds a sub criteria with OR comparator
+
+==== _Signature_
+```java
+public virtual fflib_Criteria addOrCriteria(fflib_Criteria subCriteria)
+```
+==== _Parameters_
+
+_subCriteria_ +
+The condition of the sub criteria
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .equalTo(Account.Name, 'Example')
+        .addOrCriteria(
+                new fflib_Criteria()
+                        .equalTo(Account.AccountNumber, '0001')
+                        .equalTo(Account.AccountNumber, '0002'))
+// Evaluates:
+// Account.Name = 'Example' AND (Account.AccountNumber = '0001' OR Account.AccountNumber = '0002')
+```
+___
+
+[[addAndCriteria]]
+=== addAndCriteria(fflib_Criteria subCriteria)
+Adds a sub criteria with AND comparator
+
+==== _Signature_
+```java
+public virtual fflib_Criteria addAndCriteria(fflib_Criteria subCriteria)
+```
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .orCriteria()
+        .equalTo(Account.Name, 'Example')
+        .addAndCriteria(
+                new fflib_Criteria()
+                        .equalTo(Account.AccountNumber, '0001')
+                        .equalTo(Account.ShippingCountry, 'USA'))
+// Evaluates:
+// Name = 'Example' OR (AccountNumber = '0001' AND ShippingCountry = 'USA')
+```
+
+___
+
+[[equalTo]]
+=== equalTo(Schema.SObjectField field, Object value)
+Add an equal to criteria comparing a fields value to a given value
+
+==== _Signature_
+```java
+public virtual fflib_Criteria equalTo(Schema.SObjectField field, Object value)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to evaluate
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .equalTo(Account.Name, 'Example')
+
+// Evaluates:
+// Name = 'Example'
+```
+___
+[[evaluate]]
+=== evaluate(Object record)
+Evaluates the stored criteria based on the given SObject
+
+==== _Signature_
+```java
+public virtual Boolean evaluate(Object record)
+```
+==== _Parameters_
+
+_**record**_ +
+The SObject to evaluate
+
+==== _Returns_
+The Boolean result of the evaluated criteria
+
+==== _Example_
+```java
+Account record = new Account( Name = 'Example );
+System.assert(
+    new fflib_Criteria()
+            .equalTo(Account.Name, 'Example')
+            .evaluate(record)
+);
+```
+
+___
+[[greaterOrEqualTo]]
+=== greaterOrEqualTo(Schema.SObjectField field, Object value)
+Compares the fields values to be greater or equal to the given value.
+Evaluates to false if the field value is null.
+
+==== _Signature_
+```java
+public virtual fflib_Criteria greaterOrEqualTo(Schema.SObjectField field, Object value)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .greaterOrEqualTo(Account.AnnualRevenue, 54321)
+
+// Evaluates:
+// AnnualRevenue >= 54321
+```
+
+___
+[[greaterThan]]
+=== greaterThan(Schema.SObjectField field, Object value)
+Compares the fields values to be greater or equal to the given value
+Evaluates to false if the field value is null
+
+==== _Signature_
+```java
+public virtual fflib_Criteria greaterThan(Schema.SObjectField field, Object value)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .greaterThan(Account.AnnualRevenue, 54321)
+
+// Evaluates:
+// AnnualRevenue > 54321
+```
+
+___
+
+[[inSet]]
+=== inSet(Schema.SObjectField field, Set<Object> values)
+Checks if the given sets contains the fields values
+
+==== _Signature_
+```java
+public virtual fflib_Criteria inSet(Schema.SObjectField field, Set<Object> values)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to use its value
+
+_**values**_ +
+The values to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .inSet(Account.Type, new Set<Object>{'Customer', 'Competitor', 'Partner'})
+
+// Evaluates:
+// Account.Type IN ('Customer','Competitor','Partner')
+```
+
+___
+[[lessOrEqualTo]]
+=== lessOrEqualTo(Schema.SObjectField field, Object value)
+Compares the fields values to be less or equal to the given value
+Evaluates to true if the field value is null
+
+==== _Signature_
+```java
+public virtual fflib_Criteria lessOrEqualTo(Schema.SObjectField field, Object value)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .lessOrEqualTo(Account.AnnualRevenue, 54321)
+
+// Evaluates:
+// AnnualRevenue > 54321
+```
+
+___
+
+[[lessThan]]
+=== lessThan(Schema.SObjectField field, Object value)
+Compares the fields values to be less or equal to the given value
+Evaluates to true if the field value is null
+
+==== _Signature_
+```java
+public virtual fflib_Criteria lessThan(Schema.SObjectField field, Object value)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .lessThan(Account.AnnualRevenue, 54321)
+
+// Evaluates:
+// AnnualRevenue < 54321
+```
+
+___
+
+[[notEqualTo]]
+=== notEqualTo(Schema.SObjectField field, Object value)
+Add a not equal to criteria comparing a fields value to a given value
+
+==== _Signature_
+```java
+public virtual fflib_Criteria notEqualTo(Schema.SObjectField field, Object value)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to evaluate
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .notEqualTo(Account.Name, 'Example')
+
+// Evaluates:
+// Name != 'Example'
+```
+___
+
+[[notInSet]]
+=== notInSet(Schema.SObjectField field, Set<Object> values)
+Checks if the given sets does not contain the fields values
+
+==== _Signature_
+```java
+public fflib_Criteria notInSet(Schema.SObjectField field, Set<Object> values)
+```
+==== _Parameters_
+
+_**field**_ +
+The Schema.sObjectField to use its value
+
+_**values**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+new fflib_Criteria()
+        .notInSet(Account.Type, new Set<Object>{'Customer', 'Competitor', 'Partner'})
+
+// Evaluates:
+// Account.Type NOT IN ('Customer','Competitor','Partner')
+```
+
+___
+
+[[toSQL]]
+=== toSOQL()
+Generates the SOQL equivalent of the criteria provided
+
+==== _Signature_
+```java
+public virtual String toSOQL()
+```
+
+==== _Returns_
+The "where" part in the SOQL statement
+
+___

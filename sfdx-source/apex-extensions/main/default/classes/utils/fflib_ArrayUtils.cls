@@ -1,5 +1,5 @@
 /**
- * File Name: Array
+ * File Name: fflib_ArrayUtils
  * @description
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,10 +28,10 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class ArrayUtils
+public class fflib_ArrayUtils
 {
 	/* private constructor to prevent instantiation */
-	private ArrayUtils() {}
+	private fflib_ArrayUtils() {}
 
 	/**
 	 * Creates a clone from the provided list and returns the sorted list

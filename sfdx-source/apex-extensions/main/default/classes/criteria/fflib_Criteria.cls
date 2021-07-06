@@ -64,7 +64,7 @@ public virtual with sharing class fflib_Criteria
 	 *  Evaluates:
 	 *      Name = 'Example' OR AccountNumber = '1234567'
 	 */
-	public fflib_Criteria orCriteria()
+	public virtual fflib_Criteria orCriteria()
 	{
 		this.type = 'OR';
 		return this;
@@ -75,10 +75,10 @@ public virtual with sharing class fflib_Criteria
 	 * By default the comparator is set to AND,
 	 * so this method should only be used in custom implementations extended from fflib_Criteria
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
-	 *  new MyCustomCriteria()
+	 *  new fflib_Criteria()
 	 *          .andCriteria()
 	 *          .equalTo(Account.Name, 'Example')
 	 *  		.equalTo(Account.AccountNumber, '1234567')
@@ -86,7 +86,7 @@ public virtual with sharing class fflib_Criteria
 	 *  Evaluates:
 	 *      Name = 'Example' AND AccountNumber = '1234567'
 	 */
-	public fflib_Criteria andCriteria()
+	public virtual fflib_Criteria andCriteria()
 	{
 		this.type = 'AND';
 		return this;
@@ -97,7 +97,7 @@ public virtual with sharing class fflib_Criteria
 	 *
 	 * @param subCriteria The condition of the sub criteria
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 * new fflib_Criteria()
@@ -110,7 +110,7 @@ public virtual with sharing class fflib_Criteria
 	 *  Evaluates:
 	 *      Account.Name = 'Example' AND (Account.AccountNumber = '0001' OR Account.AccountNumber = '0002')
 	 */
-	public fflib_Criteria addOrCriteria(fflib_Criteria subCriteria)
+	public virtual fflib_Criteria addOrCriteria(fflib_Criteria subCriteria)
 	{
 		subCriteria.orCriteria();
 		subCriteria.setEmbraced(true);
@@ -123,7 +123,7 @@ public virtual with sharing class fflib_Criteria
 	 *
 	 * @param subCriteria The condition of the sub criteria
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 * new fflib_Criteria()
@@ -137,7 +137,7 @@ public virtual with sharing class fflib_Criteria
 	 *  Evaluates:
 	 *      Name = 'Example' OR (AccountNumber = '0001' AND ShippingCountry = 'USA')
 	 */
-	public fflib_Criteria addAndCriteria(fflib_Criteria subCriteria)
+	public virtual fflib_Criteria addAndCriteria(fflib_Criteria subCriteria)
 	{
 		subCriteria.andCriteria();
 		subCriteria.setEmbraced(true);
@@ -146,12 +146,12 @@ public virtual with sharing class fflib_Criteria
 	}
 
 	/**
-	 * add an equal to criteria comparing a fields value to a given value
+	 * Add an equal to criteria comparing a fields value to a given value
 	 *
 	 * @param field The sObjectField to evaluate
 	 * @param value The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -160,19 +160,19 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      Name = 'Example'
 	 */
-	public fflib_Criteria equalTo(Schema.SObjectField field, Object value)
+	public virtual fflib_Criteria equalTo(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.EQUALS, value));
 		return this;
 	}
 
 	/**
-	 * add a not equal to criteria while comparing a fields value to a given value
+	 * Add a not equal to criteria while comparing a fields value to a given value
 	 *
 	 * @param field The sObjectField to evaluate
 	 * @param value The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -181,7 +181,7 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      Name != 'Example'
 	 */
-	public fflib_Criteria notEqualTo(Schema.SObjectField field, Object value)
+	public virtual fflib_Criteria notEqualTo(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.NOT_EQUALS, value));
 		return this;
@@ -194,7 +194,7 @@ public virtual with sharing class fflib_Criteria
 	 *
 	 * @return The Boolean result of the evaluated criteria
 	 */
-	public Boolean evaluate(Object record)
+	public virtual Boolean evaluate(Object record)
 	{
 		if (this.evaluators.isEmpty()) return true;
 
@@ -215,13 +215,13 @@ public virtual with sharing class fflib_Criteria
 	}
 
 	/**
-	 * compares the fields values to be greater or equal to the given value
+	 * Compares the fields values to be greater or equal to the given value
 	 * Evaluates to false if the field value is null
 	 *
-	 * @param field The field to use its value
+	 * @param field The Schema.sObjectField to use its value
 	 * @param value The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -230,20 +230,20 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      AnnualRevenue >= 54321
 	 */
-	public fflib_Criteria greaterOrEqualTo(Schema.SObjectField field, Object value)
+	public virtual fflib_Criteria greaterOrEqualTo(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.GREATER_THAN_OR_EQUAL_TO, value));
 		return this;
 	}
 
 	/**
-	 * compares the fields values to be greater or equal to the given value
+	 * Compares the fields values to be greater or equal to the given value
 	 * Evaluates to false if the field value is null
 	 *
-	 * @param field The field to use its value
+	 * @param field The Schema.SObjectField to use its value
 	 * @param value The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -252,20 +252,20 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      AnnualRevenue > 54321
 	 */
-	public fflib_Criteria greaterThan(Schema.SObjectField field, Object value)
+	public virtual fflib_Criteria greaterThan(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.GREATER_THAN, value));
 		return this;
 	}
 
 	/**
-	 * compares the fields values to be less or equal to the given value
+	 * Compares the fields values to be less or equal to the given value
 	 * Evaluates to true if the field value is null
 	 *
-	 * @param field The field to use its value
+	 * @param field The Schema.SObjectField to use its value
 	 * @param value The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -274,7 +274,7 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      AnnualRevenue <= 54321
 	 */
-	public fflib_Criteria lessOrEqualTo(Schema.SObjectField field, Object value)
+	public virtual fflib_Criteria lessOrEqualTo(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.LESS_THAN_OR_EQUAL_TO, value));
 		return this;
@@ -282,13 +282,13 @@ public virtual with sharing class fflib_Criteria
 
 
 	/**
-	 * compares the fields values to be greater or equal to the given value
+	 * Compares the fields values to be greater or equal to the given value
 	 * Evaluates to true if the field value is null
 	 *
-	 * @param field The field to use its value
+	 * @param field The Schema.sObjectField to use its value
 	 * @param value The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -297,19 +297,19 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      AnnualRevenue < 54321
 	 */
-	public fflib_Criteria lessThan(Schema.SObjectField field, Object value)
+	public virtual fflib_Criteria lessThan(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.LESS_THAN, value));
 		return this;
 	}
 
 	/**
-	 * checks if the given sets contains the fields values
+	 * Checks if the given sets contains the fields values
 	 *
-	 * @param field The field to use its value
-	 * @param values The value to be compared to the fields value
+	 * @param field The Schema.sObjectField to use its value
+	 * @param values The values to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -318,7 +318,7 @@ public virtual with sharing class fflib_Criteria
 	 * Evaluates:
 	 *      Account.Type IN ('Customer','Competitor','Partner')
 	 */
-	public fflib_Criteria inSet(Schema.SObjectField field, Set<Object> values)
+	public virtual fflib_Criteria inSet(Schema.SObjectField field, Set<Object> values)
 	{
 		return inSet(field, new fflib_Objects(new List<Object>(values)));
 	}
@@ -361,7 +361,7 @@ public virtual with sharing class fflib_Criteria
 	 * @param field The field to use its value
 	 * @param values The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -377,12 +377,12 @@ public virtual with sharing class fflib_Criteria
 	}
 
 	/**
-	 * checks if the given sets contains the fields values
+	 * Checks if the given sets does not contain the fields values
 	 *
-	 * @param field The field to use its value
+	 * @param field The Schema.sObjectField to use its value
 	 * @param values The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -434,7 +434,7 @@ public virtual with sharing class fflib_Criteria
 	 * @param field The field to use its value
 	 * @param values The value to be compared to the fields value
 	 *
-	 * @return Instance of fflib_Criteria
+	 * @return An instance of itself to enable method chaining
 	 *
 	 * @example
 	 *  new fflib_Criteria()
@@ -454,7 +454,7 @@ public virtual with sharing class fflib_Criteria
 	 *
 	 * @return The "where" part in the SOQL statement
 	 */
-	public String toSOQL()
+	public virtual String toSOQL()
 	{
 		if (this.evaluators.isEmpty()) return '';
 
