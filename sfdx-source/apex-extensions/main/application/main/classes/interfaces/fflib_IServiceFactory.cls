@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_IServiceFactory
- * Description: Interface for creating instances of Service classes
+ * @description Interface for creating instances of Service classes
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

@@ -1,0 +1,10 @@
+= Method Reference
+
+== Core classes
+
+
+
+== Features
+
+=== Application
+- link:fflib_AppBinding.asciidoc[fflib_AppBinding]

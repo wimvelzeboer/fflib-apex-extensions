@@ -1,8 +1,8 @@
 /**
  * File Name: Integers 
- * Description: Primitive domain for the object type Integer
+ * @description Primitive domain for the object type Integer
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

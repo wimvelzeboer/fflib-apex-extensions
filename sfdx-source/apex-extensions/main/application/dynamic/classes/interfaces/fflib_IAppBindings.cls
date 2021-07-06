@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_IAppBindings 
- * Description: Domain class interface signatures for fflib_AppBindings 
+ * @description Domain class interface signatures for fflib_AppBindings
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

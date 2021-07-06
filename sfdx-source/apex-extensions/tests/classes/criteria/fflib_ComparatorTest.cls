@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_ComparatorTest
- * Description: Unit test class for fflib_Comparator
+ * @description Unit test class for fflib_Comparator
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

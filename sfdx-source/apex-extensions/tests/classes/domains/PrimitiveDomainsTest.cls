@@ -1,8 +1,8 @@
 /**
  * File Name: DatesTest
- * Description: Unit test class for Primitive domains
+ * @description Unit test class for Primitive domains
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

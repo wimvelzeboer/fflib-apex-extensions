@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_AppBindings 
- * Description: Domain class for fflib_AppBinding objects
+ * @description Domain class for fflib_AppBinding objects
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

@@ -1,8 +1,8 @@
 /**
  * File Name: Doubles 
- * Description: Primitive domain for the object type Double
+ * @description Primitive domain for the object type Double
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

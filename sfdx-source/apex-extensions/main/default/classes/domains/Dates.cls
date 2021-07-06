@@ -1,8 +1,8 @@
 /**
  * File Name: Dates 
- * Description: Primitive domain for the object type Date
+ * @description Primitive domain for the object type Date
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

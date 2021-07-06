@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_AppBindingsSelector 
- * Description: Selector for fflib_AppBinding__mdt records
+ * @description Selector for fflib_AppBinding__mdt records
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_AppBindingType 
- * Description: Enum for Binding Types
+ * @Description Enum for Binding Types
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

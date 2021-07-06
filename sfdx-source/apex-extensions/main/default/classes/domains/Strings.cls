@@ -1,8 +1,8 @@
 /**
  * File Name: Strings
- * Description: Primitive domain for the object type String
+ * @description Primitive domain for the object type String
  *
-  * @author : architect ir. Wilhelmus G.J. Velzeboer
+  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

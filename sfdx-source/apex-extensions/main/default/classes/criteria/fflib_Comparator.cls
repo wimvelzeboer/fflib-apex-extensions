@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_Comparator
- * Description: Comparator for primitive values
+ * @description Comparator for primitive values
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

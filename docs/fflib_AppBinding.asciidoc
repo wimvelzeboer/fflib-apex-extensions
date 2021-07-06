@@ -1,0 +1,332 @@
+= fflib_AppBinding Class
+:Author:    Wilhelmus G.J. Velzeboer
+:Email:     wim@velzeboer.nl
+:Date:      2021
+:Revision:  version 1
+
+A Data-class containing the information about a binding.
+It implements fflib_IBinding with the generic method signatures and implements Comparable for sorting based on the Sequence number.
+
+== Methods
+
+- <<compareTo, compareTo(Object compareTo)>> +
+Compares the Binding Sequence number so that binding can be sorted
+- <<getBindingObject, getBindingObject()>> +
+Returns the Object to which the binding is bound to
+- <<getBindingType, getBindingType()>> +
+Returns the enum value fflib_AppBindingType that defines the type of the binding
+- <<getImplementationType, getImplementationType()>> +
+Returns the System.Type of the implementation class for the binding
+- <<getInterfaceType, getInterfaceType()>> +
+Returns the System.Type of the interface for the binding
+- <<getNamespacePrefix, getNamespacePrefix()>> +
+Returns the Namespace for the binding
+- <<getSequence, getSequence()>> +
+Returns the number of the order sequence in which the binding should be returned
+- <<getSharingMode, getSharingMode()>> +
+Returns an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+- <<newImplInstance, newImplInstance()>>
+Creates a new instance of the implementation for this binding.
+
+- <<setBindingObject, setBindingObject(Object bindingObject)>> +
+Sets the Object to which the binding is bound to
+- <<setBindingType, setBindingType(fflib_AppBindingType bindingType)>> +
+Sets the bindingType to an enum value of fflib_AppBindingType
+- <<setImplementationType, setImplementationType(System.Type implementationType)>> +
+Sets the System.Type of the implementation class for the binding
+- <<setInterfaceType, setInterfaceType(System.Type interfaceType)>> +
+Sets the System.Type of the interface for the binding
+- <<setNamespacePrefix, setNamespacePrefix(String namespacePrefix)>> +
+Sets the Namespace for the binding
+- <<setSequence, setSequence(Decimal sequence)>> +
+sets the number of the order sequence in which the binding should be returned
+- <<setSharingMode, setSharingMode(fflib_SharingMode sharingMode)>> +
+Sets an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+
+[[compareTo]]
+=== compareTo(Object compareTo)
+Compares the Binding Sequence number so that binding can be sorted
+
+==== _Signature_
+```java
+public Integer compareTo(Object compareTo)
+```
+==== _Parameters_
+
+_compareTo_ +
+The Object (instance of fflib_IBinding) to compare the current object to, for sorting purposes
+
+___
+
+[[getBindingObject]]
+=== getBindingObject()
+Returns the enum value fflib_AppBindingType that defines the type of the binding
+
+==== _Signature_
+```java
+public Object getBindingObject()
+```
+
+==== _Returns_
+An enum value fflib_AppBindingType that defines the type of the binding
+
+___
+
+[[getBindingType]]
+=== getBindingType()
+Returns the Object to which the binding is bound to.
+
+==== _Signature_
+```java
+public virtual fflib_AppBindingType getBindingType()
+```
+
+==== _Returns_
+
+___
+
+
+[[getImplementationType]]
+=== getImplementationType()
+Returns the System.Type of the implementation class for the binding
+
+==== _Signature_
+```java
+virtual System.Type getImplementationType()
+```
+
+==== _Returns_
+The System.Type of the implementation class for the binding
+
+___
+
+[[getInterfaceType]]
+=== getInterfaceType()
+Returns the System.Type of the interface for the binding.
+This must match the type of the implementation.
+
+==== _Signature_
+```java
+public virtual System.Type getInterfaceType()
+```
+
+==== _Returns_
+The System.Type of the interface for the binding
+
+___
+
+[[getNamespacePrefix]]
+=== getNamespacePrefix()
+Returns the Namespace for the binding
+
+==== _Signature_
+```java
+public virtual String getNamespacePrefix()
+```
+
+==== _Returns_
+The Namespace for the binding
+
+___
+
+[[getSequence]]
+=== getSequence()
+Returns the number of the order sequence in which the binding should be returned.
+In some scenarios there are multiple bindings available, this sequence number defines the order in which they are returned. +
+This sequence number can also be used to dynamically override an existing binding (without replacing it),
+by having a binding with a higher sequence number.
+
+==== _Signature_
+```java
+public virtual Decimal getSequence()
+```
+
+==== _Returns_
+The number of the order sequence in which the binding should be returned
+
+___
+
+[[getSharingMode]]
+=== getSharingMode()
+Returns an enum value fflib_SharingMode that defines the type of sharing used in the implementation class.
+This value is particularly useful when you have multiple implementation with different class sharing types
+
+==== _Signature_
+```java
+public virtual fflib_SharingMode getSharingMode()
+```
+
+==== _Returns_
+The enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+
+___
+
+[[newImplInstance]]
+=== newImplInstance()
+Creates a new instance of the implementation for this binding.
+
+==== _Signature_
+```java
+public virtual Object newImplInstance()
+```
+
+==== _Returns_
+An instance of the implementation for this binding.
+
+
+==== _Example_
+```java
+fflib_AppBinding binding =
+    new fflib_AppBinding();
+        .setInterface( IAccountsService.class )
+        .setImplementation( AccountsServiceImpl );
+
+IAccountsService service = (IAccountsService) binding.newImplInstance();
+```
+
+___
+
+[[setBindingObject]]
+=== setBindingObject(Object bindingObject)
+Sets the Object to which the binding is bound to
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setBindingObject(Object bindingObject)
+```
+
+==== _Parameters_
+
+_**bindingObject**_ +
+An object representing the binding type, e.g.; +
+`MyCustomerInfo.class` or `Schema.Account.SObjectType`
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+[[setBindingType]]
+=== setBindingType(fflib_AppBindingType bindingType)
+Sets the bindingType to an enum value of fflib_AppBindingType
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setBindingType(fflib_AppBindingType bindingType)
+```
+
+==== _Parameters_
+
+_**bindingType**_ +
+An enum value of fflib_AppBindingType to define the type of binding, e.g.; +
+`Service` or `Domain`
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+[[setImplementationType]]
+=== setImplementationType(System.Type implementationType)
+Sets the System.Type of the implementation class for the binding
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setImplementationType(System.Type implementationType)
+```
+
+==== _Parameters_
+
+_**implementationType**_ +
+The System.Type of the implementation class. e.g.; `AccountsServiceImpl.class`
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+[[setInterfaceType]]
+=== setInterfaceType(System.Type interfaceType)
+Sets the System.Type of the interface for the binding
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setInterfaceType(System.Type interfaceType)
+```
+
+==== _Parameters_
+
+_**interfaceType**_ +
+The System.Type of the interface class. e.g.; `IAccountsService.class`
+This must match the type of the implementation.
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+[[setNamespacePrefix]]
+=== setNamespacePrefix(String namespacePrefix)
+Sets the Namespace for the binding. This is typically used when Apps use
+https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_namespace_prefix.htm[Namespaces].
+
+but can also be utilised when there are multiple modules with implementations of the same Object types. e.g.
+
+    SFDX Package "Core"  - binds Schema.Account.SObjectType to implementation Accounts.class
+    SFDX Package "MyApp" - binds Schema.Account.SObjectType to implementation Accounts_MyApp.class
+
+The resolver can use the defined namespace to return the correct binding for each package inside the single sfdx project.
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setNamespacePrefix(String namespacePrefix)
+```
+
+==== _Parameters_
+
+_**namespacePrefix**_ +
+The name of the Namespace for the binding
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+[[setSequence]]
+=== setSequence(Decimal sequence)
+Set the order number so that the resolver can sort the bindings.
+The higher the number, the more priority.
+The binding with the highest number will be returned first by the resolver.
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setSequence(Decimal sequence)
+```
+
+==== _Parameters_
+
+_**sequence**_ +
+A decimal number representing the priority of the binding
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+___
+
+[[setSharingMode]]
+=== setSharingMode(fflib_SharingMode sharingMode)
+Sets an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+
+==== _Signature_
+```java
+public virtual fflib_IAppBinding setSharingMode(fflib_SharingMode sharingMode)
+```
+
+==== _Parameters_
+
+_**sharingMode**_ +
+A enum value of fflib_SharingMode representing the sharing mode of the implementation class
+
+==== _Returns_
+An instance of itself to enable method chaining
+

@@ -1,8 +1,8 @@
 /**
  * File Name: ArrayTest 
- * Description: 
+ * @description
  *
- * @author: architect ir. Wilhelmus G.J. Velzeboer | wvelzebo@its.jnj.com 
+ * @author architect ir. Wilhelmus G.J. Velzeboer | wvelzebo@its.jnj.com
  */
 @IsTest(IsParallel=true)
 private class ArrayUtilsTest

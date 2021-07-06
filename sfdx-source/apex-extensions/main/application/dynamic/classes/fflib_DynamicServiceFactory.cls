@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_DynamicServiceFactory
- * Description: Service Factory to return service class instances in a dynamic way
+ * @description Service Factory to return service class instances in a dynamic way
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

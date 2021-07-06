@@ -1,8 +1,8 @@
 /**
  * File Name: Decimals 
- * Description: Primitive domain for the object type Decimal
+ * @description Primitive domain for the object type Decimal
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

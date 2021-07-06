@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_IUnitOfWorkFactory
- * Description: Interface for creating instances of fflib_ISObjectUnitOfWork
+ * @description Interface for creating instances of fflib_ISObjectUnitOfWork
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

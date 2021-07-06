@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_DynamicAppFactory 
- * Description: Abstract class with common functionality for Dynamic Bindings
+ * @description Abstract class with common functionality for Dynamic Bindings
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

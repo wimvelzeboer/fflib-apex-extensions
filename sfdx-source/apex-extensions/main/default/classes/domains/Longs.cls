@@ -1,8 +1,8 @@
 /**
  * File Name: Longs 
- * Description: Primitive domain for the object type Long
+ * @description Primitive domain for the object type Long
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

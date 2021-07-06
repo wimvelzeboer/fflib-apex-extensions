@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_Criteria
- * Description: A evaluator based on criteria
+ * @description A evaluator based on criteria
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

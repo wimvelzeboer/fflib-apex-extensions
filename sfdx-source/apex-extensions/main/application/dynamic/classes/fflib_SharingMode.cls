@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_SharingMode 
- * Description: Enum with the Application Binding Sharing Modes
+ * @description Enum with the Application Binding Sharing Modes
 
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

@@ -8,7 +8,17 @@ This extension package is dependent on the following packages:
 
 ## Wiki
 A full overview of the features in this extension pack and how to use them 
-can be found in [the Wiki pages of this repository](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki)
+can be found in [the Wiki pages of this repository](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki).
+It is written in an easy readable format with lots of explanations on the design pattern Separation of Concerns, and how that apply those patterns.
+
+A hands-on training session is also available to learn how to translate a user-story into Apex code. 
+
+## Method Reference
+When you rather prefer the bare overview of classes, methods and their examples,
+instead of the nicely readable Wiki, 
+then you can find a full overview of the methods, their signatures and description in the
+[ApexDocs](./docs). 
+
 
 ## Migrating from apex-commons
 

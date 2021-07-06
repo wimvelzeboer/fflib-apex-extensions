@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_AppBinding 
- * Description: Definition for an Application Binding
+ * @description Definition for an Application Binding
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.
@@ -47,82 +47,171 @@ public virtual class fflib_AppBinding
 		return -1;
 	}
 
+	/**
+	 * @return Returns the Object to which the binding is bound to.
+	 */
 	public Object getBindingObject()
 	{
 		return this.bindingObject;
 	}
 
+	/**
+	 * @return Returns the enum value fflib_AppBindingType that defines the type of the binding
+	 *
+	 * @see fflib_AppBindingType
+	 */
 	public virtual fflib_AppBindingType getBindingType()
 	{
 		return this.bindingType;
 	}
 
+	/**
+	 * @return Returns the System.Type of the implementation class for the binding
+	 */
 	public virtual System.Type getImplementationType()
 	{
 		return this.implementationType;
 	}
 
-	public Type getInterfaceType()
+	/**
+	 * @return Returns the System.Type of the interface for the binding
+	 */
+	public virtual System.Type getInterfaceType()
 	{
 		return this.interfaceType;
 	}
 
-	public String getNamespacePrefix()
+	/**
+	 * @return Returns the Namespace for the binding
+	 */
+	public virtual String getNamespacePrefix()
 	{
 		return this.namespacePrefix;
 	}
 
-	public Decimal getSequence()
+	/**
+	 * @return Returns the number of the order sequence in which the binding should be returned
+	 */
+	public virtual Decimal getSequence()
 	{
 		return this.bindingSequence;
 	}
 
-	public fflib_SharingMode getSharingMode()
+	/**
+	 * @return Returns an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+	 *
+	 * @see fflib_SharingMode
+	 */
+	public virtual fflib_SharingMode getSharingMode()
 	{
 		return this.sharingMode;
 	}
 
+	/**
+	 * Creates a new instance of the implementation for this binding.
+	 *
+	 * @return The enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+	 */
 	public virtual Object newImplInstance()
 	{
 		return implementationType.newInstance();
 	}
 
+	/**
+	 * Sets the Object to which the binding is bound to
+	 *
+	 * @param bindingObject An object representing the binding type, e.g.;
+	 *                      `MyCustomerInfo.class` or `Schema.Account.SObjectType`
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
 	public virtual fflib_IAppBinding setBindingObject(Object bindingObject)
 	{
 		this.bindingObject = bindingObject;
 		return this;
 	}
 
+	/**
+	 * Sets the bindingType to an enum value of fflib_AppBindingType
+	 *
+	 * @param bindingType An enum value of fflib_AppBindingType to define the type of binding, e.g.;
+	 *                   `Service` or `Domain`
+	 *
+	 * @return An instance of itself to enable method chaining
+	 *
+	 * @see fflib_AppBindingType
+	 */
 	public virtual fflib_IAppBinding setBindingType(fflib_AppBindingType bindingType)
 	{
 		this.bindingType = bindingType;
 		return this;
 	}
 
-	public virtual fflib_IAppBinding setNamespacePrefix(String namespacePrefix)
-	{
-		this.namespacePrefix = namespacePrefix;
-		return this;
-	}
-
+	/**
+	 * Sets the System.Type of the implementation class for the binding
+	 *
+	 * @param implementationType The System.Type of the implementation class. e.g.; `AccountsServiceImpl.class`
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
 	public virtual fflib_IAppBinding setImplementationType(System.Type implementationType)
 	{
 		this.implementationType = implementationType;
 		return this;
 	}
 
-	public virtual fflib_IAppBinding setInterfaceType(Type interfaceType)
+	/**
+	 * Sets the System.Type of the interface for the binding
+	 *
+	 * @param interfaceType The System.Type of the interface class. e.g.; `IAccountsService.class`.
+	 *                      This must match the type of the implementation.
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
+	public virtual fflib_IAppBinding setInterfaceType(System.Type interfaceType)
 	{
 		this.interfaceType = interfaceType;
 		return this;
 	}
 
+	/**
+	 * Sets the Namespace for the binding. This is typically used when Apps use Namespaces
+	 * or have multiple packages inside a single project
+	 *
+	 * @param namespacePrefix The name of the Namespace for the binding
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
+	public virtual fflib_IAppBinding setNamespacePrefix(String namespacePrefix)
+	{
+		this.namespacePrefix = namespacePrefix;
+		return this;
+	}
+
+	/**
+	 * Set the order number so that the resolver can sort the bindings.
+	 * The higher the number, the more priority.
+	 * The binding with the highest number will be returned first by the resolver.
+	 *
+	 * @param sequence A decimal number representing the priority of the binding
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
 	public virtual fflib_IAppBinding setSequence(Decimal sequence)
 	{
 		this.bindingSequence = sequence;
 		return this;
 	}
 
+	/**
+	 * Sets an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
+	 *
+	 * @param sharingMode A enum value of fflib_SharingMode representing the sharing mode
+	 *
+	 * @return An instance of itself to enable method chaining
+	 *
+	 * @see fflib_SharingMode
+	 */
 	public virtual fflib_IAppBinding setSharingMode(fflib_SharingMode sharingMode)
 	{
 		this.sharingMode = sharingMode;

@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_AppBindingResolver
- * Description: Resolver for returning the requested binding(s)
+ * @description Resolver for returning the requested binding(s)
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

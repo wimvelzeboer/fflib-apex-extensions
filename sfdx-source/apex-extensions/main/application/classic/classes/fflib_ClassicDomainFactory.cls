@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_ClassicDomainFactory 
- * Description: 
+ * @description
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.

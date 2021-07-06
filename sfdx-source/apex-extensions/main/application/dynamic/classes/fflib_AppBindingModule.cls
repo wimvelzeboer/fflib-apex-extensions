@@ -1,8 +1,8 @@
 /**
  * File Name: fflib_AppBindingModule 
- * Description: An application module is responsible for loading the application bindings
+ * @description An application module is responsible for loading the application bindings
  *
- * @author : architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.
