@@ -26,6 +26,8 @@ then you can find a full overview of the methods, their signatures and descripti
 ## Contributing
 Anyone is welcome to fork this repository and propose changes or complete new features via raising a pull-requests. 
 
+Please have read the [contributing guide](./CONTRIBUTING.md) that will through the process to making your first contribution! 
+
 You can also have a look at the open items in the [project(s)](./projects), feel free to pick an item from the kanban board!
 
 ## Donations
