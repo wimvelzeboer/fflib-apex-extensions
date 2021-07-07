@@ -11,7 +11,7 @@
 
 === Application
 * *Interfaces*
-  - fflib_IDomainFactory
+  - link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
   - fflib_ISelectorFactory
   - fflib_IServiceFactory
   - fflib_IUnitOfWorkFactory

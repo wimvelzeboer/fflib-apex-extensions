@@ -1,0 +1,256 @@
+= fflib_IDomainFactory Class
+:Author:    Wilhelmus G.J. Velzeboer
+:Email:     wim@velzeboer.nl
+:Date:      2021
+:Revision:  version 1
+
+Interface for creating instances of Domain classes
+
+== Methods
+
+- <<newInstance1, newInstance(Set<Id> recordIds)>> +
+Dynamically constructs an instance of a Domain class for the given record Ids
+- <<newInstance2, newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)>> +
+Dynamically constructs an instance of a Domain class for the given record Ids
+- <<newInstance3, newInstance(List<SObject> records)>> +
+Dynamically constructs an instance of the Domain class for the given records
+- <<newInstance4, newInstance(List<Object> objects, Object objectType)>> +
+Dynamically constructs an instance of the Domain class for the given Objects
+- <<newInstance5, newInstance(List<SObject> records, Schema.SObjectType sObjectType)>> +
+Dynamically constructs an instance of the Domain class for the given records
+- <<setMock1, setMock(fflib_ISObjectDomain mockDomain)>> +
+- <<setMock2, setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)>> +
+Registers a mock implementation in the Factory for the provided sObjectType
+- <<setMock3, setMock(fflib_IDomain mockDomain)>> +
+Registers a mock in the Factory by providing a mock instance of a domain
+- <<setMock4, setMock(Object domainType, fflib_IDomain mockDomain)>> +
+Registers a mock implementation in the Factory for the provided sObjectType
+
+
+[[newInstance1]]
+=== newInstance(Set<Id> recordIds)
+Dynamically constructs an instance of a Domain class for the given record Ids
+Internally uses the Selector Factory to query the records before passing to a
+dynamically constructed instance of the application Apex Domain class
+
+==== _Signature_
+```java
+fflib_IDomain newInstance(Set<Id> recordIds);
+```
+
+==== _Parameters_
+
+_**recordIds**_ +
+A list of Id's of the same type
+
+==== _Returns_
+Instance of the Domain with the records
+
+
+___
+
+[[newInstance2]]
+=== newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)
+Dynamically constructs an instance of a Domain class for the given record Ids
+Internally uses the Selector Factory to query the records before passing to a
+dynamically constructed instance of the application Apex Domain class. +
+Will return a Mock implementation if one has been provided via setMock
+
+==== _Signature_
+```java
+fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType);
+```
+
+==== _Parameters_
+
+_**recordIds**_ +
+A list of Id's of the same type
+
+_**sObjectType**_ +
+The Schema.SObjectType of the record Ids,
+Providing this parameter will omit the framework from checking if the Id's are all the same
+and of which SObjectType they are.
+
+==== _Returns_
+Instance of the Domain with the records
+
+___
+
+[[newInstance3]]
+=== newInstance(List<SObject> records)
+Dynamically constructs an instance of the Domain class for the given records. +
+Will return a Mock implementation if one has been provided via setMock
+
+==== _Signature_
+```java
+fflib_IDomain newInstance(List<SObject> records);
+```
+
+==== _Parameters_
+
+_**records**_ +
+A concrete list of records, e.g.; `List<Account>` or `List<SObject>`)
+
+==== _Returns_
+Instance of the Domain containing the given records
+
+___
+[[newInstance4]]
+=== newInstance(List<Object> objects, Object objectType)
+Dynamically constructs an instance of the Domain class for the given records. +
+Will return a Mock implementation if one has been provided via setMock
+
+==== _Signature_
+```java
+fflib_IDomain newInstance(List<Object> objects, Object objectType);
+```
+
+==== _Parameters_
+
+_**objects**_ +
+A concrete list of Objects, e.g.; `List<Account>` or `List<SObject>`)
+
+_**objectType**_ +
+The type of objects which are provided
+
+==== _Returns_
+Instance of the Domain containing the given Objects
+
+___
+
+[[newInstance5]]
+=== newInstance(List<SObject> records, SObjectType domainSObjectType)
+Dynamically constructs an instance of the Domain class for the given records and SObjectType.
+All records in the provided list will be assumed to be of the specified sObjectType +
+Will return a Mock implementation if one has been provided via setMock. +
+
+
+==== _Signature_
+```java
+fflib_IDomain newInstance(List<SObject> records, Schema.SObjectType sObjectType);
+```
+
+==== _Parameters_
+
+_**records**_ +
+A list records
+
+_**sObjectType**_ +
+SObjectType for list of records
+
+==== _Returns_
+Instance of the Domain containing the given records
+
+___
+[[setMock1]]
+=== setMock(fflib_ISObjectDomain mockDomain)
+Registers a mock in the Factory by providing a mock instance of a domain
+
+NOTE: This method is only available for backward compatibility for
+domains which are implementations of fflib_ISObjectDomain
+
+==== _Signature_
+```java
+void setMock(fflib_ISObjectDomain mockDomain);
+```
+
+==== _Parameters_
+
+_**mockDomain**_ +
+The instance of the Domain mock
+
+==== _Example_
+```java
+fflib_ApexMocks mocks = new fflib_ApexMocks();
+IAccounts domainMock = (IAccounts) mocks.mock(IAccounts.class);
+mocks.startStubbing();
+mocks.when(domainMock.getType()).thenReturn(Schema.Account.SObjectType);
+...
+mocks.stopStubbing();
+
+Application.Domain.setMock((fflib_ISObjectDomain) domainMock);
+```
+
+___
+
+[[setMock2]]
+=== setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)
+Registers a mock implementation in the Factory for the provided sObjectType
+
+NOTE: This method is only available for backward compatibility for
+domains which are implementations of fflib_ISObjectDomain
+
+==== _Signature_
+```java
+void setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain);
+```
+
+==== _Parameters_
+
+_**sObjectType**_ +
+The SObjectType of the Domain mock, avoids the need to stub the mock to return its SObjectType
+
+_**mockDomain**_ +
+The instance of the Domain mock
+
+==== _Example_
+```java
+fflib_ApexMocks mocks = new fflib_ApexMocks();
+IAccounts domainMock = (IAccounts) mocks.mock(IAccounts.class);
+
+Application.Domain.setMock(Schema.Account.SObjectType, domainMock);
+```
+
+___
+[[setMock3]]
+=== setMock(fflib_IDomain mockDomain)
+Registers a mock in the Factory by providing a mock instance of a domain
+
+==== _Signature_
+```java
+void setMock(fflib_IDomain mockDomain);
+```
+
+==== _Parameters_
+
+_**mockDomain**_ +
+The instance of the Domain mock
+
+==== _Example_
+```java
+IAccounts domainMock = (IAccounts) mocks.mock(IAccounts.class);
+mocks.startStubbing();
+mocks.when(domainMock.getType()).thenReturn(Schema.Account.SObjectType);
+...
+mocks.stopStubbing();
+
+Application.Domain.setMock(domainMock);
+```
+
+___
+[[setMock4]]
+=== setMock(Object domainType, fflib_IDomain mockDomain)
+Registers a mock implementation in the Factory for the provided sObjectType
+
+==== _Signature_
+```java
+void setMock(Object domainType, fflib_IDomain mockDomain);
+```
+
+==== _Parameters_
+
+_**domainType**_ +
+The ObjectType of the Domain mock, avoids the need to stub the mock to return its ObjectType
+
+_**mockDomain**_ +
+The instance of the Domain mock
+
+==== _Example_
+```java
+fflib_ApexMocks mocks = new fflib_ApexMocks();
+IAccounts domainMock = (IAccounts) mocks.mock(IAccounts.class);
+
+Application.Domain.setMock(domainMock);
+```
+
+___
