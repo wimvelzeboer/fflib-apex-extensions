@@ -4,6 +4,8 @@
 :Date:      2021
 :Revision:  version 1
 
+link:README.asciidoc[<- _Back to main overview_]
+
 A Data-class containing the information about a binding.
 It implements fflib_IBinding with the generic method signatures and implements Comparable for sorting based on the Sequence number.
 
