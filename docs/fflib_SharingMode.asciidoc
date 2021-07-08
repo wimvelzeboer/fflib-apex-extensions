@@ -1,0 +1,158 @@
+= fflib_SharingMode Enum
+:Author:    Wilhelmus G.J. Velzeboer
+:Email:     wim@velzeboer.nl
+:Date:      2021
+:Revision:  version 1
+
+link:README.asciidoc[<- _Back to main overview_]
+
+Enum with the Application Binding Sharing Modes.
+
+
+== Enum values
+
+- WithSharing
+- WithoutSharing
+- InheritedSharing
+- None
+
+
+These values can be set in the
+link:fflib_AppBinding.asciidoc[AppBindings] to define which kind of access modifier
+the implementation class is using.
+
+The Dynamic Domain Factory is using this sharing mode in the process of resolving the bindings,
+to return the implementation class with the correct sharing mode.
+
+=== Example
+Lets assume we have the following bindings configured in the
+link:fflib_AppBindingResolver.asciidoc[fflib_AppBindingResolver]
+
+|===
+| Binding Type | Sharing mode | Implementation
+
+| Account._SObjectType_
+| WithSharing
+| AccountsSelector.WithSharing._class_
+
+| Account._SObjectType_
+| WithoutSharing
+| AccountsSelector.WithoutSharing._class_
+
+
+|===
+
+The application is configured to use the Dynamic Domain Factory.
+As you can see the `Selector` property doesn't define a sharing mode, so the default sharing "WithSharing" is used.
+
+```java
+public class Application
+{
+    private static fflib_IAppBindingResolver bindingResolver =
+            new fflib_AppBindingResolver();
+
+    public static final fflib_ISelectorFactory Selector =
+            new fflib_DynamicSelectorFactory(bindingResolver);
+  
+    public static final fflib_ISelectorFactory WithoutSharingSelector = 
+            new fflib_DynamicSelectorFactory(
+                    bindingResolver.bySharingMode(fflib_SharingMode.WithoutSharing)
+            );
+}
+```
+
+The selector is setup with three access modifiers
+```java
+public virtual inherited sharing class AccountsSelector
+        extends fflib_SObjectSelector
+        implements IAccountsSelector
+{
+    public static IAccountsSelector newInstance()
+    {
+        return (IAccountsSelector) Application.Selector.newInstance(Schema.Account.SObjectType);
+    }
+
+    public static IAccountsSelector newWithoutSharingInstance()
+    {
+        return (IAccountsSelector) Application.WithoutSharingSelector
+        .newInstance(Schema.Account.SObjectType);
+    }
+
+    public AccountsSelector()
+    {
+        super();
+    }
+
+    public AccountsSelector(Boolean includeFieldSetFields, Boolean enforceCRUD, Boolean enforceFLS)
+    {
+        super(includeFieldSetFields, enforceCRUD, enforceFLS);
+    }
+
+    public List<Schema.SObjectField> getSObjectFieldList()
+    {
+        return new List<Schema.SObjectField>
+        {
+                Account.Id,
+                Account.Name,
+                Account.Rating
+        };
+    }
+
+    public Schema.SObjectType getSObjectType()
+    {
+        return Account.SObjectType;
+    }
+
+    public virtual List<Account> selectById(Set<Id> idSet)
+    {
+        return (List<Account>) selectSObjectsById(idSet);
+    }
+
+    public virtual List<Account> selectByRating(Set<String> rating)
+    {
+        return (List<Account>)
+                Database.query(
+                        newQueryFactory()
+                                .setCondition('Rating IN :rating')
+                                .toSOQL()
+                );
+    }
+
+    public with sharing class WithSharing extends AccountsSelector
+    {
+        public WithSharing()
+        {
+            super(true, true, true);
+        }
+
+        public override List<Account> selectById(Set<Id> idSet)
+        {
+            return super.selectById(idSet);
+        }
+
+        public override List<Account> selectByRating(Set<String> rating)
+        {
+            return super.selectByRating(rating);
+        }
+    }
+
+    public without sharing class WithoutSharing extends AccountsSelector
+    {
+        public WithoutSharing()
+        {
+            super(true, false, false);
+        }
+
+        public override List<Account> selectById(Set<Id> idSet)
+        {
+            return super.selectById(idSet);
+        }
+
+        public override List<Account> selectByRating(Set<String> rating)
+        {
+            return super.selectByRating(leadSources);
+        }
+    }
+}
+
+```

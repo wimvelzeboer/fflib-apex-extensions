@@ -39,7 +39,7 @@
 ** link:fflib_DynamicDomainFactory.asciidoc[fflib_DynamicDomainFactory]
 ** fflib_DynamicSelectorFactory
 ** fflib_DynamicServiceFactory
-** fflib_SharingMode
+** link:fflib_SharingMode.asciidoc[fflib_SharingMode]
 
 === Primitive Domains
 - Dates
