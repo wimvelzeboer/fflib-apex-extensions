@@ -81,7 +81,7 @@ public virtual class fflib_DynamicDomainFactory
 				.resolve();
 
 		if (bindings.isEmpty())
-			throw new DeveloperException('Unable to find domain binding ' + objectType);
+			throw new DeveloperException('Unable to find domain binding for ' + objectType);
 
 		System.Type domainImplementationType = bindings.get(0).getImplementationType();
 

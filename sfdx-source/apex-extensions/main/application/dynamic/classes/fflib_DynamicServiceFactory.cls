@@ -54,7 +54,7 @@ public virtual class fflib_DynamicServiceFactory
 		if (bindings.isEmpty())
 			throw new DeveloperException(
 					String.format(
-							'Unable to find service binding {0} with sharing more {0}',
+							'Unable to find service binding for {0} with sharing more {1}',
 							new List<String>
 							{
 									serviceInterfaceType.getName(),

@@ -54,7 +54,7 @@ public virtual class fflib_DynamicSelectorFactory
 		if (bindings.isEmpty())
 			throw new DeveloperException(
 					String.format(
-							'Unable to find selector binding {0} with sharing more {0}',
+							'Unable to find selector binding for {0} with sharing mode {1}',
 							new List<String>
 							{
 									sObjectType.getDescribe().getName(),
