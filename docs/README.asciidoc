@@ -16,7 +16,7 @@
   - fflib_IServiceFactory
   - fflib_IUnitOfWorkFactory
 * *Classic*
-  - fflib_ClassicDomainFactory
+  - link:fflib_ClassicDomainFactory.asciidoc[fflib_ClassicDomainFactory]
   - fflib_ClassicSelectorFactory
   - fflib_ClassicServiceFactory
   - fflib_ClassicTriggerHandlerFactory
@@ -36,7 +36,7 @@
 ** fflib_AppBindingsSelector
 ** fflib_AppBindingType
 ** fflib_DynamicAppFactory
-** fflib_DynamicDomainFactory
+** link:fflib_DynamicDomainFactory.asciidoc[fflib_DynamicDomainFactory]
 ** fflib_DynamicSelectorFactory
 ** fflib_DynamicServiceFactory
 ** fflib_SharingMode

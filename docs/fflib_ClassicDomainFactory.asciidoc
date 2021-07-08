@@ -1,0 +1,179 @@
+= fflib_ClassicDomainFactory Class
+:Author:    Wilhelmus G.J. Velzeboer
+:Email:     wim@velzeboer.nl
+:Date:      2021
+:Revision:  version 1
+
+Domain Factory for creating instances of Domain classes using a static map for
+linking the SObjectType to its Domain Constructor implementation class.
+
+This class is extended from
+link:https://github.com/apex-enterprise-patterns/fflib-apex-common/blob/master/sfdx-source/apex-common/main/classes/fflib_Application.cls[fflib_Application.DomainFactory]
+and implements the
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
+interface class.
+
+== Constructor Methods
+
+- <<constructor0, constructor: ()>> +
+Empty constructor creating an instance of the Domain Factory,
+particularly used for classes extending fflib_ClassicDomainFactory.
+
+- <<constructor1, constructor: (selectorFactory, constructorTypeByObject) >> +
+Constructs a Domain factory, based on a map linking the ObjectType to the implementation class type.
+
+- <<constructor2, constructor: (selectorFactory, sObjectByDomainConstructorType) >> +
+Constructs a Domain factory, based on a map linking the SObjectType to the implementation class type. +
+**Use only for backwards compatibility**.
+
+== Methods
+This implementation of
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
+Does not add any new public or protected methods other than the following methods
+which are defined in the interface
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory].
+
+- link:fflib_IDomainFactory.asciidoc#newInstance1[newInstance(Set<Id> recordIds)] +
+Dynamically constructs an instance of a Domain class for the given record Ids
+- link:fflib_IDomainFactory.asciidoc#<newInstance2[newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)] +
+Dynamically constructs an instance of a Domain class for the given record Ids
+- link:fflib_IDomainFactory.asciidoc#newInstance3[newInstance(List<SObject> records)] +
+Dynamically constructs an instance of the Domain class for the given records
+- link:fflib_IDomainFactory.asciidoc#newInstance4[newInstance(List<Object> objects, Object objectType)] +
+Dynamically constructs an instance of the Domain class for the given Objects
+- link:fflib_IDomainFactory.asciidoc#newInstance5[newInstance(List<SObject> records, Schema.SObjectType sObjectType)] +
+Dynamically constructs an instance of the Domain class for the given records
+- link:fflib_IDomainFactory.asciidoc#setMock1[setMock(fflib_ISObjectDomain mockDomain)] +
+- link:fflib_IDomainFactory.asciidoc#setMock2[setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)] +
+Registers a mock implementation in the Factory for the provided sObjectType
+- link:fflib_IDomainFactory.asciidoc#setMock3[setMock(fflib_IDomain mockDomain)] +
+Registers a mock in the Factory by providing a mock instance of a domain
+- link:fflib_IDomainFactory.asciidoc#setMock4[setMock(Object domainType, fflib_IDomain mockDomain)] +
+Registers a mock implementation in the Factory for the provided sObjectType
+
+
+
+[[constructor0]]
+=== fflib_ClassicDomainFactory()
+Empty constructor creating an instance of the Domain Factory,
+particularly used for classes extending fflib_ClassicDomainFactory.
+
+==== _Signature_
+```java
+public fflib_ClassicDomainFactory()	{}
+```
+
+___
+
+
+[[constructor1]]
+=== fflib_ClassicDomainFactory(selectorFactory, constructorTypeByObject)
+Constructs a Domain factory, based on a map linking the ObjectType to the
+implementation class type.
+
+CAUTION: This will not check if the Apex classes actually implements the
+interfaces since this is not possible in the Apex runtime at present
+
+==== _Signature_
+```java
+public fflib_ClassicDomainFactory(
+        fflib_ISelectorFactory selectorFactory,
+        Map<Object, Type> constructorTypeByObject)
+```
+
+==== _Parameters_
+
+_**selectorFactory**_ +
+A reference to the Selector Factory instance,
+which is an implementation of
+link:fflib_ISelectorFactory.asciidoc[fflib_ISelectorFactory].
+
+_**constructorTypeByObject**_ +
+Map of Domain classes constructor by Object Type.
+The Domain class constructor needs to be an implementation of
+link:https://github.com/apex-enterprise-patterns/fflib-apex-common/blob/master/sfdx-source/apex-common/main/classes/fflib_IDomainConstructor.cls[fflib_IDomainConstructor]
+
+==== _Example_
+
+```java
+public class Application
+{
+     public static final fflib_ISelectorFactory Selector =
+            new fflib_ClassicSelectorFactory(
+                    new Map<SObjectType, Type>
+                    {
+                            Schema.Account.SObjectType =>
+                                    AccountsSelector.class
+                    }
+            );
+
+    public static final fflib_IDomainFactory Domain =
+            new fflib_ClassicDomainFactory(
+                    Application.Selector,
+                    new Map<Object, Type>
+                    {
+                            Schema.Account.SObjectType =>
+                                    Accounts.Constructor.class
+                    }
+            );
+}
+```
+
+___
+
+
+[[constructor2]]
+=== fflib_ClassicDomainFactory(selectorFactory, constructorTypeByObject)
+Constructs a Domain factory, using an instance of the Selector Factory
+and a map of Apex classes implementing fflib_ISObjectDomain by SObjectType
+
+NOTE: Use only for backwards compatibility!
+
+CAUTION: This will not check if the Apex classes actually implements the
+interfaces since this is not possible in the Apex runtime at present
+
+==== _Signature_
+```java
+public fflib_ClassicDomainFactory(fflib_ISelectorFactory selectorFactory,
+			Map<SObjectType, Type> sObjectByDomainConstructorType)
+```
+
+==== _Parameters_
+
+_**selectorFactory**_ +
+A reference to the Selector Factory instance,
+which is an implementation of
+link:fflib_ISelectorFactory.asciidoc[fflib_ISelectorFactory].
+
+_**constructorTypeByObject**_ +
+Map of Domain classes constructor by SObjectType.
+The Domain class constructor needs to be an implementation of
+link:https://github.com/apex-enterprise-patterns/fflib-apex-common/blob/master/sfdx-source/apex-common/main/classes/fflib_IDomainConstructor.cls[fflib_IDomainConstructor]
+
+==== _Example_
+
+```java
+public class Application
+{
+     public static final fflib_ISelectorFactory Selector =
+            new fflib_ClassicSelectorFactory(
+                    new Map<SObjectType, Type>
+                    {
+                            Schema.Account.SObjectType =>
+                                    AccountsSelector.class
+                    }
+            );
+
+    public static final fflib_IDomainFactory Domain =
+            new fflib_ClassicDomainFactory(
+                    Application.Selector,
+                    new Map<SObjectType, Type>
+                    {
+                            Schema.Account.SObjectType =>
+                                    Accounts.Constructor.class
+                    }
+            );
+}
+```
+
+___

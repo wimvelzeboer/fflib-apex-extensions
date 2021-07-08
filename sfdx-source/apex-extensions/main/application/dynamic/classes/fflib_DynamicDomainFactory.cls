@@ -1,6 +1,7 @@
 /**
  * File Name: fflib_DynamicDomainFactory
- * @description
+ * @description Domain Factory for creating instances of Domain classes
+ *              using a resolver to dynamically link an Object type to its Domain Constructor implementation class
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -32,12 +33,16 @@ public virtual class fflib_DynamicDomainFactory
 		extends fflib_DynamicAppFactory
 		implements fflib_IDomainFactory
 {
-	public static final fflib_AppBindingType DOMAIN = fflib_AppBindingType.Domain;
-
 	protected Map<Object, fflib_IDomain> mockDomainByObjectType = new Map<Object, fflib_IDomain>();
 	protected fflib_ISelectorFactory selectorFactory;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param resolver A reference to the resolve instance
+	 * @param selectorFactory A reference to the selector factory instance
+	 */
 	public fflib_DynamicDomainFactory(fflib_IAppBindingResolver resolver, fflib_ISelectorFactory selectorFactory)
 	{
 		this.resolver = resolver;
@@ -72,7 +77,7 @@ public virtual class fflib_DynamicDomainFactory
 		if (hasMock(objectType)) return (fflib_IDomain) getMock(objectType);
 
 		List<fflib_IAppBinding> bindings = resolver.byObject(objectType)
-				.byType(DOMAIN)
+				.byType(fflib_AppBindingType.Domain)
 				.resolve();
 
 		if (bindings.isEmpty())

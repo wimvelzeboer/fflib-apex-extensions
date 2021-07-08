@@ -1,6 +1,7 @@
 /**
  * File Name: fflib_ClassicDomainFactory 
- * @description
+ * @description Domain Factory for creating instances of Domain classes
+ *              using a static map for linking the SObjectType to its Domain Constructor implementation class
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -40,13 +41,13 @@ public virtual class fflib_ClassicDomainFactory
 	public fflib_ClassicDomainFactory()	{}
 
 	/**
-	 * Constructs a Domain factory, using an instance of the Selector Factory
-	 *   and a map of Apex classes implementing fflib_ISObjectDomain by SObjectType
-	 *   Note this will not check the Apex classes provided actually implement the interfaces
-	 *     since this is not possible in the Apex runtime at present
+	 * Constructs a Domain factory, based on a map linking the ObjectType to the
+	 * implementation class type.
+	 * Note: this will not check if the Apex classes actually implements the
+	 *       interfaces since this is not possible in the Apex runtime at present
 	 *
-	 * @param selectorFactory , e.g. Application.Selector
-	 * @param constructorTypeByObject Map of Domain classes by ObjectType
+	 * @param selectorFactory, A reference to the Selector Factory instance, an instance of fflib_ISelectorFactory
+	 * @param constructorTypeByObject Map of Domain classes by Object Type
 	 **/
 	public fflib_ClassicDomainFactory(
 			fflib_ISelectorFactory selectorFactory,
@@ -62,6 +63,7 @@ public virtual class fflib_ClassicDomainFactory
 	 *   and a map of Apex classes implementing fflib_ISObjectDomain by SObjectType
 	 *   Note this will not check the Apex classes provided actually implement the interfaces
 	 *     since this is not possible in the Apex runtime at present
+	 * Use only for backwards compatibility.
 	 *
 	 * @param selectorFactory , e.g. Application.Selector
 	 * @param sObjectByDomainConstructorType Map of Apex classes by SObjectType

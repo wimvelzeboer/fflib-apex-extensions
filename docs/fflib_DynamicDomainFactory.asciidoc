@@ -1,0 +1,90 @@
+= fflib_DynamicDomainFactory Class
+:Author:    Wilhelmus G.J. Velzeboer
+:Email:     wim@velzeboer.nl
+:Date:      2021
+:Revision:  version 1
+
+Domain Factory for creating instances of Domain classes using a resolver
+to dynamically link an Object type to its Domain Constructor implementation class
+
+This class is extended from
+fflib_DynamicAppFactory
+and implements the
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
+interface class.
+
+== Constructor Methods
+
+- <<constructor0, constructor: (resolver, selectorFactory)>> +
+
+
+== Methods
+This implementation of
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
+Does not add any new public or protected methods other than the following methods
+which are defined in the interface
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory].
+
+- link:fflib_IDomainFactory.asciidoc#newInstance1[newInstance(Set<Id> recordIds)] +
+Dynamically constructs an instance of a Domain class for the given record Ids
+- link:fflib_IDomainFactory.asciidoc#<newInstance2[newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)] +
+Dynamically constructs an instance of a Domain class for the given record Ids
+- link:fflib_IDomainFactory.asciidoc#newInstance3[newInstance(List<SObject> records)] +
+Dynamically constructs an instance of the Domain class for the given records
+- link:fflib_IDomainFactory.asciidoc#newInstance4[newInstance(List<Object> objects, Object objectType)] +
+Dynamically constructs an instance of the Domain class for the given Objects
+- link:fflib_IDomainFactory.asciidoc#newInstance5[newInstance(List<SObject> records, Schema.SObjectType sObjectType)] +
+Dynamically constructs an instance of the Domain class for the given records
+- link:fflib_IDomainFactory.asciidoc#setMock1[setMock(fflib_ISObjectDomain mockDomain)] +
+- link:fflib_IDomainFactory.asciidoc#setMock2[setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)] +
+Registers a mock implementation in the Factory for the provided sObjectType
+- link:fflib_IDomainFactory.asciidoc#setMock3[setMock(fflib_IDomain mockDomain)] +
+Registers a mock in the Factory by providing a mock instance of a domain
+- link:fflib_IDomainFactory.asciidoc#setMock4[setMock(Object domainType, fflib_IDomain mockDomain)] +
+Registers a mock implementation in the Factory for the provided sObjectType
+
+== Protected Variables
+- Map<Object, fflib_IDomain> **mockDomainByObjectType** +
+A map linking the ObjectType to a mock implementation of the domain.
+
+- fflib_ISelectorFactory **selectorFactory** +
+Holds the reference to the selector factory instance.
+
+---
+
+[[constructor0]]
+=== fflib_DynamicDomainFactory(resolver, selectorFactory)
+
+==== _Signature_
+```java
+public fflib_DynamicDomainFactory(fflib_IAppBindingResolver resolver, fflib_ISelectorFactory selectorFactory)
+```
+
+==== _Parameters_
+
+_**resolver**_ +
+A reference to the resolve instance,
+which dynamically links an Object type to its Domain Constructor implementation class
+
+
+_**selectorFactory**_ +
+A reference to the selector factory instance,
+to query records when a domain is created via record Ids.
+
+==== _Example_
+
+```java
+public class Application
+{
+    private static fflib_IAppBindingResolver bindingResolver =
+            new fflib_AppBindingResolver();
+
+    public static final fflib_ISelectorFactory Selector =
+            new fflib_DynamicSelectorFactory(bindingResolver);
+
+    public static final fflib_IDomainFactory Domain =
+        new fflib_DynamicDomainFactory(bindingResolver, Selector);
+}
+```
+
+___
