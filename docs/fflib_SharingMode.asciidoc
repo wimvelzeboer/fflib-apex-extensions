@@ -54,10 +54,9 @@ public class Application
     public static final fflib_ISelectorFactory Selector =
             new fflib_DynamicSelectorFactory(bindingResolver);
   
-    public static final fflib_ISelectorFactory WithoutSharingSelector = 
-            new fflib_DynamicSelectorFactory(
-                    bindingResolver.bySharingMode(fflib_SharingMode.WithoutSharing)
-            );
+    public static final fflib_ISelectorFactory ElevatedSelector =
+            new fflib_DynamicSelectorFactory(bindingResolver)
+                    .setSharingMode(fflib_SharingMode.WithSharing);
 }
 ```
 
@@ -69,13 +68,12 @@ public virtual inherited sharing class AccountsSelector
 {
     public static IAccountsSelector newInstance()
     {
-        return (IAccountsSelector) Application.Selector.newInstance(Schema.Account.SObjectType);
+        return (IAccountsSelector) Application.Selector.newInstance(Account.SObjectType);
     }
 
     public static IAccountsSelector newWithoutSharingInstance()
     {
-        return (IAccountsSelector) Application.WithoutSharingSelector
-        .newInstance(Schema.Account.SObjectType);
+        return (IAccountsSelector) Application.ElevatedSelector.newInstance(Account.SObjectType);
     }
 
     public AccountsSelector()

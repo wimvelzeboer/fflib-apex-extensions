@@ -18,6 +18,10 @@ When you rather prefer the bare overview of classes, methods and their examples,
 then you can find a full overview of the methods, their signatures and description in the
 [ApexDocs](./docs/README.asciidoc). 
 
+## Example Application
+You can look at 
+[these examples](https://github.com/wimvelzeboer/fflib-apex-extensions-samplecode) 
+if you like to see this extension package in action.
 
 ## Migrating from apex-commons
 

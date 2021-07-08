@@ -20,12 +20,14 @@ interface class.
 - <<constructor0, constructor: (resolver, selectorFactory)>> +
 
 
-== Methods
+== Inherited Methods
 This implementation of
 link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
 Does not add any new public or protected methods other than the following methods
 which are defined in the interface
-link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory].
+link:fflib_IDomainFactory.asciidoc[fflib_IDomainFactory]
+and in the abstract class
+link:fflib_DynamicAppFactory[fflib_DynamicAppFactory].
 
 - link:fflib_IDomainFactory.asciidoc#newInstance1[newInstance(Set<Id> recordIds)] +
 Dynamically constructs an instance of a Domain class for the given record Ids
