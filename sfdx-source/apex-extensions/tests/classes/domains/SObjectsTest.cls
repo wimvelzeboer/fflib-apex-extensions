@@ -68,7 +68,7 @@ private class SObjectsTest
 	}
 
 	@IsTest
-	static void itShouldReturnTheDomainsType()
+	static void itShouldReturnTheCreatedData()
 	{
 		System.assertEquals(
 				(Object) Schema.Account.SObjectType,
@@ -82,6 +82,36 @@ private class SObjectsTest
 						.getSObjectType(),
 				'Unexpected Domain SObjectType'
 		);
+	}
+
+	@IsTest
+	static void itShouldReturnTheDomainsType()
+	{
+		fflib_Criteria criteria = new fflib_Criteria().equalTo(Account.Name, 'A');
+
+		DomainAccounts domain = generateDomain();
+		domain.getDateTimeFieldValues(Account.LastActivityDate);
+		domain.getDateTimeFieldValues(Account.CreatedDate);
+		domain.getFieldByField(Account.Name, Account.AccountNumber);
+		domain.getFieldsByField(Account.Id, Account.AccountNumber);
+		domain.getFieldByField(Account.Id, Account.Id);
+		domain.getIdFieldByIdField(Account.Id, Account.Id);
+		domain.getIdFieldsByIdField(Account.Id, Account.Id);
+		domain.getIdFieldValues(Account.Id);
+		domain.getIdFieldValues(Account.Id, criteria);
+		domain.getIntegerFieldValues(Account.NumberOfEmployees);
+		domain.getIntegerFieldValues(Account.NumberOfEmployees, criteria);
+		domain.getDoubleFieldValues(Account.BillingLatitude);
+		domain.getDoubleFieldValues(Account.BillingLatitude, criteria);
+		domain.getSObjectByIdField(Account.Id);
+		domain.getSObjectsByIdField(Account.Id);
+		domain.getSObjectByStringField(Account.Name);
+		domain.getSObjectsByStringField(Account.Name);
+		domain.getStringFieldByIdField(Account.Id, Account.Name);
+		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
+		domain.getStringFieldValues(Account.Name, criteria);
+
+		// todo - add assertions
 	}
 
 	@IsTest

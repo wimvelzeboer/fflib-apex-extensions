@@ -214,7 +214,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Dates getDateFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getDateFieldValues(sObjectField);
 	}
 
@@ -245,7 +245,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual DateTimes getDateTimeFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getDateTimeFieldValues(sObjectField);
 	}
 
@@ -276,7 +276,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Decimals getDecimalFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getDecimalFieldValues(sObjectField);
 	}
 
@@ -307,7 +307,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Doubles getDoubleFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getDoubleFieldValues(sObjectField);
 	}
 
@@ -324,6 +324,7 @@ public virtual class SObjects
 	 * Accounts accounts = Accounts.newInstance(records);
 	 * Map<Object, Object> accountNameById = accounts.getFieldByField(Account.Name, Account.Id);
 	 */
+	@TestVisible
 	protected virtual Map<Object, Object> getFieldByField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<Object, Object> result = new Map<Object, Object>();
@@ -352,6 +353,7 @@ public virtual class SObjects
 	 * Contacts contacts = Contacts.newInstance(records);
 	 * Map<Object, Set<Object>> contactIdByAccountId = contacts.getFieldsByField(Contact.Id, Contact.AccountId);
 	 */
+	@TestVisible
 	protected virtual Map<Object, Set<Object>> getFieldsByField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<Object, Set<Object>> result = new Map<Object, Set<Object>>();
@@ -382,6 +384,7 @@ public virtual class SObjects
 	 * Contacts contacts = Contacts.newInstance(records);
 	 * Map<Id, Id> accountIdByContactId = contacts.getIdFieldByIdField(Contact.AccountId, Contact.Id);
 	 */
+	@TestVisible
 	protected virtual Map<Id, Id> getIdFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<Id, Id> result = new Map<Id, Id>();
@@ -410,6 +413,7 @@ public virtual class SObjects
 	 * Contacts contacts = Contacts.newInstance(records);
 	 * Map<Id, Set<Id>> contactIdByAccountId = contacts.getIdFieldsByIdField(Contact.Id, Contact.AccountId);
 	 */
+	@TestVisible
 	protected virtual Map<Id, Set<Id>> getIdFieldsByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<Id, Set<Id>> result = new Map<Id, Set<Id>>();
@@ -459,7 +463,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Ids getIdFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getIdFieldValues(sObjectField);
 	}
 
@@ -491,7 +495,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Integers getIntegerFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getIntegerFieldValues(sObjectField);
 	}
 
@@ -522,7 +526,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Longs getLongFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getLongFieldValues(sObjectField);
 	}
 
@@ -538,6 +542,7 @@ public virtual class SObjects
 	 * Account account = Account.newInstance(records);
 	 * Map<Id, SObject> accountById = account.getSObjectByIdField(Account.Id);
 	 */
+	@TestVisible
 	protected virtual Map<Id, SObject> getSObjectByIdField(Schema.SObjectField sObjectField)
 	{
 		Map<Id, SObject> result = new Map<Id, SObject>();
@@ -562,13 +567,14 @@ public virtual class SObjects
 	 * Contacts contacts = Contacts.newInstance(records);
 	 * Map<Id, List<SObject>> contactsByAccountId = contacts.getSObjectsByIdField(Contact.AccountId);
 	 */
+	@TestVisible
 	protected virtual Map<Id, List<SObject>> getSObjectsByIdField(Schema.SObjectField sObjectField)
 	{
 		Map<Id, List<SObject>> result = new Map<Id, List<SObject>>();
 		for (SObject record : getRecords())
 		{
 			Id fieldId = (Id) record.get(sObjectField);
-			if (record.get(fieldId) == null) continue;
+			if (fieldId == null) continue;
 
 			if (!result.containsKey(fieldId))
 			{
@@ -591,6 +597,7 @@ public virtual class SObjects
 	 * Account account = Account.newInstance(records);
 	 * Map<String, SObject> accountByNumber = account.getSObjectByStringField(Account.AccountNumber);
 	 */
+	@TestVisible
 	protected virtual Map<String, SObject> getSObjectByStringField(Schema.SObjectField sObjectField)
 	{
 		Map<String, SObject> result = new Map<String, SObject>();
@@ -616,6 +623,7 @@ public virtual class SObjects
 	 * Account account = Account.newInstance(records);
 	 * Map<String, SObject> accountByName = account.getSObjectsByStringField(Account.AccountName);
 	 */
+	@TestVisible
 	protected virtual Map<String, List<SObject>> getSObjectsByStringField(Schema.SObjectField sObjectField)
 	{
 		Map<String, List<SObject>> result = new Map<String, List<SObject>>();
@@ -646,6 +654,7 @@ public virtual class SObjects
 	 * Account account = Account.newInstance(records);
 	 * Map<Id, String> accountNameById = account.getStringFieldByIdField(Account.AccountName, Account.Id);
 	 */
+	@TestVisible
 	protected virtual Map<Id, String> getStringFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<Id, String> result = new Map<Id, String>();
@@ -670,6 +679,7 @@ public virtual class SObjects
 	 * Account account = Account.newInstance(records);
 	 * Map<Id, String> accountNameById = account.getStringFieldByStringField(Account.AccountName, Account.Id);
 	 */
+	@TestVisible
 	protected virtual Map<String, String> getStringFieldByStringField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<String, String> result = new Map<String, String>();
@@ -708,7 +718,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual Strings getStringFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria))
+		return new SObjects(getRecords(criteria), getSObjectType())
 				.getStringFieldValues(sObjectField);
 	}
 
@@ -722,7 +732,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual void setFieldValue(Schema.SObjectField sObjectField, Object value, fflib_Criteria criteria)
 	{
-		new SObjects(getRecords(criteria))
+		new SObjects(getRecords(criteria), getSObjectType())
 				.setFieldValue(sObjectField, value);
 	}
 }

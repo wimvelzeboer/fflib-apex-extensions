@@ -71,7 +71,7 @@ public virtual class fflib_ClassicDomainFactory
 	public fflib_ClassicDomainFactory(fflib_ISelectorFactory selectorFactory,
 			Map<SObjectType, Type> sObjectByDomainConstructorType)
 	{
-		selectorFactory = selectorFactory;
+		this.selectorFactory = selectorFactory;
 		this.constructorTypeByObject = getConstructorTypeByObject(sObjectByDomainConstructorType);
 		this.mockDomainByObject = new Map<Object, fflib_IDomain>();
 	}
@@ -104,7 +104,7 @@ public virtual class fflib_ClassicDomainFactory
 	 **/
 	public virtual fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)
 	{
-		return newInstance(selectorFactory.selectById(recordIds, sObjectType));
+		return newInstance(selectorFactory.selectById(recordIds, sObjectType), sObjectType);
 	}
 
 	/**
