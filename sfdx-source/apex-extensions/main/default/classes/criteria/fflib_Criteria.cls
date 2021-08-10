@@ -31,14 +31,20 @@
 public virtual with sharing class fflib_Criteria
 		implements Evaluator
 {
+	private static final String OPEN_BRACKET = '(';
+	private static final String CLOSE_BRACKET = ')';
+	private static final String FORMULA = 'FORMULA';
+
 	// Add brace when generated to SQL
 	private Boolean embraced = false;
 
 	// List to hold all evaluators
 	private List<Evaluator> evaluators;
 
-	// The type of comparator NONE | AND | OR
+	// The type of comparator NONE | AND | OR | FORMULA
 	private String type;
+	private IFormulaEvaluator formulaEvaluator;
+
 
 
 	/**
@@ -146,6 +152,154 @@ public virtual with sharing class fflib_Criteria
 	}
 
 	/**
+	 * @param formula Formula string
+	 *
+	 * @return An instance of itself to enable method chaining
+	 *
+	 * @example
+	 * new fflib_Criteria()
+	 *          .formulaCriteria('(1 OR 2) AND 3')
+     *     		.equalTo(Account.AccountNumber, '0001')
+	 *    		.equalTo(Account.AccountNumber, '0002')
+	 *     		.equalTo(Account.ShippingCountry, 'USA'))
+	 *
+	 *  Evaluates:
+	 *      (AccountNumber = '0001' OR AccountNumber = '0001') AND ShippingCountry = 'USA'
+	 */
+	public virtual fflib_Criteria formulaCriteria(String formula)
+	{
+		this.type = 'FORMULA';
+		this.formulaEvaluator = new FormulaEvaluator(formula.toUpperCase());
+		return this;
+	}
+
+	private interface IFormulaEvaluator
+	{
+		Boolean evaluate(Object record, Map<Integer, Boolean> evaluatedResultByNumber);
+		String toSOQL(Map<Integer, String> queryByNumber);
+	}
+
+	public class FormulaEvaluator implements IFormulaEvaluator
+	{
+		private String formula;
+		private String type
+		{
+			get;
+			set
+			{
+				if (type != null && type != value)
+					throw new CriteriaException('Can not mix AND and OR, use brackets');
+				type = value;
+			}
+		}
+
+		List<IFormulaEvaluator> formulaParts = new List<IFormulaEvaluator>();
+
+		public FormulaEvaluator(String formula)
+		{
+			this.formula = formula;
+			String expression = String.valueOf(formula);
+			while(expression.length() > 0)
+			{
+				if (expression.startsWith(' '))
+				{
+					expression = expression.removeStart(' ');
+				}
+				else if (expression.startsWith(OPEN_BRACKET))
+				{
+					String subFormula = fflib_StringUtils.getBetweenBrackets(OPEN_BRACKET, CLOSE_BRACKET, expression, 0);
+					if (subFormula == null)
+						throw new CriteriaException('Missing closing bracket');
+
+					formulaParts.add(new FormulaEvaluator(subFormula));
+					expression = expression.substring(subFormula.length() + 2);
+				}
+				else if (expression.startsWith('OR'))
+				{
+					type = 'OR';
+					expression = expression.removeStart('OR');
+				}
+				else if (expression.startsWith('AND'))
+				{
+					type = 'AND';
+					expression = expression.removeStart('AND');
+				}
+				else
+				{
+					String numberValue;
+					if (expression.indexOf(' ') == -1)  // at the end of string
+					{
+						numberValue = expression;
+						expression = '';
+					}
+					else
+					{
+						numberValue = expression.substring(0, expression.indexOf(' '));
+						expression = expression.substring(expression.indexOf(' '));
+					}
+					formulaParts.add(new FormulaNumberEvaluator(Integer.valueOf(numberValue)));
+				}
+			}
+		}
+
+		public Boolean evaluate(Object record, Map<Integer, Boolean> evaluatedResultByNumber)
+		{
+			Boolean result = !(this.type == 'OR');
+			for (IFormulaEvaluator evaluator : formulaParts)
+			{
+				Boolean evaluateResult = evaluator.evaluate(record, evaluatedResultByNumber);
+				if (evaluateResult && (this.type == 'OR'))
+				{
+					return true;
+				}
+				else if (!evaluateResult && this.type == 'AND')
+				{
+					return false;
+				}
+			}
+			return result;
+		}
+
+		public String toSOQL(Map<Integer, String> queryByNumber)
+		{
+			String result = '';
+			for (IFormulaEvaluator evaluator : formulaParts)
+			{
+				if (result != '')
+					result += ' ' + this.type + ' ';
+				result += evaluator.toSOQL(queryByNumber);
+			}
+			return OPEN_BRACKET + result + CLOSE_BRACKET;
+		}
+	}
+
+	private class FormulaNumberEvaluator implements IFormulaEvaluator
+	{
+		private Integer expressionNumber;
+
+		public FormulaNumberEvaluator(Integer expressionNumber)
+		{
+			this.expressionNumber = expressionNumber;
+		}
+
+		public Boolean evaluate(Object record, Map<Integer, Boolean> evaluatedResultByNumber)
+		{
+			if (!evaluatedResultByNumber.containsKey(expressionNumber - 1))
+				throw new CriteriaException('Expected a formula expression with number: ' + expressionNumber);
+
+			return evaluatedResultByNumber.get(expressionNumber - 1);
+		}
+
+		public String toSOQL(Map<Integer, String> queryByNumber)
+		{
+			if (!queryByNumber.containsKey(expressionNumber - 1))
+				throw new CriteriaException('Expected a formula expression with number: ' + expressionNumber);
+
+			return queryByNumber.get(expressionNumber - 1);
+		}
+	}
+
+	/**
 	 * Add an equal to criteria comparing a fields value to a given value
 	 *
 	 * @param field The sObjectField to evaluate
@@ -210,6 +364,8 @@ public virtual with sharing class fflib_Criteria
 	{
 		if (this.evaluators.isEmpty()) return true;
 
+		if (this.type == FORMULA) return evaluateFormula(record);
+
 		Boolean result = !(this.type == 'OR');
 		for (Evaluator evaluator : evaluators)
 		{
@@ -224,6 +380,16 @@ public virtual with sharing class fflib_Criteria
 			}
 		}
 		return result;
+	}
+
+	private Boolean evaluateFormula(Object record)
+	{
+		Map<Integer, Boolean> evaluatedResultByNumber = new Map<Integer, Boolean>();
+		for (Integer i = 0; i < evaluators.size(); i++)
+		{
+			evaluatedResultByNumber.put(i, evaluators.get(i).evaluate(record));
+		}
+		return formulaEvaluator.evaluate(record, evaluatedResultByNumber);
 	}
 
 	/**
@@ -491,6 +657,8 @@ public virtual with sharing class fflib_Criteria
 	{
 		if (this.evaluators.isEmpty()) return '';
 
+		if (this.type == FORMULA) return formulaToSOQL();
+
 		String result = '';
 		for (Evaluator evaluator : this.evaluators)
 		{
@@ -504,6 +672,19 @@ public virtual with sharing class fflib_Criteria
 		if (this.embraced) result = '(' + result + ')';
 
 		return result;
+	}
+
+	private String formulaToSOQL()
+	{
+		Map<Integer, String> queryByNumber = new Map<Integer, String>();
+		for (Integer i = 0; i < this.evaluators.size(); i++)
+		{
+			queryByNumber.put(i, evaluators.get(i).toSOQL());
+		}
+
+		String result = this.formulaEvaluator
+				.toSOQL(queryByNumber);
+		return result.substring(1, result.length() - 1);
 	}
 
 	private static String operatorToString(fflib_Operator operator)

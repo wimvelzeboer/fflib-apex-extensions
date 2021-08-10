@@ -569,4 +569,33 @@ private with sharing class fflib_CriteriaTest
 					.evaluate(record)
 		);
 	}
+
+	@IsTest
+	static void itShouldEvaluateFormula()
+	{
+		// GIVEN a record
+		Contact record = new Contact(
+				LastName = 'Smith',
+				FirstName = 'John',
+				Department = 'MIB1'
+		);
+
+		// WHEN we process a formula criteria it should evaluate the formula
+		System.assert(
+				new fflib_Criteria()
+						.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
+						.equalTo(Contact.LastName, 'Smith')
+						.equalTo(Contact.FirstName, 'John')
+						.equalTo(Contact.Department, 'MIB')
+						.evaluate(record)
+		);
+		System.assertEquals(false,
+				new fflib_Criteria()
+						.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
+						.equalTo(Contact.LastName, 'Ford')
+						.equalTo(Contact.FirstName, 'John')
+						.equalTo(Contact.Department, 'MIB')
+						.evaluate(record)
+		);
+	}
 }

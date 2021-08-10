@@ -24,6 +24,8 @@ Add an equal to criteria comparing a fields value to a given value
 Add an equal to criteria comparing a related fields value to a given value
 - <<evaluate, evaluate(Object record)>> +
 Evaluates the stored criteria based on the given SObject
+- <<formula, formulaCriteria(String formula)>> +
+Adds a criteria based on a formula
 - <<greaterOrEqualTo, greaterOrEqualTo(Schema.SObjectField field, Object value)>> +
 Compares the fields values to be greater or equal to the given value
 - <<greaterOrEqualTo2, greaterOrEqualTo(String relatedField, Object value)>> +
@@ -245,6 +247,45 @@ System.assert(
             .equalTo(Account.Name, 'Example')
             .evaluate(record)
 );
+```
+
+[[formula]]
+=== formulaCriteria(String formula)(Object record)
+Adds a criteria based on a formula that can dynamically compare criteria with complex AND or OR structure.
+
+==== _Signature_
+```java
+public virtual fflib_Criteria formulaCriteria(String formula)
+```
+==== _Parameters_
+
+_**formula**_ +
+The condition formula to evaluate
+
+==== _Returns_
+The Boolean result of the evaluated criteria
+
+==== _Example_
+```java
+Contact record = new Contact(
+		LastName = 'Smith',
+		FirstName = 'John',
+		Department = 'MIB'
+);
+
+new fflib_Criteria()
+		.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
+		.equalTo(Contact.LastName, 'Smith')
+		.equalTo(Contact.FirstName, 'John')
+		.equalTo(Contact.Department, 'MIB')
+		.evaluate(record); // true
+
+new fflib_Criteria()
+		.FormulaCriteria('(1 AND 2) OR 3')
+		.equalTo(Contact.LastName, 'Smith')
+		.equalTo(Contact.FirstName, 'John')
+		.equalTo(Contact.Department, 'MIB')
+		.toSOQL(); // "(LastName='Smith' OR FirstName='John') AND Department='MIB'"
 ```
 
 ___
