@@ -550,4 +550,23 @@ private with sharing class fflib_CriteriaTest
 						.toSOQL()
 		);
 	}
+
+	@IsTest
+	static void itShouldEvaluateValuesOnRelatedObject()
+	{
+		// GIVEN a Contact record with related Account records
+		Contact contact = new Contact(LastName = 'Smith');
+		Account account = new Account(
+				Id = fflib_IDGenerator.generate(Account.SObjectType),
+				Name = 'Dummy'
+		);
+		SObject record = fflib_MockSObjectUtil.addRelatedParentObject(contact, account, 'Account');
+
+		// WHEN we run a criteria con the contact record validating related data on the parent Account
+		System.assert(
+				new fflib_Criteria()
+					.equalTo('Account.Name', 'Dummy')
+					.evaluate(record)
+		);
+	}
 }

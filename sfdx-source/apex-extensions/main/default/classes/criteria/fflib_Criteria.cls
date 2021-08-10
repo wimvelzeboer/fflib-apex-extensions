@@ -166,6 +166,12 @@ public virtual with sharing class fflib_Criteria
 		return this;
 	}
 
+	public virtual fflib_Criteria equalTo(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.EQUALS, value));
+		return this;
+	}
+
 	/**
 	 * Add a not equal to criteria while comparing a fields value to a given value
 	 *
@@ -184,6 +190,12 @@ public virtual with sharing class fflib_Criteria
 	public virtual fflib_Criteria notEqualTo(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.NOT_EQUALS, value));
+		return this;
+	}
+
+	public virtual fflib_Criteria notEqualTo(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.NOT_EQUALS, value));
 		return this;
 	}
 
@@ -236,6 +248,12 @@ public virtual with sharing class fflib_Criteria
 		return this;
 	}
 
+	public virtual fflib_Criteria greaterOrEqualTo(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.GREATER_THAN_OR_EQUAL_TO, value));
+		return this;
+	}
+
 	/**
 	 * Compares the fields values to be greater or equal to the given value
 	 * Evaluates to false if the field value is null
@@ -255,6 +273,11 @@ public virtual with sharing class fflib_Criteria
 	public virtual fflib_Criteria greaterThan(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.GREATER_THAN, value));
+		return this;
+	}
+	public virtual fflib_Criteria greaterThan(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.GREATER_THAN, value));
 		return this;
 	}
 
@@ -279,6 +302,11 @@ public virtual with sharing class fflib_Criteria
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.LESS_THAN_OR_EQUAL_TO, value));
 		return this;
 	}
+	public virtual fflib_Criteria lessOrEqualTo(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.LESS_THAN_OR_EQUAL_TO, value));
+		return this;
+	}
 
 
 	/**
@@ -300,6 +328,11 @@ public virtual with sharing class fflib_Criteria
 	public virtual fflib_Criteria lessThan(Schema.SObjectField field, Object value)
 	{
 		evaluators.add(new FieldEvaluator(field, fflib_Operator.LESS_THAN, value));
+		return this;
+	}
+	public virtual fflib_Criteria lessThan(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.LESS_THAN, value));
 		return this;
 	}
 
@@ -568,10 +601,16 @@ public virtual with sharing class fflib_Criteria
 		return result + ')';
 	}
 
+	private interface Evaluator
+	{
+		Boolean evaluate(Object obj);
+		String toSOQL();
+	}
+
 	/**
 	 * Generic criteria handler for comparing against sets
 	 */
-	private class FieldSetEvaluator implements Evaluator
+	private virtual class FieldSetEvaluator implements Evaluator
 	{
 		private Schema.SObjectField sObjectField;
 		private fflib_Objects values;
@@ -606,12 +645,6 @@ public virtual with sharing class fflib_Criteria
 					}
 			);
 		}
-	}
-
-	private interface Evaluator
-	{
-		Boolean evaluate(Object obj);
-		String toSOQL();
 	}
 
 	/**
@@ -650,6 +683,99 @@ public virtual with sharing class fflib_Criteria
 							toLiteral(this.value)
 					},
 					''
+			);
+		}
+	}
+
+	private abstract class AbstractRelatedFieldEvaluator implements Evaluator
+	{
+		protected String fieldName;
+		protected fflib_Operator operator;
+
+		protected Object getFieldValue(Object record)
+		{
+			if (!fieldName.contains('.'))
+			{
+				return ((SObject) record).get(fieldName);
+			}
+
+			List<String> fieldPath = fieldName.split('\\.');
+			SObject relatedObject = (SObject) record;
+			for (Integer i = 0; i < fieldPath.size() - 1; i++)
+			{
+				relatedObject = relatedObject.getSObject(fieldPath.get(i));
+			}
+			return relatedObject.get(fieldPath.get(fieldPath.size()-1));
+		}
+
+	}
+
+	private class RelatedFieldEvaluator extends AbstractRelatedFieldEvaluator
+	{
+		private Object value;
+
+		public RelatedFieldEvaluator(String fieldName, fflib_Operator operator, Object value)
+		{
+			this.fieldName = fieldName;
+			this.value = value;
+			this.operator = operator;
+		}
+
+		public Boolean evaluate(Object record)
+		{
+			if (!(record instanceof SObject))
+				throw new CriteriaException('Only records of type SObject can have fieldCriteria');
+
+			Object fieldValue = getFieldValue(record);
+
+			return fflib_Comparator.compareTo(fieldValue, operator, this.value);
+		}
+
+		public String toSOQL()
+		{
+			return String.join(
+					new List<String>
+					{
+							this.fieldName,
+							operatorToString(this.operator),
+							toLiteral(this.value)
+					},
+					''
+			);
+		}
+	}
+
+	private class RelatedFieldSetEvaluator extends AbstractRelatedFieldEvaluator
+	{
+		private fflib_Objects values;
+
+		public RelatedFieldSetEvaluator(String fieldName, fflib_Operator operator, fflib_Objects values)
+		{
+			this.fieldName = fieldName;
+			this.values = values;
+			this.operator = operator;
+		}
+
+		public Boolean evaluate(Object record)
+		{
+			if (!(record instanceof SObject))
+				throw new CriteriaException('Only records of type SObject can have fieldCriteria');
+
+			Object fieldValue = getFieldValue(record);
+			Boolean isIn = this.values.contains(fieldValue);
+			return ((operator == fflib_Operator.INx && isIn) || (operator == fflib_Operator.NOT_IN && !isIn));
+		}
+
+		public String toSOQL()
+		{
+			return String.format(
+					'{0} {2} {3}',
+					new List<String>
+					{
+							this.fieldName,
+							operatorToString(this.operator),
+							toLiteral(this.values)
+					}
 			);
 		}
 	}

@@ -20,20 +20,32 @@ Adds a sub criteria with OR comparator
 Adds a sub criteria with AND comparator
 - <<equalTo, equalTo(Schema.SObjectField field, Object value)>> +
 Add an equal to criteria comparing a fields value to a given value
+- <<equalTo2, equalTo(String relatedField, Object value)>> +
+Add an equal to criteria comparing a related fields value to a given value
 - <<evaluate, evaluate(Object record)>> +
 Evaluates the stored criteria based on the given SObject
 - <<greaterOrEqualTo, greaterOrEqualTo(Schema.SObjectField field, Object value)>> +
 Compares the fields values to be greater or equal to the given value
+- <<greaterOrEqualTo2, greaterOrEqualTo(String relatedField, Object value)>> +
+Compares the related field values to be greater or equal to the given value
 - <<greaterThan, greaterThan(Schema.SObjectField field, Object value)>> +
 Compares the fields values to be greater or equal to the given value
+- <<greaterThan2, greaterThan(String relatedField, Object value)>> +
+Compares the related field values to be greater or equal to the given value
 - <<inSet, inSet(Schema.SObjectField field, Set<Object> values)>> +
 Checks if the given sets contains the fields values
 - <<lessOrEqualTo, lessOrEqualTo(Schema.SObjectField field, Object value)>> +
 Compares the fields values to be less or equal to the given value
+- <<lessOrEqualTo2, lessOrEqualTo(String relatedField, Object value)>> +
+Compares the related field values to be less or equal to the given value
 - <<lessThan, lessThan(Schema.SObjectField field, Object value)>> +
 Compares the fields values to be greater or equal to the given value
+- <<lessThan2, lessThan(String relatedField, Object value)>> +
+Compares the related field values to be greater or equal to the given value
 - <<notEqualTo, notEqualTo(Schema.SObjectField field, Object value)>> +
 Add an equal to criteria comparing a fields value to a given value
+- <<notEqualTo2, notEqualTo(String relatedField, Object value)>> +
+Add an equal to criteria comparing a related fields value to a given value
 - <<notInSet, notInSet(Schema.SObjectField field, Set<Date> values)>> +
 Checks if the given sets does not contain the fields values
 - <<toSQL, toSOQL()>> +
@@ -65,8 +77,6 @@ new fflib_Criteria()
 ```
 
 ___
-
-
 
 
 [[andCriteria]]
@@ -181,6 +191,36 @@ new fflib_Criteria()
 // Name = 'Example'
 ```
 ___
+[[equalTo2]]
+=== equalTo(String relatedField, Object value)
+Add an equal to criteria comparing a related fields value to a given value
+
+==== _Signature_
+```java
+public virtual fflib_Criteria equalTo(String relatedField, Object value)
+```
+==== _Parameters_
+
+_**relatedField**_ +
+The related field to evaluate
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+Contact record = [SELECT Id, Account.Name FROM Contact LIMIT 1];
+new fflib_Criteria()
+        .equalTo('Account.Name', 'Example')
+        .evaluate(record)
+
+// Evaluates:
+// Account.Name = 'Example'
+```
+___
 [[evaluate]]
 === evaluate(Object record)
 Evaluates the stored criteria based on the given SObject
@@ -238,6 +278,38 @@ new fflib_Criteria()
 ```
 
 ___
+[[greaterOrEqualTo2]]
+=== greaterOrEqualTo(String relatedField, Object value)
+Compares the fields values to be greater or equal to the given value.
+Evaluates to false if the field value is null.
+
+==== _Signature_
+```java
+public virtual fflib_Criteria greaterOrEqualTo(String relatedField, Object value)
+```
+==== _Parameters_
+
+_**relatedField**_ +
+The relatedField name to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+Contact record = [SELECT Id, Account.AnnualRevenue FROM Contact LIMIT 1];
+new fflib_Criteria()
+        .greaterOrEqualTo('Account.AnnualRevenue', 54321)
+        .evaluate(record);
+
+// Evaluates:
+// Account.AnnualRevenue >= 54321
+```
+
+___
 [[greaterThan]]
 === greaterThan(Schema.SObjectField field, Object value)
 Compares the fields values to be greater or equal to the given value
@@ -265,6 +337,38 @@ new fflib_Criteria()
 
 // Evaluates:
 // AnnualRevenue > 54321
+```
+
+___
+[[greaterThan2]]
+=== greaterThan(String relatedField, Object value)
+Compares the fields values to be greater or equal to the given value
+Evaluates to false if the field value is null
+
+==== _Signature_
+```java
+public virtual fflib_Criteria greaterThan(String relatedField, Object value)
+```
+==== _Parameters_
+
+_**relatedField**_ +
+The relatedField name to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+Contact record = [SELECT Id, Account.AnnualRevenue FROM Contact LIMIT 1];
+new fflib_Criteria()
+        .greaterThan('Account.AnnualRevenue', 54321)
+        .evaluate(record);
+
+// Evaluates:
+// Account.AnnualRevenue > 54321
 ```
 
 ___
@@ -328,6 +432,37 @@ new fflib_Criteria()
 ```
 
 ___
+[[lessOrEqualTo2]]
+=== lessOrEqualTo(String relatedField, Object value)
+Compares the related fields values to be less or equal to the given value
+Evaluates to true if the field value is null
+
+==== _Signature_
+```java
+public virtual fflib_Criteria lessOrEqualTo(String relatedField, Object value)
+```
+==== _Parameters_
+
+_**relatedField**_ +
+The relatedField name to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+Contact record = [SELECT Id, Account.AnnualRevenue FROM Contact LIMIT 1];
+new fflib_Criteria()
+        .lessOrEqualTo('Account.AnnualRevenue', 54321)
+        .evaluate(record);
+// Evaluates:
+// Account.AnnualRevenue > 54321
+```
+
+___
 
 [[lessThan]]
 === lessThan(Schema.SObjectField field, Object value)
@@ -353,6 +488,37 @@ An instance of itself to enable method chaining
 ```java
 new fflib_Criteria()
         .lessThan(Account.AnnualRevenue, 54321)
+
+// Evaluates:
+// AnnualRevenue < 54321
+```
+
+[[lessThan2]]
+=== lessThan(String relatedField, Object value)
+Compares the related fields values to be less or equal to the given value
+Evaluates to true if the field value is null
+
+==== _Signature_
+```java
+public virtual fflib_Criteria lessThan(String relatedField, Object value)
+```
+==== _Parameters_
+
+_**relatedField**_ +
+The relatedField name to use its value
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+Contact record = [SELECT Id, Account.AnnualRevenue FROM Contact LIMIT 1];
+new fflib_Criteria()
+        .lessThan('Account.AnnualRevenue', 54321)
+        .evaluate(record);
 
 // Evaluates:
 // AnnualRevenue < 54321
@@ -386,6 +552,36 @@ new fflib_Criteria()
 
 // Evaluates:
 // Name != 'Example'
+```
+___
+[[notEqualTo2]]
+=== notEqualTo(String relatedField, Object value)
+Add a not equal to criteria comparing a related fields value to a given value
+
+==== _Signature_
+```java
+public virtual fflib_Criteria notEqualTo(String relatedField, Object value)
+```
+==== _Parameters_
+
+_**relatedField**_ +
+The relatedField name to evaluate
+
+_**value**_ +
+The value to be compared to the fields value
+
+==== _Returns_
+An instance of itself to enable method chaining
+
+==== _Example_
+```java
+Contact record = [SELECT Id, Account.Name FROM Contact LIMIT 1];
+new fflib_Criteria()
+        .notEqualTo('Account.Name', 'Example')
+        .evaluate(record);
+
+// Evaluates:
+// Account.Name != 'Example'
 ```
 ___
 
