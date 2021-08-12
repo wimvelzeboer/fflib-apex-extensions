@@ -248,11 +248,11 @@ public virtual with sharing class fflib_Criteria
 			for (IFormulaEvaluator evaluator : formulaParts)
 			{
 				Boolean evaluateResult = evaluator.evaluate(record, evaluatedResultByNumber);
-				if (evaluateResult && (this.type == 'OR'))
+				if (evaluateResult && (this.type == 'OR' || this.type == null))
 				{
 					return true;
 				}
-				else if (!evaluateResult && this.type == 'AND')
+				else if (!evaluateResult && (this.type == 'AND' || this.type == null))
 				{
 					return false;
 				}

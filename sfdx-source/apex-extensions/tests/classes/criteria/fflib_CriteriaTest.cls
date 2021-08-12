@@ -598,4 +598,21 @@ private with sharing class fflib_CriteriaTest
 						.evaluate(record)
 		);
 	}
+
+	@IsTest
+	static void itShouldEvaluateFormula_WithSingleItem()
+	{
+		System.assert(
+				new fflib_Criteria()
+						.FormulaCriteria('1')
+						.equalTo(Contact.LastName, 'Smith')
+						.evaluate(new Contact(LastName = 'Smith'))
+		);
+		System.assertEquals(false,
+				new fflib_Criteria()
+						.FormulaCriteria('1')
+						.equalTo(Contact.LastName, 'Ford')
+						.evaluate(new Contact(LastName = 'Smith'))
+		);
+	}
 }
