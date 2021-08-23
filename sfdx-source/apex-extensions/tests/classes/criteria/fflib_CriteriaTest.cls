@@ -615,4 +615,20 @@ private with sharing class fflib_CriteriaTest
 						.evaluate(new Contact(LastName = 'Smith'))
 		);
 	}
+
+	@IsTest
+	static void itShouldEvaluateFormula_ReturnNullOnErrorInFormula()
+	{
+		SObject record = fflib_MockSObjectUtil.addRelatedParentObject(
+				new Contact(LastName = 'Smith'),
+				new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Industry = 'Energy'),
+				'Account');
+
+		System.assertEquals(null,
+				new fflib_Criteria()
+						.FormulaCriteria('1')
+						.equalTo('AccountTypo.Industry', 'Energy')
+						.evaluate(record)
+		);
+	}
 }

@@ -45,8 +45,6 @@ public virtual with sharing class fflib_Criteria
 	private String type;
 	private IFormulaEvaluator formulaEvaluator;
 
-
-
 	/**
 	 * populate private variables with default settings.
 	 */
@@ -172,6 +170,7 @@ public virtual with sharing class fflib_Criteria
 		this.formulaEvaluator = new FormulaEvaluator(formula.toUpperCase());
 		return this;
 	}
+
 
 	private interface IFormulaEvaluator
 	{
@@ -384,12 +383,25 @@ public virtual with sharing class fflib_Criteria
 
 	private Boolean evaluateFormula(Object record)
 	{
-		Map<Integer, Boolean> evaluatedResultByNumber = new Map<Integer, Boolean>();
-		for (Integer i = 0; i < evaluators.size(); i++)
+		try
 		{
-			evaluatedResultByNumber.put(i, evaluators.get(i).evaluate(record));
+				Map<Integer, Boolean> evaluatedResultByNumber = new Map<Integer, Boolean>();
+				for (Integer i = 0; i < evaluators.size(); i++)
+				{
+					evaluatedResultByNumber.put(i, evaluators.get(i).evaluate(record));
+				}
+				return formulaEvaluator.evaluate(record, evaluatedResultByNumber);
 		}
-		return formulaEvaluator.evaluate(record, evaluatedResultByNumber);
+		catch (Exception e)
+		{
+			// If an error occurs during the validation,
+			// just return a null value and send a warning message to the debug log;
+			System.debug(
+					System.LoggingLevel.WARN,
+					'Criteria condition failure with error: ' + e.getMessage() + '\n' + e.getStackTraceString()
+			);
+			return null;
+		}
 	}
 
 	/**
