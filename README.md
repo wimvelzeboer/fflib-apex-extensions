@@ -34,6 +34,22 @@ Please have read the [contributing guide](./CONTRIBUTING.md) that will through t
 
 You can also have a look at the open items in the [project(s)](./projects), feel free to pick an item from the kanban board!
 
+## Change Log
+Some of the changes that have major impact are listed here;
+
+### August 2021
+**Added criteria based on formula;  (1 OR 2) AND 3)**
+
+```apex
+new fflib_Criteria()
+        .formulaCriteria('(1 OR 2) AND 3')
+        .equalTo(Account.AccountNumber, '0001')
+        .equalTo(Account.AccountNumber, '0002')
+        .equalTo(Account.ShippingCountry, 'USA')
+	 
+Evaluates:
+     (AccountNumber = '0001' OR AccountNumber = '0001') AND ShippingCountry = 'USA'
+```
 ## Donations
 
 We are pleased to announce that the fflib-apex-extensions Project is accepting donations in the privacy-oriented cryptocurrency Monero (XMR) at the following address:

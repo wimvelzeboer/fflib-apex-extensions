@@ -29,7 +29,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public virtual with sharing class Ids
-		extends fflib_Objects
+		extends Objects
 {
 	public Ids(Set<Id> idSet)
 	{
