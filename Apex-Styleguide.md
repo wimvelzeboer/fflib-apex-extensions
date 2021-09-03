@@ -770,5 +770,5 @@ To configure the Code Styling in IntelliJ follow these steps
 
 - Open Preferences Dialog log (Mainmenu: InteliJ -> Preferences)
 - Goto Editor -> Code Style -> Apex
-- Import the [ApexStyleGuide.xml](./docs/ApexStyleGuide.xml)
+- Import the [ApexStyleGuide.xml](dev-tools/assets/intelliJ/ApexStyleGuide.xml)
 
