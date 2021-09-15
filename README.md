@@ -34,8 +34,13 @@ Please have read the [contributing guide](./CONTRIBUTING.md) that will through t
 
 You can also have a look at the open items in the [project(s)](./projects), feel free to pick an item from the kanban board!
 
-## Change Log
+----
+# Change Log
 Some of the changes that have major impact are listed here;
+
+### September 2021
+**Logger functionality**
+A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
 
 ### August 2021
 **Added criteria based on formula;  (1 OR 2) AND 3)**
@@ -50,6 +55,9 @@ new fflib_Criteria()
 Evaluates:
      (AccountNumber = '0001' OR AccountNumber = '0001') AND ShippingCountry = 'USA'
 ```
+
+---
+
 ## Donations
 
 We are pleased to announce that the fflib-apex-extensions Project is accepting donations in the privacy-oriented cryptocurrency Monero (XMR) at the following address:
