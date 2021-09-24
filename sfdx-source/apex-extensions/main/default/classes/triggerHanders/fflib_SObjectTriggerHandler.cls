@@ -32,6 +32,16 @@ public with sharing class fflib_SObjectTriggerHandler
 		extends fflib_SObjectDomain
 		implements fflib_ISObjectTriggerHandler
 {
+	public fflib_SObjectTriggerHandler(List<SObject> records)
+	{
+		super(records);
+	}
+
+	public fflib_SObjectTriggerHandler(List<SObject> records, Schema.SObjectType sObjectType)
+	{
+		super(records, sObjectType);
+	}
+
 	public List<SObject> getChangedRecords(String fileName)
 	{
 		return getChangedRecords(new Set<String>{ fileName });
