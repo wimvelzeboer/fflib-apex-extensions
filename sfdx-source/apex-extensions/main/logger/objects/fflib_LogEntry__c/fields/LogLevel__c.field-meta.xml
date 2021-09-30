@@ -14,22 +14,22 @@
             <value>
                 <fullName>ERROR</fullName>
                 <default>false</default>
-                <label>ERROR</label>
+                <label>Error</label>
             </value>
             <value>
                 <fullName>WARN</fullName>
                 <default>false</default>
-                <label>WARN</label>
+                <label>Warning</label>
             </value>
             <value>
                 <fullName>INFO</fullName>
                 <default>false</default>
-                <label>INFO</label>
+                <label>Informational</label>
             </value>
             <value>
                 <fullName>DEBUG</fullName>
                 <default>false</default>
-                <label>DEBUG</label>
+                <label>Debug</label>
             </value>
         </valueSetDefinition>
     </valueSet>
