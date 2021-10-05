@@ -1,6 +1,6 @@
 /**
- * File Name: DateTimes 
- * @description Primitive domain for the object type DateTime
+ * File Name: fflib_Doubles
+ * @description Primitive domain for the object type Double
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,31 +28,32 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class DateTimes
-		extends Objects
+public virtual with sharing class fflib_Doubles
+		extends fflib_Objects2
 {
-	public DateTimes(Set<Datetime> dateTimes)
+	public fflib_Doubles(Set<Double> doubles)
 	{
-		super(new List<Datetime>(dateTimes));
+		super(new List<Double>(doubles));
 	}
 
-	public DateTimes(List<Datetime> dateTimes)
+	public fflib_Doubles(List<Double> doubles)
 	{
-		super((List<Object>) dateTimes);
+		super((List<Object>) doubles);
 	}
 
-	public DateTimes(List<Object> elements)
+	public fflib_Doubles(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Set<Datetime> getDateTimeSet()
+	public Set<Double> getDoubleSet()
 	{
-		return new Set<Datetime>(getDateTimes());
+		return new Set<Double>(getDoubles());
+
 	}
 
-	public List<Datetime> getDateTimes()
+	public List<Double> getDoubles()
 	{
-		return (List<Datetime>) getObjects();
+		return (List<Double>) getObjects();
 	}
 }

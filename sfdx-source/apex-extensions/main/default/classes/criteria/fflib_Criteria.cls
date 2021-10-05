@@ -536,35 +536,35 @@ public virtual with sharing class fflib_Criteria
 	// Method overrides
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Date> values)
 	{
-		return inSet(field, new Dates(values));
+		return inSet(field, new fflib_Dates(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Datetime> values)
 	{
-		return inSet(field, new DateTimes(values));
+		return inSet(field, new fflib_DateTimes(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Decimal> values)
 	{
-		return inSet(field, new Decimals(values));
+		return inSet(field, new fflib_Decimals(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Double> values)
 	{
-		return inSet(field, new Doubles(values));
+		return inSet(field, new fflib_Doubles(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Id> values)
 	{
-		return inSet(field, new Ids(values));
+		return inSet(field, new fflib_Ids(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Integer> values)
 	{
-		return inSet(field, new Integers(values));
+		return inSet(field, new fflib_Integers(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<Long> values)
 	{
-		return inSet(field, new Longs(values));
+		return inSet(field, new fflib_Longs(values));
 	}
 	public fflib_Criteria inSet(Schema.SObjectField field, Set<String> values)
 	{
-		return inSet(field, new Strings(values));
+		return inSet(field, new fflib_Strings(values));
 	}
 	/**
 	 * checks if the given sets contains the fields values
@@ -604,35 +604,35 @@ public virtual with sharing class fflib_Criteria
 	 */
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Date> values)
 	{
-		return notInSet(field, new Dates(values));
+		return notInSet(field, new fflib_Dates(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Datetime> values)
 	{
-		return notInSet(field, new DateTimes(values));
+		return notInSet(field, new fflib_DateTimes(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Decimal> values)
 	{
-		return notInSet(field, new Decimals(values));
+		return notInSet(field, new fflib_Decimals(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Double> values)
 	{
-		return notInSet(field, new Doubles(values));
+		return notInSet(field, new fflib_Doubles(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Id> values)
 	{
-		return notInSet(field, new Ids(values));
+		return notInSet(field, new fflib_Ids(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Integer> values)
 	{
-		return notInSet(field, new Integers(values));
+		return notInSet(field, new fflib_Integers(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Long> values)
 	{
-		return notInSet(field, new Longs(values));
+		return notInSet(field, new fflib_Longs(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<String> values)
 	{
-		return notInSet(field, new Strings(values));
+		return notInSet(field, new fflib_Strings(values));
 	}
 	public fflib_Criteria notInSet(Schema.SObjectField field, Set<Object> values)
 	{

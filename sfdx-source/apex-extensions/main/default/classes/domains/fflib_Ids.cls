@@ -1,6 +1,6 @@
 /**
- * File Name: Doubles 
- * @description Primitive domain for the object type Double
+ * File Name: fflib_Ids
+ * @description Primitive domain for the object type Id
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,32 +28,48 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Doubles
-		extends Objects
+public virtual with sharing class fflib_Ids
+		extends fflib_Objects2
 {
-	public Doubles(Set<Double> doubles)
+	public fflib_Ids(Set<Id> idSet)
 	{
-		super(new List<Double>(doubles));
+		super(new List<Id>(idSet));
 	}
 
-	public Doubles(List<Double> doubles)
+	public fflib_Ids(List<Id> ids)
 	{
-		super((List<Object>) doubles);
+		super((List<Object>) ids);
 	}
 
-	public Doubles(List<Object> elements)
+	public fflib_Ids(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Set<Double> getDoubleSet()
+	public fflib_Ids(fflib_Objects objects)
 	{
-		return new Set<Double>(getDoubles());
-
+		super(getIdList(objects));
 	}
 
-	public List<Double> getDoubles()
+	public Set<Id> getIds()
 	{
-		return (List<Double>) getObjects();
+		return new Set<Id>(getIdList());
+	}
+
+	public List<Id> getIdList()
+	{
+		return (List<Id>) getObjects();
+	}
+
+	private static List<Id> getIdList(fflib_Objects objects)
+	{
+		List<Id> result = new List<Id>();
+		for (Object obj : objects.getObjects())
+		{
+			if (!(obj instanceof Id)) continue;
+
+			result.add((Id) obj);
+		}
+		return result;
 	}
 }

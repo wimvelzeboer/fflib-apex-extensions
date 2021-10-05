@@ -1,5 +1,5 @@
 public inherited sharing class ${NAME}
-        extends SObjects
+        extends fflib_SObjects2
         implements I${NAME}
 {
     public static I${NAME} newInstance(List<${SObject_API_Name}> records)
