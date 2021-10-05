@@ -6,9 +6,9 @@ The primitive domain SObject adds a lot of additional getter methods to the doma
 This class should be used to extend Domain classes.
 
 ```apex
-public class Accounts extends SObjects implements IAccounts
+public class Accounts extends fflib_SObjects2 implements IAccounts
 {
-    ...
+	...
 }
 ```
 

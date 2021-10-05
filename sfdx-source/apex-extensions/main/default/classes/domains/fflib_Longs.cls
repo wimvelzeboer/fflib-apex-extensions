@@ -1,6 +1,6 @@
 /**
- * File Name: Integers 
- * @description Primitive domain for the object type Integer
+ * File Name: fflib_Longs
+ * @description Primitive domain for the object type Long
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,31 +28,31 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Integers
-		extends Objects
+public virtual with sharing class fflib_Longs
+		extends fflib_Objects2
 {
-	public Integers(Set<Integer> integerSet)
+	public fflib_Longs(Set<Long> longs)
 	{
-		super(new List<Integer>(integerSet));
+		super(new List<Long>(longs));
 	}
 
-	public Integers(List<Integer> integerList)
+	public fflib_Longs(List<Long> longs)
 	{
-		super((List<Integer>) integerList);
+		super((List<Object>) longs);
 	}
 
-	public Integers(List<Object> elements)
+	public fflib_Longs(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Set<Integer> getIntegerSet()
+	public Set<Long> getLongSet()
 	{
-		return new Set<Integer>(getIntegers());
+		return new Set<Long>(getLongs());
 	}
 
-	public List<Integer> getIntegers()
+	public List<Long> getLongs()
 	{
-		return (List<Integer>) getObjects();
+		return (List<Long>) getObjects();
 	}
 }

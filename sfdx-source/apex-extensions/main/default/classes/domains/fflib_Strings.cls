@@ -1,6 +1,6 @@
 /**
- * File Name: Objects
- * @description Primitive domain for the type object
+ * File Name: fflib_Strings
+ * @description Primitive domain for the object type String
  *
   * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,21 +28,48 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Objects
-		extends fflib_Objects
+public virtual with sharing class fflib_Strings
+		extends fflib_Objects2
 {
-	public Objects(List<Object> elements)
+	public fflib_Strings(Set<String> stringSet)
+	{
+		super(new List<String>(stringSet));
+	}
+
+	public fflib_Strings(List<String> stringList)
+	{
+		super(stringList);
+	}
+
+	public fflib_Strings(List<Object> elements)
 	{
 		super(elements);
+
+	}
+
+	/**
+	 * @return Returns a set with unique values of the Strings contained in this domain
+	 */
+	public Set<String> getStringSet()
+	{
+		return new Set<String>(getStrings());
+	}
+
+	/**
+	 * @return Returns all values of the Strings contained in this domain, including duplicate values
+	 */
+	public List<String> getStrings()
+	{
+		return (List<String>) getObjects();
 	}
 
 	/**
 	 * @return Returns only the first occurrence in the list of strings contained in the domain.
 	 */
-	public Object getFirstObject()
+	public String getFirst()
 	{
 		if (isEmpty()) return null;
 
-		return getObjects().get(0);
+		return (String) getFirstObject();
 	}
 }

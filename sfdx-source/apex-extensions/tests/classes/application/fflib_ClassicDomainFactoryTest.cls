@@ -80,7 +80,7 @@ private class fflib_ClassicDomainFactoryTest
 		}
 	}
 
-	public class MyDomain extends SObjects
+	public class MyDomain extends fflib_SObjects2
 	{
 		public MyDomain(List<Account> records)
 		{

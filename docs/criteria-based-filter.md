@@ -41,39 +41,39 @@ How it can be applied in a Domain class:
 
 ```apex
 public with sharing class Accounts
-        extends SObjects
-        implements IAccounts
+		extends fflib_SObjects2
+		implements IAccounts
 {
-    private static final Integer LARGE_ACCOUNT_EMPLOYEE_NUMBERS = 500;
+	private static final Integer LARGE_ACCOUNT_EMPLOYEE_NUMBERS = 500;
 
-    public Accounts getByCountry(String countryName)
-    {
-        return new Accounts(
-                getRecords(
-                        new AccountCriteria().shippingCountryEquals(countryName)
-                )
-        );
-    }
-    
-    public Accounts getByNumberOfEmployeesGreaterThan(Integer numberOfEmployees)
-    {
-        return new Accounts(
-                getRecords(
-                       new AccountCriteria().numberOfEmployeesGreaterThan(numberOfEmployees)
-                )
-        );
-    }
-    
-    public Accounts getByLargeAccountsInCountry(String countryName)
-    {
-        return new Accounts(
-                getRecords(
-                       new AccountCriteria()
-                               .shippingCountryEquals(countryName)
-                               .numberOfEmployeesGreaterThan(numberOfEmployees)
-                )
-        );
-    }
+	public Accounts getByCountry(String countryName)
+	{
+		return new Accounts(
+				getRecords(
+						new AccountCriteria().shippingCountryEquals(countryName)
+				)
+		);
+	}
+
+	public Accounts getByNumberOfEmployeesGreaterThan(Integer numberOfEmployees)
+	{
+		return new Accounts(
+				getRecords(
+						new AccountCriteria().numberOfEmployeesGreaterThan(numberOfEmployees)
+				)
+		);
+	}
+
+	public Accounts getByLargeAccountsInCountry(String countryName)
+	{
+		return new Accounts(
+				getRecords(
+						new AccountCriteria()
+								.shippingCountryEquals(countryName)
+								.numberOfEmployeesGreaterThan(numberOfEmployees)
+				)
+		);
+	}
 }
 ```
 In this example we see three filters; one for country, another for checking minimal number of employees and a third that combines the first two.

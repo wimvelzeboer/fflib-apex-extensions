@@ -1,5 +1,5 @@
 /**
- * File Name: SObjects
+ * File Name: fflib_SObjects2
  * @description Primitive domain for the object type SObject
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,7 +28,7 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual class SObjects
+public virtual class fflib_SObjects2
 		extends fflib_SObjects
 		implements fflib_ISObjects
 {
@@ -39,7 +39,7 @@ public virtual class SObjects
 	 *
 	 * @param objects The Objects of type SObjectType, to contain inside the domain
 	 */
-	public SObjects(List<Object> objects)
+	public fflib_SObjects2(List<Object> objects)
 	{
 		// todo - assert of objects of type SObject
 		this((List<SObject>) objects);
@@ -50,7 +50,7 @@ public virtual class SObjects
 	 *
 	 * @param records The records to contain inside the domain
 	 */
-	public SObjects(List<SObject> records)
+	public fflib_SObjects2(List<SObject> records)
 	{
 		this(records, records.getSObjectType());
 	}
@@ -61,7 +61,7 @@ public virtual class SObjects
 	 * @param records The records to contain inside the domain
 	 * @param sObjectType The SObjectType of the records
 	 */
-	public SObjects(List<SObject> records, Schema.SObjectType sObjectType)
+	public fflib_SObjects2(List<SObject> records, Schema.SObjectType sObjectType)
 	{
 		super(records, sObjectType);
 		SObjectDescribe = sObjectType.getDescribe();
@@ -92,7 +92,7 @@ public virtual class SObjects
 	 *
 	 * @return Returns only the SObjects from the domain matching the given Ids.
 	 */
-	public virtual List<SObject> getRecords(Ids ids)
+	public virtual List<SObject> getRecords(fflib_Ids ids)
 	{
 		return getRecords(ids.getIds());
 	}
@@ -193,7 +193,7 @@ public virtual class SObjects
 	 * @return The Date values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Dates getDateFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Dates getDateFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Date> result = new Set<Date>();
 		for (SObject record : getRecords())
@@ -202,7 +202,7 @@ public virtual class SObjects
 			if (fieldValue == null) continue;
 			result.add((Date) fieldValue);
 		}
-		return new Dates(result);
+		return new fflib_Dates(result);
 	}
 
 	/**
@@ -212,9 +212,9 @@ public virtual class SObjects
 	 * @return The Date values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Dates getDateFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Dates getDateFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getDateFieldValues(sObjectField);
 	}
 
@@ -224,7 +224,7 @@ public virtual class SObjects
 	 * @return The DateTime values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual DateTimes getDateTimeFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_DateTimes getDateTimeFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Datetime> result = new Set<Datetime>();
 		for (SObject record : getRecords())
@@ -233,7 +233,7 @@ public virtual class SObjects
 			if (fieldValue == null) continue;
 			result.add((Datetime) fieldValue);
 		}
-		return new DateTimes(result);
+		return new fflib_DateTimes(result);
 	}
 
 	/**
@@ -243,9 +243,9 @@ public virtual class SObjects
 	 * @return The DateTime values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual DateTimes getDateTimeFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_DateTimes getDateTimeFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getDateTimeFieldValues(sObjectField);
 	}
 
@@ -255,7 +255,7 @@ public virtual class SObjects
 	 * @return The Decimal values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Decimals getDecimalFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Decimals getDecimalFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Decimal> result = new Set<Decimal>();
 		for (SObject record : getRecords())
@@ -264,7 +264,7 @@ public virtual class SObjects
 			if (fieldValue == null) continue;
 			result.add((Decimal) fieldValue);
 		}
-		return new Decimals(result);
+		return new fflib_Decimals(result);
 	}
 
 	/**
@@ -274,9 +274,9 @@ public virtual class SObjects
 	 * @return The Decimal values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Decimals getDecimalFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Decimals getDecimalFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getDecimalFieldValues(sObjectField);
 	}
 
@@ -286,7 +286,7 @@ public virtual class SObjects
 	 * @return The Double values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Doubles getDoubleFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Doubles getDoubleFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Double> result = new Set<Double>();
 		for (SObject record : getRecords())
@@ -295,7 +295,7 @@ public virtual class SObjects
 			if (fieldValue == null) continue;
 			result.add((Double) fieldValue);
 		}
-		return new Doubles(result);
+		return new fflib_Doubles(result);
 	}
 
 	/**
@@ -305,9 +305,9 @@ public virtual class SObjects
 	 * @return The Double values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Doubles getDoubleFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Doubles getDoubleFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getDoubleFieldValues(sObjectField);
 	}
 
@@ -440,7 +440,7 @@ public virtual class SObjects
 	 * @return The Id values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Ids getIdFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Ids getIdFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Id> result = new Set<Id>();
 		for (SObject record : getRecords())
@@ -450,7 +450,7 @@ public virtual class SObjects
 
 			result.add(Id.valueOf(String.valueOf(fieldValue)));
 		}
-		return new Ids(result);
+		return new fflib_Ids(result);
 		// todo - alternative return to avoid code duplications: return new Ids(getFieldValues(sObjectField));
 	}
 
@@ -461,9 +461,9 @@ public virtual class SObjects
 	 * @return The Id values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Ids getIdFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Ids getIdFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getIdFieldValues(sObjectField);
 	}
 
@@ -473,7 +473,7 @@ public virtual class SObjects
 	 * @return The Integer values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Integers getIntegerFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Integers getIntegerFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Integer> result = new Set<Integer>();
 		for (SObject record : getRecords())
@@ -483,7 +483,7 @@ public virtual class SObjects
 
 			result.add(Integer.valueOf(fieldValue));
 		}
-		return new Integers(result);
+		return new fflib_Integers(result);
 	}
 
 	/**
@@ -493,9 +493,9 @@ public virtual class SObjects
 	 * @return The Integer values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Integers getIntegerFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Integers getIntegerFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getIntegerFieldValues(sObjectField);
 	}
 
@@ -505,7 +505,7 @@ public virtual class SObjects
 	 * @return The Long values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Longs getLongFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Longs getLongFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<Long> result = new Set<Long>();
 		for (SObject record : getRecords())
@@ -514,7 +514,7 @@ public virtual class SObjects
 			if (fieldValue == null) continue;
 			result.add((Long) fieldValue);
 		}
-		return new Longs(result);
+		return new fflib_Longs(result);
 	}
 
 	/**
@@ -524,9 +524,9 @@ public virtual class SObjects
 	 * @return The Long values of the given sObjectField, null values are omitted
 	 */
 	@TestVisible
-	protected virtual Longs getLongFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Longs getLongFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getLongFieldValues(sObjectField);
 	}
 
@@ -699,14 +699,14 @@ public virtual class SObjects
 	 * @return The String values of the given sObjectField
 	 */
 	@TestVisible
-	protected virtual Strings getStringFieldValues(Schema.SObjectField sObjectField)
+	protected virtual fflib_Strings getStringFieldValues(Schema.SObjectField sObjectField)
 	{
 		Set<String> result = new Set<String>();
 		for (SObject record : getRecords())
 		{
 			result.add(String.valueOf(record.get(sObjectField)));
 		}
-		return new Strings(result);
+		return new fflib_Strings(result);
 	}
 
 	/**
@@ -716,9 +716,9 @@ public virtual class SObjects
 	 * @return The String values of the given sObjectField
 	 */
 	@TestVisible
-	protected virtual Strings getStringFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
+	protected virtual fflib_Strings getStringFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new SObjects(getRecords(criteria), getSObjectType())
+		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.getStringFieldValues(sObjectField);
 	}
 
@@ -732,7 +732,7 @@ public virtual class SObjects
 	@TestVisible
 	protected virtual void setFieldValue(Schema.SObjectField sObjectField, Object value, fflib_Criteria criteria)
 	{
-		new SObjects(getRecords(criteria), getSObjectType())
+		new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.setFieldValue(sObjectField, value);
 	}
 }

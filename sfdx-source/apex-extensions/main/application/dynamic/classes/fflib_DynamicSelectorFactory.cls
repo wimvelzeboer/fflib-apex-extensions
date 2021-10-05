@@ -120,7 +120,7 @@ public virtual class fflib_DynamicSelectorFactory
 		return this;
 	}
 
-	private class RelatedRecordsDomain extends SObjects
+	private class RelatedRecordsDomain extends fflib_SObjects2
 	{
 		public 	RelatedRecordsDomain(List<SObject> records)
 		{

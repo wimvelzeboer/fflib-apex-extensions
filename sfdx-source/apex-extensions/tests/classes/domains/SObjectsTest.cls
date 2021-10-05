@@ -211,7 +211,7 @@ private class SObjectsTest
 	static void itShouldReturnRecordsById()
 	{
 		final Id idA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
-		final Ids ids = new Ids(new Set<Id> {idA});
+		final fflib_Ids ids = new fflib_Ids(new Set<Id> {idA});
 		DomainAccounts domain = new DomainAccounts(
 				new List<Account>
 				{
@@ -336,7 +336,7 @@ private class SObjectsTest
 	}
 
 
-	private class DomainAccounts extends SObjects
+	private class DomainAccounts extends fflib_SObjects2
 	{
 		public DomainAccounts(List<SObject> records)
 		{

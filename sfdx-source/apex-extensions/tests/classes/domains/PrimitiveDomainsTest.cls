@@ -48,9 +48,9 @@ private class PrimitiveDomainsTest
                 Date.newInstance(2022, 02, 02)
         };
 
-        Dates datesA = new Dates(dateSet);
-        Dates DatesB = new Dates(dateList);
-        Dates DatesC = new Dates((List<Object>) dateList);
+        fflib_Dates datesA = new fflib_Dates(dateSet);
+        fflib_Dates DatesB = new fflib_Dates(dateList);
+        fflib_Dates DatesC = new fflib_Dates((List<Object>) dateList);
 
         System.assert(datesA.getDateSet().containsAll(DatesB.getDates()));
         System.assert(datesA.getDateSet().containsAll(DatesC.getDates()));
@@ -73,9 +73,9 @@ private class PrimitiveDomainsTest
                 Datetime.newInstance(2022, 02, 02, 01, 00, 00)
         };
 
-        DateTimes datetimeA = new DateTimes(dateSet);
-        DateTimes datetimeB = new DateTimes(dateList);
-        DateTimes datetimeC = new DateTimes((List<Object>) dateList);
+        fflib_DateTimes datetimeA = new fflib_DateTimes(dateSet);
+        fflib_DateTimes datetimeB = new fflib_DateTimes(dateList);
+        fflib_DateTimes datetimeC = new fflib_DateTimes((List<Object>) dateList);
 
         System.assert(datetimeA.getDateTimeSet().containsAll(datetimeB.getDateTimes()));
         System.assert(datetimeA.getDateTimeSet().containsAll(datetimeC.getDateTimes()));
@@ -87,9 +87,9 @@ private class PrimitiveDomainsTest
         final Set<Decimal> dataSet = new Set<Decimal> {5.5, 1.1, -1.1, -2.7};
         final List<Decimal> dataList = new List<Decimal> {5.5, 1.1, -1.1, -2.7};
 
-        Decimals domainA = new Decimals(dataSet);
-        Decimals domainB = new Decimals(dataList);
-        Decimals domainC = new Decimals((List<Object>) dataList);
+        fflib_Decimals domainA = new fflib_Decimals(dataSet);
+        fflib_Decimals domainB = new fflib_Decimals(dataList);
+        fflib_Decimals domainC = new fflib_Decimals((List<Object>) dataList);
 
         System.assert(domainA.getDecimalSet().containsAll(domainB.getDecimals()));
         System.assert(domainA.getDecimalSet().containsAll(domainC.getDecimals()));
@@ -101,9 +101,9 @@ private class PrimitiveDomainsTest
         final Set<Double> dataSet = new Set<Double> {1261992, 3.14159265};
         final List<Double> dataList = new List<Double> {1261992, 3.14159265};
 
-        Doubles domainA = new Doubles(dataSet);
-        Doubles domainB = new Doubles(dataList);
-        Doubles domainC = new Doubles((List<Object>) dataList);
+        fflib_Doubles domainA = new fflib_Doubles(dataSet);
+        fflib_Doubles domainB = new fflib_Doubles(dataList);
+        fflib_Doubles domainC = new fflib_Doubles((List<Object>) dataList);
 
         System.assert(domainA.getDoubleSet().containsAll(domainB.getDoubles()));
         System.assert(domainA.getDoubleSet().containsAll(domainC.getDoubles()));
@@ -119,9 +119,9 @@ private class PrimitiveDomainsTest
                 fflib_IDGenerator.generate(Schema.Account.SObjectType)
         };
 
-        Ids domainA = new Ids(dataSet);
-        Ids domainB = new Ids(new List<Id>(dataSet));
-        Ids domainC = new Ids((List<Object>) new List<Id>(dataSet));
+        fflib_Ids domainA = new fflib_Ids(dataSet);
+        fflib_Ids domainB = new fflib_Ids(new List<Id>(dataSet));
+        fflib_Ids domainC = new fflib_Ids((List<Object>) new List<Id>(dataSet));
 
         System.assert(domainA.getIds().containsAll(domainB.getIdList()));
         System.assert(domainA.getIds().containsAll(domainC.getIdList()));
@@ -138,7 +138,7 @@ private class PrimitiveDomainsTest
                 fflib_IDGenerator.generate(Schema.Account.SObjectType)
         }));
 
-        Ids domainA = new Ids(data);
+        fflib_Ids domainA = new fflib_Ids(data);
 
         System.assert(domainA.getIds().containsAll((List<Id>) data.getObjects()));
     }
@@ -148,9 +148,9 @@ private class PrimitiveDomainsTest
     {
         final Set<Integer> dataSet = new Set<Integer> {1261, 31415};
 
-        Integers domainA = new Integers(dataSet);
-        Integers domainB = new Integers(new List<Integer>(dataSet));
-        Integers domainC = new Integers((List<Object>) new List<Integer>(dataSet));
+        fflib_Integers domainA = new fflib_Integers(dataSet);
+        fflib_Integers domainB = new fflib_Integers(new List<Integer>(dataSet));
+        fflib_Integers domainC = new fflib_Integers((List<Object>) new List<Integer>(dataSet));
 
         System.assert(domainA.getIntegerSet().containsAll(domainB.getIntegers()));
         System.assert(domainA.getIntegerSet().containsAll(domainC.getIntegers()));
@@ -161,9 +161,9 @@ private class PrimitiveDomainsTest
     {
         final Set<Long> dataSet = new Set<Long> {1261, 31415};
 
-        Longs domainA = new Longs(dataSet);
-        Longs domainB = new Longs(new List<Long>(dataSet));
-        Longs domainC = new Longs((List<Object>) new List<Long>(dataSet));
+        fflib_Longs domainA = new fflib_Longs(dataSet);
+        fflib_Longs domainB = new fflib_Longs(new List<Long>(dataSet));
+        fflib_Longs domainC = new fflib_Longs((List<Object>) new List<Long>(dataSet));
 
         System.assert(domainA.getLongSet().containsAll(domainB.getLongs()));
         System.assert(domainA.getLongSet().containsAll(domainC.getLongs()));
@@ -174,9 +174,9 @@ private class PrimitiveDomainsTest
     {
         final Set<String> dataSet = new Set<String> {'Hello', 'World'};
 
-        Strings domainA = new Strings(dataSet);
-        Strings domainB = new Strings(new List<String>(dataSet));
-        Strings domainC = new Strings((List<Object>) new List<String>(dataSet));
+        fflib_Strings domainA = new fflib_Strings(dataSet);
+        fflib_Strings domainB = new fflib_Strings(new List<String>(dataSet));
+        fflib_Strings domainC = new fflib_Strings((List<Object>) new List<String>(dataSet));
 
         System.assert(domainA.getStringSet().containsAll(domainB.getStrings()));
         System.assert(domainA.getStringSet().containsAll(domainC.getStrings()));
