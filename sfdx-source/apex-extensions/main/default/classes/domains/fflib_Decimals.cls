@@ -1,6 +1,6 @@
 /**
- * File Name: Ids 
- * @description Primitive domain for the object type Id
+ * File Name: fflib_Decimals
+ * @description Primitive domain for the object type Decimal
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,48 +28,31 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Ids
-		extends Objects
+public virtual with sharing class fflib_Decimals
+		extends fflib_Objects2
 {
-	public Ids(Set<Id> idSet)
+	public fflib_Decimals(Set<Decimal> decimals)
 	{
-		super(new List<Id>(idSet));
+		super(new List<Decimal>(decimals));
 	}
 
-	public Ids(List<Id> ids)
+	public fflib_Decimals(List<Decimal> decimals)
 	{
-		super((List<Object>) ids);
+		super((List<Object>) decimals);
 	}
 
-	public Ids(List<Object> elements)
+	public fflib_Decimals(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Ids(fflib_Objects objects)
+	public Set<Decimal> getDecimalSet()
 	{
-		super(getIdList(objects));
+		return new Set<Decimal>(getDecimals());
 	}
 
-	public Set<Id> getIds()
+	public List<Decimal> getDecimals()
 	{
-		return new Set<Id>(getIdList());
-	}
-
-	public List<Id> getIdList()
-	{
-		return (List<Id>) getObjects();
-	}
-
-	private static List<Id> getIdList(fflib_Objects objects)
-	{
-		List<Id> result = new List<Id>();
-		for (Object obj : objects.getObjects())
-		{
-			if (!(obj instanceof Id)) continue;
-
-			result.add((Id) obj);
-		}
-		return result;
+		return (List<Decimal>) getObjects();
 	}
 }

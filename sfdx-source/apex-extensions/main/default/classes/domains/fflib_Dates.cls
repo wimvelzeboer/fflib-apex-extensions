@@ -1,8 +1,8 @@
 /**
- * File Name: Strings
- * @description Primitive domain for the object type String
+ * File Name: fflib_Dates
+ * @description Primitive domain for the object type Date
  *
-  * @author architect ir. Wilhelmus G.J. Velzeboer
+ * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.
@@ -28,48 +28,31 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Strings
-		extends Objects
+public virtual class fflib_Dates
+		extends fflib_Objects2
 {
-	public Strings(Set<String> stringSet)
+	public fflib_Dates(Set<Date> dates)
 	{
-		super(new List<String>(stringSet));
+		super(new List<Date>(dates));
 	}
 
-	public Strings(List<String> stringList)
+	public fflib_Dates(List<Date> dates)
 	{
-		super(stringList);
+		super((List<Object>) dates);
 	}
 
-	public Strings(List<Object> elements)
+	public fflib_Dates(List<Object> elements)
 	{
 		super(elements);
-
 	}
 
-	/**
-	 * @return Returns a set with unique values of the Strings contained in this domain
-	 */
-	public Set<String> getStringSet()
+	public Set<Date> getDateSet()
 	{
-		return new Set<String>(getStrings());
+		return new Set<Date>(getDates());
 	}
 
-	/**
-	 * @return Returns all values of the Strings contained in this domain, including duplicate values
-	 */
-	public List<String> getStrings()
+	public List<Date> getDates()
 	{
-		return (List<String>) getObjects();
-	}
-
-	/**
-	 * @return Returns only the first occurrence in the list of strings contained in the domain.
-	 */
-	public String getFirst()
-	{
-		if (isEmpty()) return null;
-
-		return (String) getFirstObject();
+		return (List<Date>) getObjects();
 	}
 }

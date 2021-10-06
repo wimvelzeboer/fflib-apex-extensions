@@ -1,6 +1,6 @@
 /**
- * File Name: Longs 
- * @description Primitive domain for the object type Long
+ * File Name: fflib_DateTimes
+ * @description Primitive domain for the object type DateTime
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,31 +28,31 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Longs
-		extends Objects
+public virtual with sharing class fflib_DateTimes
+		extends fflib_Objects2
 {
-	public Longs(Set<Long> longs)
+	public fflib_DateTimes(Set<Datetime> dateTimes)
 	{
-		super(new List<Long>(longs));
+		super(new List<Datetime>(dateTimes));
 	}
 
-	public Longs(List<Long> longs)
+	public fflib_DateTimes(List<Datetime> dateTimes)
 	{
-		super((List<Object>) longs);
+		super((List<Object>) dateTimes);
 	}
 
-	public Longs(List<Object> elements)
+	public fflib_DateTimes(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Set<Long> getLongSet()
+	public Set<Datetime> getDateTimeSet()
 	{
-		return new Set<Long>(getLongs());
+		return new Set<Datetime>(getDateTimes());
 	}
 
-	public List<Long> getLongs()
+	public List<Datetime> getDateTimes()
 	{
-		return (List<Long>) getObjects();
+		return (List<Datetime>) getObjects();
 	}
 }

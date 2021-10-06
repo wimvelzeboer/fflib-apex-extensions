@@ -1,8 +1,8 @@
 /**
- * File Name: Decimals 
- * @description Primitive domain for the object type Decimal
+ * File Name: fflib_Objects2
+ * @description Primitive domain for the type object
  *
- * @author architect ir. Wilhelmus G.J. Velzeboer
+  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
  * All rights reserved.
@@ -28,31 +28,21 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual with sharing class Decimals
-		extends Objects
+public virtual with sharing class fflib_Objects2
+		extends fflib_Objects
 {
-	public Decimals(Set<Decimal> decimals)
-	{
-		super(new List<Decimal>(decimals));
-	}
-
-	public Decimals(List<Decimal> decimals)
-	{
-		super((List<Object>) decimals);
-	}
-
-	public Decimals(List<Object> elements)
+	public fflib_Objects2(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Set<Decimal> getDecimalSet()
+	/**
+	 * @return Returns only the first occurrence in the list of strings contained in the domain.
+	 */
+	public Object getFirstObject()
 	{
-		return new Set<Decimal>(getDecimals());
-	}
+		if (isEmpty()) return null;
 
-	public List<Decimal> getDecimals()
-	{
-		return (List<Decimal>) getObjects();
+		return getObjects().get(0);
 	}
 }

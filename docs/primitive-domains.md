@@ -8,8 +8,9 @@ Instead of:
 List<String> myStrings = getSomeStrings();
 ```
 You can write:
+
 ```apex
-Strings myStrings = getSomeString();
+fflib_Strings myStrings = getSomeString();
 ```
 
 It is a small thing, but it makes things looks much nicer.

@@ -1,6 +1,6 @@
 /**
- * File Name: Dates 
- * @description Primitive domain for the object type Date
+ * File Name: fflib_Integers
+ * @description Primitive domain for the object type Integer
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,31 +28,31 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual class Dates
-		extends Objects
+public virtual with sharing class fflib_Integers
+		extends fflib_Objects2
 {
-	public Dates(Set<Date> dates)
+	public fflib_Integers(Set<Integer> integerSet)
 	{
-		super(new List<Date>(dates));
+		super(new List<Integer>(integerSet));
 	}
 
-	public Dates(List<Date> dates)
+	public fflib_Integers(List<Integer> integerList)
 	{
-		super((List<Object>) dates);
+		super((List<Integer>) integerList);
 	}
 
-	public Dates(List<Object> elements)
+	public fflib_Integers(List<Object> elements)
 	{
 		super(elements);
 	}
 
-	public Set<Date> getDateSet()
+	public Set<Integer> getIntegerSet()
 	{
-		return new Set<Date>(getDates());
+		return new Set<Integer>(getIntegers());
 	}
 
-	public List<Date> getDates()
+	public List<Integer> getIntegers()
 	{
-		return (List<Date>) getObjects();
+		return (List<Integer>) getObjects();
 	}
 }
