@@ -29,7 +29,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 @IsTest(IsParallel=true)
-private class SObjectsTest
+private class fflib_SObjects2Test
 {
 	@IsTest
 	static void itShouldAddErrorMessage()
