@@ -28,7 +28,7 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public abstract with sharing class fflib_PlatformEventDomain implements ffllib_IPlatformEventDomain
+public abstract with sharing class fflib_PlatformEventDomain implements fflib_IPlatformEventDomain
 {
 
 	protected List<SObject> Records { get; private set; }
