@@ -31,7 +31,7 @@
 @IsTest
 private class fflib_LoggerTest
 {
-/*
+
 	private static final List<String> ARGUMENTS = new List<String> {'A', 'B', 'C'};
 	private static final String ERROR_MESSAGE = 'Some Error';
 	private static final String ERROR_MESSAGE_WITH_ARGS = 'Some Error {0}, {1}, {2}';
@@ -247,80 +247,29 @@ private class fflib_LoggerTest
 	}
 
 
-	private class LogAppenderMock implements fflib_ILogAppender
+	private virtual class LogAppenderMock implements fflib_ILogAppender
 	{
-		private Map<System.LoggingLevel, List<String>> appendedMessages =
-				new Map<System.LoggingLevel, List<String>>();
+		protected List<fflib_LogEntry> appendedEntries = new List<fflib_LogEntry>();
 
-		public void append(String message)
+		public void append(fflib_LogEntry logEntry)
 		{
-			if (!this.appendedMessages.containsKey(System.LoggingLevel.INFO))
-			{
-				this.appendedMessages.put(System.LoggingLevel.INFO, new List<String>());
-			}
-			appendedMessages.get(System.LoggingLevel.INFO).add(message);
+			this.appendedEntries.add(logEntry);
 		}
-
-		public void append(LoggingLevel loggingLevel, String message)
-		{
-			if (!this.appendedMessages.containsKey(loggingLevel))
-			{
-				this.appendedMessages.put(loggingLevel, new List<String>());
-			}
-			appendedMessages.get(loggingLevel).add(message);
-		}
-
 		public List<String> getAppendedMessages(System.LoggingLevel loggingLevel)
 		{
-			if (this.appendedMessages.containsKey(loggingLevel))
+			List<String> result = new List<String>();
+			for (fflib_LogEntry logEntry : appendedEntries)
 			{
-				return this.appendedMessages.get(loggingLevel);
+				if (logEntry.logLevel == loggingLevel)
+				{
+					result.add(logEntry.message);
+				}
 			}
-			else
-			{
-				return new List<String>();
-			}
+			return result;
 		}
 	}
 
-	private class SecondLogAppenderMock implements fflib_ILogAppender
-	{
-		private Map<System.LoggingLevel, List<String>> appendedMessages =
-				new Map<System.LoggingLevel, List<String>>();
+	private class SecondLogAppenderMock extends LogAppenderMock { }
 
-		public void append(String message)
-		{
-			if (!this.appendedMessages.containsKey(System.LoggingLevel.INFO))
-			{
-				this.appendedMessages.put(System.LoggingLevel.INFO, new List<String>());
-			}
-			appendedMessages.get(System.LoggingLevel.INFO).add(message);
-		}
-
-		public void append(LoggingLevel loggingLevel, String message)
-		{
-			if (!this.appendedMessages.containsKey(loggingLevel))
-			{
-				this.appendedMessages.put(loggingLevel, new List<String>());
-			}
-			appendedMessages.get(loggingLevel).add(message);
-		}
-
-		public List<String> getAppendedMessages(System.LoggingLevel loggingLevel)
-		{
-			if (this.appendedMessages.containsKey(loggingLevel))
-			{
-				return this.appendedMessages.get(loggingLevel);
-			}
-			else
-			{
-				return new List<String>();
-			}
-		}
-	}
-
-	private class LogTestMockException extends Exception
-	{
-	}
-	*/
+	private class LogTestMockException extends Exception {}
 }

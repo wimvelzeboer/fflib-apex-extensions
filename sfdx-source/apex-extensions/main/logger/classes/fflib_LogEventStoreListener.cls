@@ -30,7 +30,6 @@
  */
 public with sharing class fflib_LogEventStoreListener extends fflib_LogEventDomain
 {
-
 	/**
 	 * Class constructor
 	 */
@@ -42,13 +41,17 @@ public with sharing class fflib_LogEventStoreListener extends fflib_LogEventDoma
 	public void run()
 	{
 		List<fflib_LogEntry__c> logEntryRecords = new List<fflib_LogEntry__c>();
-		for (fflib_LogEventDomain.LogEntry logEntry : logEntries)
+		for (fflib_LogEntry logEntry : logEntries)
 		{
 			logEntryRecords.add(
 					new fflib_LogEntry__c(
-							LogLevel__c = logEntry.loggingLevel.name(),
+							ClassName__c = logEntry.className,
+							ExecutionContext__c = logEntry.executionContext,
+							LineNumber__c = logEntry.lineNumber,
+							LogLevel__c = logEntry.logLevel.name(),
 							Message__c = logEntry.message,
-							User__c = logEntry.createdById
+							MethodName__c = logEntry.methodName,
+							User__c = logEntry.userId
 					)
 			);
 		}

@@ -47,25 +47,8 @@ public abstract with sharing class fflib_LogEventDomain extends fflib_PlatformEv
 		for (SObject record : Records)
 		{
 			this.logEntries.add(
-					new LogEntry((fflib_LogEvent__e) record)
+					new fflib_LogEntry((fflib_LogEvent__e) record)
 			);
 		}
 	}
-
-	public class LogEntry
-	{
-		public Id createdById;
-		public Datetime createdDatetime;
-		public System.LoggingLevel loggingLevel;
-		public String message;
-
-		public LogEntry(fflib_LogEvent__e event)
-		{
-			this.loggingLevel = System.LoggingLevel.values().get((Integer) event.LogLevel__c);
-			this.message = event.message__c;
-			this.createdById = event.CreatedById;
-			this.createdDatetime = event.CreatedDate;
-		}
-	}
-
 }

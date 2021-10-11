@@ -50,7 +50,6 @@ public with sharing class fflib_Logger implements fflib_ILogger
 	public void add(String message)
 	{
 		add(System.LoggingLevel.INFO, message);
-
 	}
 
 	public void add(LoggingLevel loggingLevel, Exception e)

@@ -32,7 +32,6 @@ public with sharing class fflib_LogEntry
 	public String className { get; set; }
 	public String executionContext { get; set; }
 	public Decimal lineNumber { get; set; }
-	public Id logEntryId { get; set; }
 	public System.LoggingLevel logLevel { get; set; }
 	public String message { get; set; }
 	public String methodName { get; set; }
@@ -57,8 +56,11 @@ public with sharing class fflib_LogEntry
 		this.className = logEvent.ClassName__c;
 		this.executionContext = logEvent.ExecutionContext__c;
 		this.lineNumber = logEvent.LineNumber__c;
-		this.logEntryId = logEvent.Id;
 		this.logLevel = System.LoggingLevel.valueOf(logEvent.LogLevel__c);
+		this.message = logEvent.Message__c;
+		this.methodName = logEvent.MethodName__c;
+		this.userId = logEvent.CreatedById;
+		this.createdDatetime = logEvent.CreatedDate;
 	}
 
 	public fflib_LogEvent__e toPlatformEvent()

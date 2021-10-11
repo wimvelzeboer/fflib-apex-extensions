@@ -79,7 +79,7 @@ private class fflib_LogEventStoreListenerTest
 	private static fflib_LogEvent__e generateLoggingLevelEvent(LoggingLevel loggingLevel, String message)
 	{
 		return new fflib_LogEvent__e(
-				LogLevel__c = loggingLevel.ordinal(),
+				LogLevel__c = loggingLevel.name(),
 				message__c = message
 		);
 	}

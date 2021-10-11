@@ -44,7 +44,7 @@ private class fflib_LogEventAppenderTest
 		Boolean caughtException = false;
 		try
 		{
-			eventAppender.append(System.LoggingLevel.ERROR, TEST_ERROR_MESSAGE);
+			eventAppender.append(new fflib_LogEntry(System.LoggingLevel.ERROR, TEST_ERROR_MESSAGE));
 		}
 		catch (Exception e)
 		{
@@ -55,19 +55,21 @@ private class fflib_LogEventAppenderTest
 		System.assert(!caughtException);
 	}
 
-	static testMethod void itShouldNotAppendInfoMessageWhileDefaultLevelIsSetToError()
+	@IsTest
+	static void itShouldNotAppendInfoMessageWhileDefaultLevelIsSetToError()
 	{
 		// GIVEN - And appender with a default level set to Error
 		fflib_LogEventAppender eventAppender = new fflib_LogEventAppender();
 
 		// WHEN - We append an Info Entry
-		eventAppender.append(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE);
+		eventAppender.append(new fflib_LogEntry(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE));
 
 		// THEN - It should be ignored
 		System.assertEquals(0, Limits.getDmlStatements(), 'Oops, the log entry should have been ignored');
 	}
 
-	static testMethod void itShouldAppendInfoMessageWhenTheApexLevelIsSetToInfo()
+	@IsTest
+	static void itShouldAppendInfoMessageWhenTheApexLevelIsSetToInfo()
 	{
 		// GIVEN - And appender with a Apex level set to Info
 		fflib_LogEventAppender eventAppender = new fflib_LogEventAppender();
@@ -75,14 +77,15 @@ private class fflib_LogEventAppenderTest
 
 		// WHEN - We append an Info Entry
 		System.Test.startTest();
-		eventAppender.append(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE);
+		eventAppender.append(new fflib_LogEntry(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE));
 		System.Test.stopTest();
 
 		// THEN - It should be ignored
 		System.assertEquals(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
 	}
 
-	static testMethod void itShouldAppendInfoMessageWhenTheOrgSettingsLevelIsSetToInfo()
+	@IsTest
+	static void itShouldAppendInfoMessageWhenTheOrgSettingsLevelIsSetToInfo()
 	{
 		// GIVEN - And appender with a Org level set to Info
 		fflib_LogEventAppender eventAppender = new fflib_LogEventAppender();
@@ -94,7 +97,7 @@ private class fflib_LogEventAppenderTest
 
 		// WHEN - We append an Info Entry
 		System.Test.startTest();
-		eventAppender.append(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE);
+		eventAppender.append(new fflib_LogEntry(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE));
 		System.Test.stopTest();
 
 		// THEN - It should be ignored
