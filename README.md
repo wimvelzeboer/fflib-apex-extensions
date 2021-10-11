@@ -37,10 +37,9 @@ You can also have a look at the open items in the [project(s)](./projects), feel
 ----
 # Change Log
 Some of the changes that have major impact are listed here;
-
-### September 2021
-**Logger functionality**
-A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
+### October 2021
+- **Logger functionality** <br/>A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
+- **API Upgrade to Winter'22** <br/> All Apex classes are upgraded to API 53.0
 
 ### August 2021
 **Added criteria based on formula;  (1 OR 2) AND 3)**
