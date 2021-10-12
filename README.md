@@ -6,6 +6,16 @@ This extension package is dependent on the following packages:
 - [fflib-apex-mocks](https://github.com/apex-enterprise-patterns/fflib-apex-mocks)
 - [fflib-apex-common](https://github.com/apex-enterprise-patterns/fflib-apex-common)
 
+## Extensions pack contents
+These features are offered in this extension package:
+
+- [**Application class redesigned**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/application-factories) <br/>A Force-DI like feature using dependency injection with the Separation of Concerns design pattern.
+- [**Persitant Logger**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/Logger) <br/>
+Ever want to log error messages in a Custom Object? The fflib_Logger will do it for you, even if you have a database-rollback.
+- [**Extended domain features**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/Domain-Layer) <br/> Tons of extra methods in the domains to access the (S)Objects.
+- [**Criteria evaluator**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/criteria-based-filter) <br/> Ability to use the same criteria filters for domains and selectors. Build SOQL WHERE clauses in an object-oriented manner. It can also evaluate a list of records against predefined conditions "(1 AND 2 AND (3 OR 4))".
+- [**Generic UnitOfWork**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/UnitOfWork) <br/> Ever want to execute a bunch of work items in a dynamic manner, and be able to control their order of execution, and run some of it in a separate execution context? Wow... that's a lot to ask.. But, the UnitOfWork will do that for you! <br/> Be ware, this fflib_**UnitOfWork** is something different than the fflib_**SObject**UnitOfwork
+
 ## Wiki
 A full overview of the features in this extension pack and how to use them 
 can be found in [the Wiki pages of this repository](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki).
@@ -40,6 +50,7 @@ Some of the changes that have major impact are listed here;
 ### October 2021
 - **Logger functionality** <br/>A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
 - **API Upgrade to Winter'22** <br/> All Apex classes are upgraded to API 53.0
+- **UnitOfWork** <br/> Generic UnitOfWork, capable of executing work items in batch at a single instance. Each item will be executed based on its priority and can be queued in a separate execution context when necessary. 
 
 ### August 2021
 **Added criteria based on formula;  (1 OR 2) AND 3)**
