@@ -76,7 +76,7 @@ private class fflib_ALogAppenderFilterTest
 	/**
 	 * THIS UNIT TEST IS DISABLED BY DEFAULT SINCE THERE IS NO KNOWN STANDARD USER FACTORY METHOD FOR THE TARGET ORG
 	 */
-	@IsTest
+/*	@IsTest
 	static void itShouldValidateWarningLevelWithDefaultSetToErrorForSpecifiedUser()
 	{
 		// Given - A default AppenderFilter instance and a specific user config set to Warning
@@ -99,12 +99,12 @@ private class fflib_ALogAppenderFilterTest
 
 		// Then - It should be valid
 		System.assert(isValid);
-	}
+	}*/
 
 	/**
 	 * THIS UNIT TEST IS DISABLED BY DEFAULT SINCE THERE IS NO KNOWN STANDARD USER FACTORY METHOD FOR THE TARGET ORG
 	 */
-	@IsTest
+/*	@IsTest
 	static void itShouldValidateWarningLevelWithDefaultSetToErrorForSpecifiedProfile()
 	{
 		// Given - A default AppenderFilter instance and a specific user config set to Warning
@@ -127,7 +127,7 @@ private class fflib_ALogAppenderFilterTest
 
 		// Then - It should be valid
 		System.assert(isValid);
-	}
+	}*/
 
 	@IsTest
 	static void itShouldValidateWarningLevelWithDefaultOrganisationLogLevelValueSetToWarning()
