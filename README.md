@@ -14,7 +14,7 @@ These features are offered in this extension package:
 Ever want to log error messages in a Custom Object? The fflib_Logger will do it for you, even if you have a database-rollback.
 - [**Extended domain features**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/Domain-Layer) <br/> Tons of extra methods in the domains to access the (S)Objects.
 - [**Criteria evaluator**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/criteria-based-filter) <br/> Ability to use the same criteria filters for domains and selectors. Build SOQL WHERE clauses in an object-oriented manner. It can also evaluate a list of records against predefined conditions "(1 AND 2 AND (3 OR 4))".
-- [**Generic UnitOfWork**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/UnitOfWork) <br/> Ever want to execute a bunch of work items in a dynamic manner, and be able to control their order of execution, and run some of it in a separate execution context? Wow... that's a lot to ask.. But, the UnitOfWork will do that for you! <br/> Be ware, this fflib_**UnitOfWork** is something different than the fflib_**SObject**UnitOfwork
+- [**Generic UnitOfWork**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/UnitOfWork) <br/> Ever want to execute a bunch of work items in a dynamic manner, and be able to control their order of execution, and run some of it in a separate execution context? Wow... that's a lot to ask.. But, the UnitOfWork will do that for you in just **88 line of code!!** <br/> Be ware, this fflib_**UnitOfWork** is something different than the fflib_**SObject**UnitOfwork
 
 ## Wiki
 A full overview of the features in this extension pack and how to use them 
