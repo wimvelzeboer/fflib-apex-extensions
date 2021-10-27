@@ -149,7 +149,8 @@ public virtual with sharing class fflib_TriggerHandler
 
 	private fflib_ITriggerContext getTriggerContext()
 	{
-		if (triggerContext == null) constructTriggerContext();
+		if (triggerContext == null) triggerContext = constructTriggerContext();
+
 		return triggerContext;
 	}
 }
