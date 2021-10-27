@@ -101,12 +101,34 @@ private class fflib_UnitOfWorkTest
     }
 
     @IsTest
-    static void itShouldExecuteAllItemsInTheCorrectOrder()
+    static void itShouldExecuteAllItemsInTheCorrectOrderOfPriority()
     {
         // GIVEN - Three different work items added to the fflib_DoWork
         Work workA = (Work) new WorkA().setPriority(1);
         Work workB = (Work) new WorkB().setPriority(2);
         Work workC = (Work) new WorkC().setPriority(3);
+        fflib_UnitOfWork myWork = new fflib_UnitOfWork().addWork(
+                new List<fflib_IDoWork> {workA, workB, workC}
+        );
+
+        // WHEN - The work is being executed
+        System.Test.startTest();
+        myWork.doWork();
+        System.Test.stopTest();
+
+        // THEN - Then all three work items should be executed
+        System.assert(orderOfExecution.get(0).contains('WorkC'), 'Expected Work C with priority 3 to be executed first');
+        System.assert(orderOfExecution.get(1).contains('WorkB'), 'Expected Work B with priority 2 to be executed second');
+        System.assert(orderOfExecution.get(2).contains('WorkA'), 'Expected Work B with priority 1 to be executed last');
+    }
+
+    @IsTest
+    static void itShouldExecuteAllItemsInTheCorrectOrderOfSequence()
+    {
+        // GIVEN - Three different work items added to the fflib_DoWork
+        Work workA = (Work) new WorkA().setSequence(3);
+        Work workB = (Work) new WorkB().setSequence(2);
+        Work workC = (Work) new WorkC().setSequence(1);
         fflib_UnitOfWork myWork = new fflib_UnitOfWork().addWork(
                 new List<fflib_IDoWork> {workA, workB, workC}
         );

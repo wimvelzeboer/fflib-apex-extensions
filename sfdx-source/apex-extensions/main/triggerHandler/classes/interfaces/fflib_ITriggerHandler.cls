@@ -1,6 +1,6 @@
 /**
- * File Name: fflib_IDoWork
- * Description: Interface defining the method signatures for a work item used by the UnitOfWork
+ * File Name: fflib_ALogAppenderFilter
+ * Description: Log Appender that includes a filter for logginglevel
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,58 +28,28 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public interface fflib_IDoWork extends Comparable
+public interface fflib_ITriggerHandler
 {
 	/**
-	 * Do the work of this work item
+	 * Main method to execute the trigger handler to call the trigger actions
 	 */
-	void doWork();
+	void run();
 
 	/**
-	 * Enable the work item to be executed in separate UnitOfWork executed in a Queueable context
+	 * Tells the trigger handler in which trigger context it is running
 	 *
-	 * @return Instance of itself to allow for chaining
-	 */
-	fflib_IDoWork enableQueueable();
-
-	/**
-	 * Enable the work item to be executed as Queueable, not combined with other work items
+	 * @param ctx A configured Trigger Context instance
 	 *
-	 * @param dedicated When true, execute in a dedicated Queueable context.
+	 * @return Instance of itself to allow for method chaining
+	 */
+	fflib_ITriggerHandler setTriggerContext(fflib_ITriggerContext ctx);
+
+	/**
+	 * Tells the trigger handler in which trigger context it is running
 	 *
-	 * @return Instance of itself to allow for chaining
-	 */
-	fflib_IDoWork enableQueueable(Boolean dedicated);
-
-	/**
-	 * Gets the priority or sequence number of this work item. The higher the number the higher the priority
+	 * @param classType A reference to the Trigger Context class to use when executing the trigger handler
 	 *
-	 * @return Returns the priority
+	 * @return Instance of itself to allow for method chaining
 	 */
-	Integer getOrderNumber();
-
-	/**
-	 * @return Returns true when the work item is intended to be executed in separate UnitOfWork executed in a Queueable context
-	 */
-	Boolean isQueueable();
-
-	/**
-	 * @return Returns true when the work item is intended to run in real-time
-	 */
-	Boolean isNotQueueable();
-
-	/**
-     * @return Returns true when the work item is intended to be executed as Queueable, not combined with other work items
-     */
-	Boolean isDedicatedQueueable();
-
-	/**
-	 * Sets the priority value of the work item, this is used to sort the work items
-	 *
-	 * @param priority The priority value, the working with the highest priority value will be executed first
-	 *
-	 * @return Instance of itself to allow for chaining
-	 */
-	fflib_IDoWork setPriority(Integer priority);
-	fflib_IDoWork setSequence(Integer sequence);
+	fflib_ITriggerHandler setTriggerContextType(System.Type classType);
 }

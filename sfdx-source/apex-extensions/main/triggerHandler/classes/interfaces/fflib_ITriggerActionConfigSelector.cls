@@ -1,6 +1,5 @@
 /**
- * File Name: fflib_AppBindingModule 
- * @description An application module is responsible for loading the application bindings
+ * File Name: fflib_ITriggerActionConfigSelector
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,42 +27,10 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual class fflib_AppBindingModule
-		implements fflib_IAppBindingModule
+public interface fflib_ITriggerActionConfigSelector
 {
-	protected List<fflib_IAppBinding> bindings;
-
-	public fflib_AppBindingModule(){ }
-
-	public fflib_AppBindingModule(List<fflib_IAppBinding> bindings)
-	{
-		this.bindings = bindings;
-	}
-
-	public virtual void addBinding(fflib_IAppBinding binding)
-	{
-		addBindings(new List<fflib_IAppBinding>{ binding });
-	}
-
-	public virtual void addBindings(List<fflib_IAppBinding> bindings)
-	{
-		if (null == this.bindings)
-		{
-			this.bindings = bindings;
-		}
-		else
-		{
-			this.bindings.addAll(bindings);
-		}
-	}
-
-	public List<fflib_IAppBinding> getBindings()
-	{
-		return this.bindings;
-	}
-
-	public virtual void init()
-	{
-		if (null == this.bindings) this.bindings = new List<fflib_IAppBinding>();
-	}
+	/**
+	 * @return Query all fflib_TriggerAction__mdt records
+	 */
+	List<fflib_TriggerAction__mdt> selectAll();
 }

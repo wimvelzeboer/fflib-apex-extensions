@@ -30,15 +30,24 @@
  */
 public abstract class fflib_DoWork implements fflib_IDoWork, Comparable
 {
-	protected Integer priority = 0;
+	protected OrderType orderingType = OrderType.PRIORITY; // Set the default ordering to using Priority over Sequencing
+	protected Integer orderNumber = 0; // Either the Priority or Sequence value, based on the orderingType
+
 	protected Boolean dedicatedQueueable;
 
 	public virtual Integer compareTo(Object compareToObject)
 	{
 		fflib_IDoWork compareTo = (fflib_IDoWork) compareToObject;
-		if (priority == compareTo.getPriority()) return 0;
-		if (priority > compareTo.getPriority()) return -1;
-		return 1;
+
+		if (orderNumber == compareTo.getOrderNumber()) return 0;
+		if (orderingType == OrderType.PRIORITY)
+		{
+			if (orderNumber > compareTo.getOrderNumber())  return -1; else return 1;
+		}
+		else
+		{
+			if (orderNumber > compareTo.getOrderNumber()) return 1; else return -1;
+		}
 	}
 
 	/**
@@ -65,13 +74,13 @@ public abstract class fflib_DoWork implements fflib_IDoWork, Comparable
 	}
 
 	/**
-	 * Gets the priority of this work item. The higher the number the higher the priority
+	 * Gets the priority or sequence number of this work item. The higher the number the higher the priority
 	 *
 	 * @return Returns the priority
 	 */
-	public virtual Integer getPriority()
+	public virtual Integer getOrderNumber()
 	{
-		return this.priority;
+		return this.orderNumber;
 	}
 
 	/**
@@ -107,7 +116,16 @@ public abstract class fflib_DoWork implements fflib_IDoWork, Comparable
 	 */
 	public virtual fflib_IDoWork setPriority(Integer priority)
 	{
-		this.priority = priority;
+		this.orderNumber = priority;
+		this.orderingType = OrderType.PRIORITY;
 		return this;
 	}
+	public virtual fflib_IDoWork setSequence(Integer sequence)
+	{
+		this.orderNumber = sequence;
+		this.orderingType = OrderType.SEQUENCE;
+		return this;
+	}
+
+	private enum OrderType { PRIORITY, SEQUENCE }
 }
