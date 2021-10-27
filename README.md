@@ -15,6 +15,7 @@ These features are offered in this extension package:
 - [**Persitant Logger**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/Logger) <br/>
 Ever want to log error messages in a Custom Object? The fflib_Logger will do it for you, even if you have a database-rollback.
 - [**Extended domain features**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/Domain-Layer) <br/> Tons of extra methods in the domains to access the (S)Objects.
+- [**TriggerHandler Redesigned**](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/Trigger-Handler) <br/> A complete redesign of the trigger handler, using the new Force-DI like [application class](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/application-factories) in combination with the [generic UnitOfWork](https://github.com/wimvelzeboer/fflib-apex-extensions/wiki/UnitOfWork). It brings new advanced features like; enqueueing certain parts of trigger logic, separating trigger logic clearly in a readable structure and the ability to use dependency injection.
 
 ## Wiki
 A full overview of the features in this extension pack and how to use them 
@@ -50,7 +51,8 @@ Some of the changes that have major impact are listed here;
 ### October 2021
 - **Logger functionality** <br/>A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
 - **API Upgrade to Winter'22** <br/> All Apex classes are upgraded to API 53.0
-- **UnitOfWork** <br/> Generic UnitOfWork, capable of executing work items in batch at a single instance. Each item will be executed based on its priority and can be queued in a separate execution context when necessary. 
+- **UnitOfWork** <br/> Generic UnitOfWork, capable of executing work items in batch at a single instance. Each item will be executed based on its priority and can be queued in a separate execution context when necessary.
+- **TriggerHandler** <br/> A redesigned trigger handler using custom metadata and the generic UnitOfWork, to dynamicaly call trigger actions.
 
 ### August 2021
 **Added criteria based on formula;  (1 OR 2) AND 3)**

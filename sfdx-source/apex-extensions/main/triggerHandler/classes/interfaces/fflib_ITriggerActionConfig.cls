@@ -1,6 +1,5 @@
 /**
- * File Name: fflib_IDoWork
- * Description: Interface defining the method signatures for a work item used by the UnitOfWork
+ * File Name: fflib_ITriggerActionConfig
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -28,58 +27,27 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public interface fflib_IDoWork extends Comparable
+public interface fflib_ITriggerActionConfig
 {
 	/**
-	 * Do the work of this work item
+	 * @return Returns the sequence number of the trigger action
 	 */
-	void doWork();
+	Integer getSequence();
 
 	/**
-	 * Enable the work item to be executed in separate UnitOfWork executed in a Queueable context
+	 * @return Returns TRUE if the trigger action should be executed in a dedicated Queueable context
+	 */
+	Boolean isDedicatedQueued();
+
+	/**
+	 * @return Returns TRUE if the trigger action can be executed in an Queueable context
+	 */
+	Boolean isQueued();
+
+	/**
+	 * Creates a new instance of the trigger action class based on the provided implementation type in the configuration
 	 *
-	 * @return Instance of itself to allow for chaining
+	 * @return Instance of the Trigger Action class
 	 */
-	fflib_IDoWork enableQueueable();
-
-	/**
-	 * Enable the work item to be executed as Queueable, not combined with other work items
-	 *
-	 * @param dedicated When true, execute in a dedicated Queueable context.
-	 *
-	 * @return Instance of itself to allow for chaining
-	 */
-	fflib_IDoWork enableQueueable(Boolean dedicated);
-
-	/**
-	 * Gets the priority or sequence number of this work item. The higher the number the higher the priority
-	 *
-	 * @return Returns the priority
-	 */
-	Integer getOrderNumber();
-
-	/**
-	 * @return Returns true when the work item is intended to be executed in separate UnitOfWork executed in a Queueable context
-	 */
-	Boolean isQueueable();
-
-	/**
-	 * @return Returns true when the work item is intended to run in real-time
-	 */
-	Boolean isNotQueueable();
-
-	/**
-     * @return Returns true when the work item is intended to be executed as Queueable, not combined with other work items
-     */
-	Boolean isDedicatedQueueable();
-
-	/**
-	 * Sets the priority value of the work item, this is used to sort the work items
-	 *
-	 * @param priority The priority value, the working with the highest priority value will be executed first
-	 *
-	 * @return Instance of itself to allow for chaining
-	 */
-	fflib_IDoWork setPriority(Integer priority);
-	fflib_IDoWork setSequence(Integer sequence);
+	fflib_ITriggerAction newInstance();
 }

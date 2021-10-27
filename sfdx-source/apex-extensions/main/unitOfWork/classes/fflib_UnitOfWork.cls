@@ -129,10 +129,17 @@ public virtual class fflib_UnitOfWork
 	 */
 	public virtual void doWork()
 	{
+		sortAndDoWork();
+		doNextWork();
+	}
+
+	private void sortAndDoWork()
+	{
+		if (this.work.isEmpty()) return;
+
 		this.work.sort();
 		doRealTimeWork();
 		doQueuedWork();
-		doNextWork();
 	}
 
 	/**
