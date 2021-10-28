@@ -252,7 +252,49 @@ private class fflib_TriggerHandlerTest
 		System.assert(ctx.isUpdate());
 	}
 
+	@IsTest
+	private static void itShouldUseTheStatefulTriggerActionClass()
+	{
+		fflib_LogEntry__c record = new fflib_LogEntry__c(LogLevel__c = 'INFO', Message__c = 'Unit Test');
+		List<fflib_LogEntry__c> records = new List<fflib_LogEntry__c> {record};
 
+		fflib_ApexMocks mocks = new fflib_ApexMocks();
+		fflib_ITriggerAction triggerActionMock = (fflib_ITriggerAction) mocks.mock(fflib_ITriggerAction.class);
+
+		mocks.startStubbing();
+		mocks.when(triggerActionMock.isQueueable()).thenReturn(false);
+		mocks.when(triggerActionMock.isNotQueueable()).thenReturn(true);
+		mocks.stopStubbing();
+
+		fflib_TriggerHandler.triggerActionStateByClass =
+				new Map<Type, fflib_ITriggerAction>{ MyTriggerAction.class => triggerActionMock };
+
+		fflib_TriggerAction__mdt triggerAction = new fflib_TriggerAction__mdt(
+				ObjectType__c = null,
+				ObjectTypeAlternate__c = Schema.fflib_LogEntry__c.SObjectType.getDescribe().getName(),
+				BeforeInsert__c = true,
+				ImplementationType__c = 'fflib_TriggerHandlerTest.MyTriggerAction',
+				ExecutionContext__c = 'Realtime',
+				Stateful__c = true
+		);
+
+		fflib_TriggerHandler triggerHandler = new fflib_TriggerHandler();
+		String ctxClassName = triggerHandler.triggerContextType.getName() + '.Constructor';
+		fflib_TriggerContext ctx =
+				(fflib_TriggerContext)
+						((fflib_IDomainConstructor) Type.forName(ctxClassName).newInstance())
+								.construct(new List<fflib_LogEntry__c> {record});
+		ctx.triggerOperation = System.TriggerOperation.BEFORE_INSERT;
+
+		// WHEN a record is inserted
+		System.Test.startTest();
+		triggerHandler.addTriggerActionConfig(triggerAction);
+		triggerHandler.setTriggerContext(ctx).run();
+		System.Test.stopTest();
+
+		// THEN the stateful trigger action should be re-used
+		((fflib_ITriggerAction)	mocks.verify(triggerActionMock)).doWork();
+	}
 
 	public class MyTriggerAction extends fflib_TriggerAction // Todo - rename handler to action
 	{

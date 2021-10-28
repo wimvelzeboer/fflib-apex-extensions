@@ -65,12 +65,12 @@ public virtual inherited sharing class fflib_TriggerActionConfigSelector
 	/**
 	 * @return Query all fflib_TriggerAction__mdt records
 	 */
-	public virtual List<fflib_TriggerAction__mdt> selectAll()
+	public virtual List<fflib_TriggerAction__mdt> selectAllActive()
 	{
 		return (List <fflib_TriggerAction__mdt>) Database.query(
 
 				String.format(
-						'SELECT {0} FROM {1}',
+						'SELECT {0} FROM {1} WHERE IsActive__c=TRUE',
 						new List<String>
 						{
 								getFieldListString() + ', ObjectType__r.QualifiedApiName',

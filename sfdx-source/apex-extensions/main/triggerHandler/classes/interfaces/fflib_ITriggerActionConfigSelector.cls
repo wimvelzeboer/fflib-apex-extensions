@@ -32,5 +32,5 @@ public interface fflib_ITriggerActionConfigSelector
 	/**
 	 * @return Query all fflib_TriggerAction__mdt records
 	 */
-	List<fflib_TriggerAction__mdt> selectAll();
+	List<fflib_TriggerAction__mdt> selectAllActive();
 }

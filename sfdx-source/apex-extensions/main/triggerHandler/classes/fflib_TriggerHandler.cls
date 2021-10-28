@@ -49,6 +49,12 @@ public virtual with sharing class fflib_TriggerHandler
 	protected fflib_ITriggerContext triggerContext;
 
 	/**
+	 * Retain instance of Trigger Action classes implementing stateful
+	 */
+	@TestVisible
+	private static Map<Type, fflib_ITriggerAction> triggerActionStateByClass;
+
+	/**
 	 * Provides access to the trigger action configurations and allowing it to be mocked in unit-tests
 	 */
 	@TestVisible
@@ -101,7 +107,9 @@ public virtual with sharing class fflib_TriggerHandler
 		fflib_UnitOfWork unitOfWork = new fflib_UnitOfWork();
 		for (fflib_ITriggerActionConfig triggerActionConfig : configs)
 		{
-			fflib_ITriggerAction triggerAction = triggerActionConfig.newInstance();
+			if (isValidExecutionContext(ctx, triggerActionConfig) == false) continue;
+
+			fflib_ITriggerAction triggerAction = getTriggerActionInstance(triggerActionConfig);
 
 			triggerAction.setContext(ctx);
 			triggerAction.setSequence(triggerActionConfig.getSequence());
@@ -117,12 +125,29 @@ public virtual with sharing class fflib_TriggerHandler
 		unitOfWork.doWork();
 	}
 
+	private Boolean isValidExecutionContext(fflib_ITriggerContext ctx, fflib_ITriggerActionConfig config)
+	{
+		return config.hasTriggerContext(ctx.getTriggerOperation());
+	}
+
+	private fflib_ITriggerAction getTriggerActionInstance(fflib_ITriggerActionConfig triggerActionConfig)
+	{
+		if (triggerActionConfig.isStateful()
+				&& triggerActionStateByClass != null
+				&& triggerActionStateByClass.containsKey(triggerActionConfig.getImplementationType()))
+		{
+			return triggerActionStateByClass.get(triggerActionConfig.getImplementationType());
+		}
+
+		return triggerActionConfig.newInstance();
+	}
+
 	@TestVisible
 	protected void loadConfiguration()
 	{
 		if (configs.isEmpty() == false) return;
 
-		for (fflib_TriggerAction__mdt action : new fflib_TriggerActionConfigSelector().selectAll())
+		for (fflib_TriggerAction__mdt action : new fflib_TriggerActionConfigSelector().selectAllActive())
 		{
 			configs.add( new fflib_TriggerActionConfig(action));
 		}

@@ -66,12 +66,19 @@ public virtual inherited sharing class fflib_TriggerActionConfig
 		else if (triggerAction.ExecutionContext__c == 'Dedicated Queued') this.dedicatedQueued = true;
 
 		// Get SObjectType
-		System.debug('triggerAction: '+triggerAction);
 		String ObjectTypeApiName =
 				String.isNotBlank(triggerAction.ObjectType__c)
 					? triggerAction.ObjectType__r?.QualifiedApiName?.toLowerCase().trim()
 					: triggerAction.ObjectTypeAlternate__c.toLowerCase().trim();
 		this.sObjectType = Schema.describeSObjects(new List<String> {ObjectTypeApiName}).get(0).getSObjectType();
+	}
+
+	/**
+	 * @return Returns the Implementation Type of the Trigger Action
+	 */
+	public Type getImplementationType()
+	{
+		return this.implementationType;
 	}
 
 	/**
@@ -91,6 +98,14 @@ public virtual inherited sharing class fflib_TriggerActionConfig
 	}
 
 	/**
+	 * @return Returns TRUE if the trigger action needs to be kept in memory and reused by the next TriggerHandler run
+	 */
+	public Boolean isStateful()
+	{
+		return this.stateful;
+	}
+
+	/**
 	 * @return Returns TRUE if the trigger action can be executed in an Queueable context
 	 */
 	public Boolean isQueued()
@@ -106,5 +121,16 @@ public virtual inherited sharing class fflib_TriggerActionConfig
 	public fflib_ITriggerAction newInstance()
 	{
 		return (fflib_ITriggerAction) implementationType.newInstance();
+	}
+
+	public Boolean hasTriggerContext(TriggerOperation triggerOperation)
+	{
+		return (triggerOperation == System.TriggerOperation.BEFORE_INSERT && beforeInsert)
+				|| (triggerOperation == System.TriggerOperation.BEFORE_UPDATE && beforeUpdate)
+				|| (triggerOperation == System.TriggerOperation.BEFORE_DELETE && beforeDelete)
+				|| (triggerOperation == System.TriggerOperation.AFTER_DELETE && afterDelete)
+				|| (triggerOperation == System.TriggerOperation.AFTER_INSERT && afterInsert)
+				|| (triggerOperation == System.TriggerOperation.AFTER_UNDELETE && afterUndelete)
+				|| (triggerOperation == System.TriggerOperation.AFTER_UPDATE && afterUpdate);
 	}
 }

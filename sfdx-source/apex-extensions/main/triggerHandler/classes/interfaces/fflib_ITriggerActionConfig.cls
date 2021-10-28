@@ -30,14 +30,31 @@
 public interface fflib_ITriggerActionConfig
 {
 	/**
+	 * @return Returns the Implementation Type of the Trigger Action
+	 */
+	System.Type getImplementationType();
+
+	/**
 	 * @return Returns the sequence number of the trigger action
 	 */
 	Integer getSequence();
 
 	/**
+	 * @param triggerOperation The Trigger operation to validate the configuration against.
+	 *
+	 * @return Returns TRUE is the given operation type matches the one of the configuration
+	 */
+	Boolean hasTriggerContext(TriggerOperation triggerOperation);
+
+	/**
 	 * @return Returns TRUE if the trigger action should be executed in a dedicated Queueable context
 	 */
 	Boolean isDedicatedQueued();
+
+	/**
+	 * @return Returns TRUE if the trigger action needs to be kept in memory and reused by the next TriggerHandler run
+	 */
+	Boolean isStateful();
 
 	/**
 	 * @return Returns TRUE if the trigger action can be executed in an Queueable context
@@ -50,4 +67,6 @@ public interface fflib_ITriggerActionConfig
 	 * @return Instance of the Trigger Action class
 	 */
 	fflib_ITriggerAction newInstance();
+
+
 }
