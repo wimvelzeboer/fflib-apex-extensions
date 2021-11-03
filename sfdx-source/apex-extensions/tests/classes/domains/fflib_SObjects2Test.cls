@@ -319,15 +319,23 @@ private class fflib_SObjects2Test
 		System.assert(domain.selectByRating('Hot').size() == 1);
 	}
 
+	@IsTest
+	static void itShouldGetTheSumOfAnnualRevenue()
+	{
+		DomainAccounts domain = generateDomain();
+		System.assert(domain.getDecimalFieldSum(Account.AnnualRevenue) == 11);
+		System.assert(domain.getDecimalFieldValues(Account.AnnualRevenue).contains((Decimal) 5));
+	}
+
 	private static DomainAccounts generateDomain()
 	{
 		DomainAccounts domain = new DomainAccounts(
 				new List<Account>
 				{
-						new Account(Name = 'A', ShippingCountry = 'USA'),
-						new Account(Name = 'B', ShippingCountry = 'Ireland'),
-						new Account(Name = 'C', ShippingCountry = 'UK'),
-						new Account(Name = 'D', ShippingCountry = ''),
+						new Account(Name = 'A', ShippingCountry = 'USA', AnnualRevenue = 5),
+						new Account(Name = 'B', ShippingCountry = 'Ireland', AnnualRevenue = 3),
+						new Account(Name = 'C', ShippingCountry = 'UK', AnnualRevenue = 2),
+						new Account(Name = 'D', ShippingCountry = '', AnnualRevenue = 1),
 						new Account(Name = 'E'),
 						new Account()
 				}

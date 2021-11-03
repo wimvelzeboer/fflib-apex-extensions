@@ -250,6 +250,22 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * @param sObjectField The Schema.SObjectField to get the SUM of
+	 *
+	 * @return The total SUM of the given field
+	 */
+	@TestVisible
+	protected virtual Decimal getDecimalFieldSum(Schema.SObjectField sObjectField)
+	{
+		Decimal result = 0;
+		for (SObject record : getRecords())
+		{
+			result += record.get(sObjectField) == null ? 0 : (Decimal) record.get(sObjectField);
+		}
+		return result;
+	}
+
+	/**
 	 * @param sObjectField The Schema.SObjectField to get their Id values
 	 *
 	 * @return The Decimal values of the given sObjectField, null values are omitted
