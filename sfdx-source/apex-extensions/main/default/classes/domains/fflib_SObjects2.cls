@@ -388,6 +388,16 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * @return Returns only the first SObject contained in the domain.
+	 */
+	public SObject getFirstSObject()
+	{
+		if (isEmpty()) return null;
+
+		return getRecords().get(0);
+	}
+
+	/**
 	 * Get a map with the values of two Id fields
 	 * Key fields containing null values are omitted
 	 *
@@ -750,5 +760,52 @@ public virtual class fflib_SObjects2
 	{
 		new fflib_SObjects2(getRecords(criteria), getSObjectType())
 				.setFieldValue(sObjectField, value);
+	}
+
+	/**
+	 * Sets a value to the given field only when key field Id value is provided in the given map
+	 *
+	 * @param sObjectIdFieldToCheck The SObject Id Field to match the key against in the provided map
+	 * @param sObjectFieldToUpdate The SObjectField to store the mapped value when the key matches the value in the sObjectFieldToUpdate field
+	 * @param values Map of values to store by the sObjectIdFieldToCheck fields value
+	 */
+	@TestVisible
+	protected virtual void setFieldValue(
+			Schema.SObjectField sObjectIdFieldToCheck,
+			Schema.SObjectField sObjectFieldToUpdate,
+			Map<Id, Object> values)
+	{
+		for (SObject record : getRecords())
+		{
+			Id keyValue = (Id) record.get(sObjectIdFieldToCheck);
+			if (values?.containsKey(keyValue))
+			{
+				record.put(sObjectFieldToUpdate, values.get(keyValue));
+			}
+		}
+	}
+
+	/**
+	 * Sets a value to the given field only when key field String value is provided in the given map
+	 *
+	 * @param sObjectStringFieldToCheck The SObject String Field to match the key against in the provided map
+	 * @param sObjectFieldToUpdate The SObjectField to store the mapped value when the key matches the value in the sObjectFieldToUpdate field
+	 * @param values Map of values to store by the sObjectIdFieldToCheck fields value
+	 */
+	@TestVisible
+	protected virtual void setFieldValue(
+			Schema.SObjectField sObjectStringFieldToCheck,
+			Schema.SObjectField sObjectFieldToUpdate,
+			Map<String, Object> values)
+	{
+		for (SObject record : getRecords())
+		{
+			String keyValue = (String) record.get(sObjectStringFieldToCheck);
+			if (values?.containsKey(keyValue))
+			{
+				record.put(sObjectFieldToUpdate, values.get(keyValue));
+			}
+		}
+
 	}
 }

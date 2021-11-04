@@ -89,11 +89,21 @@ private class fflib_SObjects2Test
 	{
 		fflib_Criteria criteria = new fflib_Criteria().equalTo(Account.Name, 'A');
 
-		DomainAccounts domain = generateDomain();
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Name = 'A', ShippingCountry = 'USA', AnnualRevenue = 5, BillingLatitude = 121.0),
+						new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Name = 'B', ShippingCountry = 'Ireland', AnnualRevenue = 3),
+						new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Name = 'C', ShippingCountry = 'UK', AnnualRevenue = 2),
+						new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Name = 'D', ShippingCountry = '', AnnualRevenue = 1),
+						new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Name = 'E'),
+						new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), BillingLatitude = 121.0 )
+				}
+		);
 		domain.getDateTimeFieldValues(Account.LastActivityDate);
-		domain.getDateTimeFieldValues(Account.CreatedDate);
-		domain.getFieldByField(Account.Name, Account.AccountNumber);
-		domain.getFieldsByField(Account.Id, Account.AccountNumber);
+		domain.getDateTimeFieldValues(Account.CreatedDate, criteria);
+		domain.getFieldByField(Account.Name, Account.AnnualRevenue);
+		domain.getFieldsByField(Account.Id, Account.AnnualRevenue);
 		domain.getFieldByField(Account.Id, Account.Id);
 		domain.getIdFieldByIdField(Account.Id, Account.Id);
 		domain.getIdFieldsByIdField(Account.Id, Account.Id);
@@ -101,6 +111,7 @@ private class fflib_SObjects2Test
 		domain.getIdFieldValues(Account.Id, criteria);
 		domain.getIntegerFieldValues(Account.NumberOfEmployees);
 		domain.getIntegerFieldValues(Account.NumberOfEmployees, criteria);
+		domain.getDecimalFieldValues(Account.BillingLatitude, criteria);
 		domain.getDoubleFieldValues(Account.BillingLatitude);
 		domain.getDoubleFieldValues(Account.BillingLatitude, criteria);
 		domain.getSObjectByIdField(Account.Id);
@@ -325,6 +336,54 @@ private class fflib_SObjects2Test
 		DomainAccounts domain = generateDomain();
 		System.assert(domain.getDecimalFieldSum(Account.AnnualRevenue) == 11);
 		System.assert(domain.getDecimalFieldValues(Account.AnnualRevenue).contains((Decimal) 5));
+	}
+
+	@IsTest
+	static void itShouldSetFieldByIdField()
+	{
+		Id accountId = fflib_IDGenerator.generate(Account.SObjectType);
+		Account record = new Account(Id = accountId, Name = '');
+		fflib_SObjects2 domain = new fflib_SObjects2(new List<Account>{ record });
+
+		domain.setFieldValue(
+				Schema.Account.Id,
+				Schema.Account.Name,
+				new Map<Id, String>
+				{
+						accountId => 'Hello'
+				}
+		);
+
+		System.assert(domain.getFirstSObject().get('Name') == 'Hello');
+	}
+
+	@IsTest
+	static void itShouldSetFieldByStringField()
+	{
+		Account record = new Account(Name = 'Hello', Rating = 'Cold');
+		fflib_SObjects2 domain = new fflib_SObjects2(new List<Account>{ record });
+
+		domain.setFieldValue(
+				Schema.Account.Name,
+				Schema.Account.Rating,
+				new Map<String, String>
+				{
+						'Hello' => 'Warm'
+				}
+		);
+
+		System.assert(domain.getFirstSObject().get('Rating') == 'Warm');
+	}
+
+	@IsTest
+	static void itShouldSetField()
+	{
+		Account record = new Account(Name = 'Hello', Rating = 'Cold');
+		fflib_SObjects2 domain = new fflib_SObjects2(new List<Account>{ record });
+
+		domain.setFieldValue(Account.Name, 'Hello World', new fflib_Criteria().equalTo(Account.Rating, 'Cold'));
+
+		System.assert(domain.getFirstSObject().get('Name') == 'Hello World');
 	}
 
 	private static DomainAccounts generateDomain()
