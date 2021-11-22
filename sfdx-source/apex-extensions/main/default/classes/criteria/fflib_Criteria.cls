@@ -166,9 +166,17 @@ public virtual with sharing class fflib_Criteria
 	 */
 	public virtual fflib_Criteria formulaCriteria(String formula)
 	{
-		this.type = 'FORMULA';
+		this.type = fflib_Criteria.FORMULA;
 		this.formulaEvaluator = new FormulaEvaluator(formula.toUpperCase());
 		return this;
+	}
+
+	public virtual String getEvaluatedFormula()
+	{
+		if (this.type != fflib_Criteria.FORMULA)
+			throw new CriteriaException('Expected a Formula');
+
+		return ((FormulaEvaluator) this.formulaEvaluator).getEvaluatedFormula();
 	}
 
 
@@ -180,7 +188,8 @@ public virtual with sharing class fflib_Criteria
 
 	public class FormulaEvaluator implements IFormulaEvaluator
 	{
-		private String formula;
+		final private String formula;
+		private Map<Integer, Boolean> evaluatedResultByNumber;
 		private String type
 		{
 			get;
@@ -243,6 +252,7 @@ public virtual with sharing class fflib_Criteria
 
 		public Boolean evaluate(Object record, Map<Integer, Boolean> evaluatedResultByNumber)
 		{
+			this.evaluatedResultByNumber = evaluatedResultByNumber;
 			Boolean result = !(this.type == 'OR');
 			for (IFormulaEvaluator evaluator : formulaParts)
 			{
@@ -255,6 +265,19 @@ public virtual with sharing class fflib_Criteria
 				{
 					return false;
 				}
+			}
+			return result;
+		}
+
+		public String getEvaluatedFormula()
+		{
+			String result = String.valueOf(this.formula);
+			for (Integer i : this.evaluatedResultByNumber.keySet())
+			{
+				result = result.replace(
+						String.valueOf(i+1),
+						String.valueOf(evaluatedResultByNumber.get(i)).toUpperCase()
+				);
 			}
 			return result;
 		}

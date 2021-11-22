@@ -581,14 +581,13 @@ private with sharing class fflib_CriteriaTest
 		);
 
 		// WHEN we process a formula criteria it should evaluate the formula
-		System.assert(
-				new fflib_Criteria()
-						.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
-						.equalTo(Contact.LastName, 'Smith')
-						.equalTo(Contact.FirstName, 'John')
-						.equalTo(Contact.Department, 'MIB')
-						.evaluate(record)
-		);
+		fflib_Criteria result = new fflib_Criteria()
+				.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
+				.equalTo(Contact.LastName, 'Smith')
+				.equalTo(Contact.FirstName, 'John')
+				.equalTo(Contact.Department, 'MIB');
+		System.assert(result.evaluate(record));
+		System.assertEquals('(TRUE AND TRUE) OR (TRUE AND FALSE)', result.getEvaluatedFormula(), 'Incorrect formula returned');
 		System.assertEquals(false,
 				new fflib_Criteria()
 						.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
