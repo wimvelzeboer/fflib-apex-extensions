@@ -4,12 +4,12 @@ public inherited sharing class ${NAME}
 {
     public static I${NAME} newInstance(List<${SObject_API_Name}> records)
     {
-        return (I${NAME}) Application.Domain.newInstance(records);
+        return (I${NAME}) Application.Domain.newInstance(records, Schema.${SObject_API_Name}.SObjectType);
     }
 
     public static I${NAME} newInstance(Set<Id> ids)
     {
-        return (I${NAME}) Application.Domain.newInstance(ids);
+        return (I${NAME}) Application.Domain.newInstance(ids, Schema.${SObject_API_Name}.SObjectType);
     }
 
     public ${NAME}(List<${SObject_API_Name}> records)
