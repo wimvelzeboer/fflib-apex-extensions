@@ -7,14 +7,14 @@ public virtual inherited sharing class ${NAME}
         return (I${NAME}) Application.Selector.newInstance(Schema.${SObject_API_Name}.SObjectType);
     }
     
-    public static IContactsSelector newWithoutSharingInstance()
+    public static I${NAME} newWithoutSharingInstance()
 	{
-		return (IContactsSelector) Application.ElevatedSelector.newInstance(Schema.${SObject_API_Name}.SObjectType);
+		return (I${NAME}) Application.ElevatedSelector.newInstance(Schema.${SObject_API_Name}.SObjectType);
 	}
 	
-	public static IContactsSelector newInheritedSharingInstance()
+	public static I${NAME} newInheritedSharingInstance()
 	{
-		return (IContactsSelector) Application.NoSharingSelector.newInstance(Schema.${SObject_API_Name}.SObjectType);
+		return (I${NAME}) Application.NoSharingSelector.newInstance(Schema.${SObject_API_Name}.SObjectType);
 	}
 	
 	public ${NAME}()
