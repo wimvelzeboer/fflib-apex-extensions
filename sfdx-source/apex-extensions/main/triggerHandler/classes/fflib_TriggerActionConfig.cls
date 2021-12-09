@@ -90,6 +90,14 @@ public virtual inherited sharing class fflib_TriggerActionConfig
 	}
 
 	/**
+	 * @return Returns the SObjectType linked to the trigger action
+	 */
+	public SObjectType getSObjectType()
+	{
+		return this.sObjectType;
+	}
+
+	/**
 	 * @return Returns TRUE if the trigger action should be executed in a dedicated Queueable context
 	 */
 	public Boolean isDedicatedQueued()

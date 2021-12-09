@@ -107,7 +107,9 @@ public virtual with sharing class fflib_TriggerHandler
 		fflib_UnitOfWork unitOfWork = new fflib_UnitOfWork();
 		for (fflib_ITriggerActionConfig triggerActionConfig : configs)
 		{
-			if (isValidExecutionContext(ctx, triggerActionConfig) == false) continue;
+			if (isValidExecutionContext(ctx, triggerActionConfig) == false
+					||
+					isValidSObjectType(triggerActionConfig, ctx) == false) continue;
 
 			fflib_ITriggerAction triggerAction = getTriggerActionInstance(triggerActionConfig);
 
@@ -128,6 +130,11 @@ public virtual with sharing class fflib_TriggerHandler
 	private Boolean isValidExecutionContext(fflib_ITriggerContext ctx, fflib_ITriggerActionConfig config)
 	{
 		return config.hasTriggerContext(ctx.getTriggerOperation());
+	}
+
+	private Boolean isValidSObjectType(fflib_ITriggerActionConfig triggerActionConfig, fflib_ITriggerContext ctx)
+	{
+		return triggerActionConfig.getSObjectType() == ctx.getRecords().get(0).getSObjectType();
 	}
 
 	private fflib_ITriggerAction getTriggerActionInstance(fflib_ITriggerActionConfig triggerActionConfig)

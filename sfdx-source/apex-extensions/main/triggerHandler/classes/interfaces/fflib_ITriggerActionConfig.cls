@@ -40,6 +40,11 @@ public interface fflib_ITriggerActionConfig
 	Integer getSequence();
 
 	/**
+	 * @return Returns the SObjectType linked to the trigger action
+	 */
+	Schema.SObjectType getSObjectType();
+
+	/**
 	 * @param triggerOperation The Trigger operation to validate the configuration against.
 	 *
 	 * @return Returns TRUE is the given operation type matches the one of the configuration
