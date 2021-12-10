@@ -105,7 +105,6 @@ private class fflib_SObjects2Test
 		domain.getFieldByField(Account.Name, Account.AnnualRevenue);
 		domain.getFieldsByField(Account.Id, Account.AnnualRevenue);
 		domain.getFieldByField(Account.Id, Account.Id);
-		domain.getIdFieldByIdField(Account.Id, Account.Id);
 		domain.getIdFieldsByIdField(Account.Id, Account.Id);
 		domain.getIdFieldValues(Account.Id);
 		domain.getIdFieldValues(Account.Id, criteria);
@@ -123,6 +122,20 @@ private class fflib_SObjects2Test
 		domain.getStringFieldValues(Account.Name, criteria);
 
 		// todo - add assertions
+	}
+
+	@IsTest
+	static void itShouldReturnRecordIdById()
+	{
+		final Id contactId = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		final Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		final Contact record = new Contact(Id = contactId, AccountId = accountId);
+		fflib_SObjects2 domain = new fflib_SObjects2(new List<Contact>{ record });
+		System.Test.startTest();
+		Map<Id, Id> accountIdByContactId = domain.getIdFieldByIdField(Schema.Contact.AccountId, Schema.Contact.Id);
+		System.Test.stopTest();
+		System.assert(accountIdByContactId.containsKey(contactId));
+		System.assertEquals(accountId, accountIdByContactId.get(contactId));
 	}
 
 	@IsTest
