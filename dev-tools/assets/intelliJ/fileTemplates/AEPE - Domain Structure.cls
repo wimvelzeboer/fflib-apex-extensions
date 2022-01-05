@@ -22,6 +22,11 @@ public inherited sharing class ${NAME}
         return (List<${SObject_API_Name}>) getRecords();
     }
 
+    private I${NAME} selectBy(fflib_Criteria criteria)
+    {
+        return new ${NAME}(getRecords(criteria));
+    }
+
     private I${NAME} selectBlank(Schema.SObjectField sObjectField)
     {
         List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
