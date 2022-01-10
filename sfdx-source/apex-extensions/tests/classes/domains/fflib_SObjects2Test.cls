@@ -125,6 +125,19 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
+	static void itShouldReturnStringById()
+	{
+		final Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		final Account record = new Account(Id = accountId, Name = 'Test');
+		fflib_SObjects2 domain = new fflib_SObjects2(new List<Account>{ record });
+		System.Test.startTest();
+		Map<String, Id> nameById = domain.getIdFieldByStringField(Schema.Account.Id, Schema.Account.Name);
+		System.Test.stopTest();
+		System.assert(nameById.containsKey('Test'));
+		System.assertEquals(accountId, nameById.get(accountId));
+	}
+
+	@IsTest
 	static void itShouldReturnRecordIdById()
 	{
 		final Id contactId = fflib_IDGenerator.generate(Schema.Contact.SObjectType);

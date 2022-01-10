@@ -398,6 +398,35 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Get a map with the values of a String field as key and Id field
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Id field to use as the Value of the Map
+	 * @param keyField The String field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Contacts contacts = Contacts.newInstance(records);
+	 * Map<String, Id> accountIdByContactId = contacts.getIdFieldByStringField(Contact.Id, Contact.Name);
+	 */
+	@TestVisible
+	protected virtual Map<String, Id> getIdFieldByStringField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<String, Id> result = new Map<String, Id>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(keyField) == null) continue;
+
+			result.put(
+					(String) record.get(keyField),
+					(Id) record.get(valueField)
+			);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a map with the values of two Id fields
 	 * Key fields containing null values are omitted
 	 *
