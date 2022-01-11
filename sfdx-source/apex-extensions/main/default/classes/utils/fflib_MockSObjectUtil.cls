@@ -17,9 +17,9 @@ public with sharing class fflib_MockSObjectUtil
 	}
 
 	public static SObject addFieldValue(
-			SObject sObject, SObjectField sObjectField, Object value)
+			SObject record, SObjectField sObjectField, Object value)
 	{
-		String original = JSON.serialize(sObject);
+		String original = JSON.serialize(record);
 		return (SObject) JSON.deserialize(
 				original.left(original.length() - 1) + ',"'
 						+ sObjectField.getDescribe().getName() + '":"'
