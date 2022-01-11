@@ -22,6 +22,11 @@ public inherited sharing class ${NAME}
         return (List<${SObject_API_Name}>) getRecords();
     }
 
+    public I${NAME} selectById(Set<Id> ids)
+    {
+        return new ${NAME}(getRecords(ids));
+    }
+
     private I${NAME} selectBy(fflib_Criteria criteria)
     {
         return new ${NAME}(getRecords(criteria));
