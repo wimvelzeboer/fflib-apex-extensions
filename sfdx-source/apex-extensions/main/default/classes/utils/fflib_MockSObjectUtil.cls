@@ -15,4 +15,15 @@ public with sharing class fflib_MockSObjectUtil
 						JSON.serialize(parentObject) + '}',
 				SObject.class);
 	}
+
+	public static SObject addFieldValue(
+			SObject sObject, SObjectField sObjectField, Object value)
+	{
+		String original = JSON.serialize(sObject);
+		return (SObject) JSON.deserialize(
+				original.left(original.length() - 1) + ',"'
+						+ sObjectField.getDescribe().getName() + '":"'
+						+ String.valueOf(value) + '"}',
+				SObject.class);
+	}
 }
