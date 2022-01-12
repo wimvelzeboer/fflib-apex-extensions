@@ -29,6 +29,7 @@ Protected methods
 - [getDoubleFieldValues](#getdoublefieldvalues)
 - [getFieldByField](#getfieldbyfield)
 - [getFieldsByField](#getfieldsbyfield)
+- [getIdFieldByStringField](#getidfieldbystringfield)
 - [getIdFieldByIdField](#getidfieldbyidfield)
 - [getIdFieldsByIdField](#getidfieldsbyidfield)
 - [getIdFieldValues](#getidfieldvalues)
@@ -136,6 +137,18 @@ _Example_
 ```apex
 Contacts contacts = Contacts.newInstance(records);
 Map<Object, Set<Object>> contactIdByAccountId = contacts.getFieldsByField(Contact.Id, Contact.AccountId);
+```
+<br/><br/>
+#### getIdFieldByStringField
+Get a map with the string field as the key and the ID as values. Key fields containing null values are omitted.
+
+`protected Map<String, Id> getIdFieldByStringField(Schema.SObjectField valueField, Schema.SObjectField keyField)`
+
+_Example_
+
+```apex
+Contacts contacts = Contacts.newInstance(records);
+Map<String, Id> accountIdByContactId = contacts.getIdFieldByStringField(Contact.Id, Contact.Name);
 ```
 <br/><br/>
 
