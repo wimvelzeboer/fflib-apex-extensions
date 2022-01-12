@@ -22,6 +22,64 @@ public inherited sharing class ${NAME}
         return (List<${SObject_API_Name}>) getRecords();
     }
 
+    public I${NAME} selectById(Set<Id> ids)
+    {
+        return new ${NAME}(getRecords(ids));
+    }
+
+    private I${NAME} selectBy(fflib_Criteria criteria)
+    {
+        return new ${NAME}(getRecords(criteria));
+    }
+
+    private I${NAME} selectBlank(Schema.SObjectField sObjectField)
+    {
+        List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
+        for (${SObject_API_Name} record : get${NAME}())
+        {
+            if (String.isNotBlank((String) record.get(sObjectField))) continue;
+
+            result.add(record);
+        }
+        return new ${NAME}(result);
+    }
+
+    private I${NAME} selectNonBlank(Schema.SObjectField sObjectField)
+    {
+        List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
+        for (${SObject_API_Name} record : get${NAME}())
+        {
+            if (String.isBlank((String) record.get(sObjectField))) continue;
+
+            result.add(record);
+        }
+        return new ${NAME}(result);
+    }
+
+    private I${NAME} selectWith(Schema.SObjectField sObjectField)
+    {
+        List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
+        for (${SObject_API_Name} record : get${NAME}())
+        {
+            if (record.get(sObjectField) == null) continue;
+
+            result.add(record);
+        }
+        return new ${NAME}(result);
+    }
+
+    private I${NAME} selectWithout(Schema.SObjectField sObjectField)
+    {
+        List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
+        for (${SObject_API_Name} record : get${NAME}())
+        {
+            if (record.get(sObjectField) != null) continue;
+
+            result.add(record);
+        }
+        return new ${NAME}(result);
+    }
+
     public class Constructor implements fflib_IDomainConstructor
     {
         public fflib_SObjects construct(List<Object> records)

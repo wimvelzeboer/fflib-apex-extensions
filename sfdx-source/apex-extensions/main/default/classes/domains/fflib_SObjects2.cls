@@ -713,7 +713,7 @@ public virtual class fflib_SObjects2
 	protected virtual Map<Id, String> getStringFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
 	{
 		Map<Id, String> result = new Map<Id, String>();
-		Map<Object, Object> fieldByField = getFieldByField(keyField, valueField);
+		Map<Object, Object> fieldByField = getFieldByField(valueField, keyField);
 		for (Object obj : fieldByField.keySet())
 		{
 			result.put((Id) obj, (String) fieldByField.get(obj));
