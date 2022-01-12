@@ -117,11 +117,31 @@ private class fflib_SObjects2Test
 		domain.getSObjectsByIdField(Account.Id);
 		domain.getSObjectByStringField(Account.Name);
 		domain.getSObjectsByStringField(Account.Name);
-		domain.getStringFieldByIdField(Account.Id, Account.Name);
 		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
 		domain.getStringFieldValues(Account.Name, criteria);
 
 		// todo - add assertions
+	}
+
+	@IsTest
+	static void itShouldReturnStringFieldByIdField()
+	{
+		final String accountName = 'My Account';
+		final Id accountId = fflib_IDGenerator.generate(Account.SObjectType);
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Id = accountId, Name = accountName),
+						new Account(Name = accountName + ' 2')              // This one should be ignored
+				});
+
+		System.Test.startTest();
+		Map<Id, String> result = domain.getStringFieldByIdField(Account.Name, Account.Id);
+		System.Test.stopTest();
+
+		System.assertEquals(1, result.size(), 'Incorrect returned amount of results');
+		System.assert(result.keySet().contains(accountId), 'The accountId is missing from the results');
+		System.assertEquals(accountName, result.get(accountId), 'Incorrect returned account name');
 	}
 
 	@IsTest
