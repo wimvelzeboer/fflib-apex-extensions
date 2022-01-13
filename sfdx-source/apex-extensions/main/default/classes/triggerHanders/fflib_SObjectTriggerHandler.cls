@@ -28,7 +28,7 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public with sharing class fflib_SObjectTriggerHandler
+public virtual with sharing class fflib_SObjectTriggerHandler
 		extends fflib_SObjectDomain
 		implements fflib_ISObjectTriggerHandler
 {
