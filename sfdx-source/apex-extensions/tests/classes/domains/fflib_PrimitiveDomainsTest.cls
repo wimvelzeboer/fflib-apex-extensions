@@ -128,6 +128,26 @@ private class fflib_PrimitiveDomainsTest
     }
 
     @IsTest
+    static void testIds_selectById()
+    {
+        Id idA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id idB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id idC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id idD = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Set<Id> dataSet = new Set<Id> { idA, idB, idC };
+
+        System.Test.startTest();
+        fflib_Ids resultA = new fflib_Ids(dataSet).selectByIds(new Set<Id> {idA, idB, idD});
+        fflib_Ids resultB = new fflib_Ids(dataSet).selectByIdsNotIn(new Set<Id> {idA, idB, idD});
+        System.Test.stopTest();
+
+        System.assertEquals(2, resultA.getIds().size());
+        System.assert(resultA.getIds().containsAll(new Set<Id> {idA, idB }));
+        System.assertEquals(1, resultB.getIds().size());
+        System.assert(resultB.getIds().contains(idC));
+    }
+
+    @IsTest
     static void testIds_Objects()
     {
         final fflib_Objects data = new fflib_Objects(new List<Id>(

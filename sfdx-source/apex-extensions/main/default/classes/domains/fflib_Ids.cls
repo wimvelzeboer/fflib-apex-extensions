@@ -61,6 +61,30 @@ public virtual with sharing class fflib_Ids
 		return (List<Id>) getObjects();
 	}
 
+	public fflib_Ids selectByIds(Set<Id> idSet)
+	{
+		List<Id> result = new List<Id>();
+		for (Id recordId : getIdList())
+		{
+			if (idSet.contains(recordId) == false) continue;
+
+			result.add(recordId);
+		}
+		return new fflib_Ids(result);
+	}
+
+	public fflib_Ids selectByIdsNotIn(Set<Id> idSet)
+	{
+		List<Id> result = new List<Id>();
+		for (Id recordId : getIdList())
+		{
+			if (idSet.contains(recordId)) continue;
+
+			result.add(recordId);
+		}
+		return new fflib_Ids(result);
+	}
+
 	private static List<Id> getIdList(fflib_Objects objects)
 	{
 		List<Id> result = new List<Id>();
