@@ -63,6 +63,7 @@ public class fflib_RecordTypeId
 			String sObjectName,
 			String recordTypeName)
 	{
+		if (cache == null) cache = new Map<String, Map<String, RecordTypeInfo>>();
 		if (cache.containsKey(sObjectName)) return getRecordTypeIdFromCache(cache, sObjectName, recordTypeName);
 
 		Map<String, RecordTypeInfo> recordTypeInfosByName = fflib_SObjectDescribe.getDescribe(sObjectName)
