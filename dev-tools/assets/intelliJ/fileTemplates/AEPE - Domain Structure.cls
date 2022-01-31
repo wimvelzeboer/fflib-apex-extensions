@@ -56,6 +56,18 @@ public inherited sharing class ${NAME}
         return new ${NAME}(result);
     }
 
+    private I${NAME} selectNull(Schema.SObjectField sObjectField)
+    {
+        List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
+        for (${SObject_API_Name} record : get${NAME}())
+        {
+            if (record.get(sObjectField) != null) continue;
+
+            result.add(record);
+        }
+        return new ${NAME}(result);
+    }
+
     private I${NAME} selectWith(Schema.SObjectField sObjectField)
     {
         List<${SObject_API_Name}> result = new List<${SObject_API_Name}>();
