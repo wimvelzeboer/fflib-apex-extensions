@@ -53,7 +53,7 @@ public virtual class fflib_ClassicDomainFactory
 			fflib_ISelectorFactory selectorFactory,
 			Map<Object, Type> constructorTypeByObject)
 	{
-		selectorFactory = selectorFactory;
+		this.selectorFactory = selectorFactory;
 		this.constructorTypeByObject = constructorTypeByObject;
 		this.mockDomainByObject = new Map<Object, fflib_IDomain>();
 	}
