@@ -157,6 +157,28 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
+	static void itShouldReturnDateFieldByIdField()
+	{
+		final Date today = Date.today();
+		final String accountName = 'My Account';
+		final Id accountId = fflib_IDGenerator.generate(Account.SObjectType);
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						new Account(Id = accountId),
+						new Account(Name = accountName + ' 2')              // This one should be ignored
+				});
+
+		System.Test.startTest();
+		Map<Id, Date> result = domain.getDateFieldByIdField(Account.CreatedDate, Account.Id);
+		System.Test.stopTest();
+
+		System.assertEquals(1, result.size(), 'Incorrect returned amount of results');
+		System.assert(result.keySet().contains(accountId), 'The accountId is missing from the results');
+		System.assertEquals(today, result.get(accountId), 'Incorrect returned date');
+	}
+
+	@IsTest
 	static void itShouldReturnIntegerFieldValues()
 	{
 		final Integer numberOfEmployees = 10;

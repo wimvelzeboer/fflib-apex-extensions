@@ -722,6 +722,31 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Get a map with the given Date field value mapped to the given Id field
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Date field to use as value for the map
+	 * @param keyField The Id field to use as key for the map
+	 *
+	 * @return a map with the given Date field value mapped to the given Id field
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, Date> createdDateById = account.getDateFieldByIdField(Account.CreatedDate, Account.Id);
+	 */
+	@TestVisible
+	protected virtual Map<Id, Date> getDateFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, Date> result = new Map<Id, Date>();
+		Map<Object, Object> fieldByField = getFieldByField(valueField, keyField);
+		for (Object obj : fieldByField.keySet())
+		{
+			result.put((Id) obj, (Date) fieldByField.get(obj));
+		}
+		return result;
+	}
+
+	/**
 	 * Get a map with the records mapped to the given String field value
 	 * Key fields containing null values are omitted
 	 *
