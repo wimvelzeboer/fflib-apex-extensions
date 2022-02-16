@@ -271,6 +271,8 @@ public virtual with sharing class fflib_Criteria
 
 		public String getEvaluatedFormula()
 		{
+			if (String.isBlank(this.formula) || this.evaluatedResultByNumber == null) return '';
+
 			String result = String.valueOf(this.formula);
 			for (Integer i : this.evaluatedResultByNumber.keySet())
 			{
@@ -1002,6 +1004,9 @@ public virtual with sharing class fflib_Criteria
 			{
 				relatedObject = relatedObject.getSObject(fieldPath.get(i));
 			}
+
+			if (relatedObject == null) return null;
+
 			return relatedObject.get(fieldPath.get(fieldPath.size()-1));
 		}
 
