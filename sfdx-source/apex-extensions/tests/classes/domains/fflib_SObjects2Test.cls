@@ -483,6 +483,40 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
+	static void itShouldGetRecordByIdFieldValues()
+	{
+		final Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		List<Account> records = new List<Account> {
+				new Account(Id = accountId),
+				new Account(Id = fflib_IDGenerator.generate(Schema.Account.SObjectType)),
+				new Account(Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
+		};
+		fflib_SObjects2 domain = new fflib_SObjects2(records);
+
+		List<SObject> results = domain.getRecords(Schema.Account.Id, new Set<Id> {accountId});
+
+		System.assertEquals(1, results.size());
+		System.assertEquals(accountId, results.get(0).Id);
+	}
+
+	@IsTest
+	static void itShouldGetRecordByStringFieldValues()
+	{
+		final String accountName = 'Test';
+		List<Account> records = new List<Account> {
+				new Account(Name = accountName),
+				new Account(Name = accountName + 'A'),
+				new Account(Name = 'Demo')
+		};
+		fflib_SObjects2 domain = new fflib_SObjects2(records);
+
+		List<SObject> results = domain.getRecords(Schema.Account.Name, new Set<String> {accountName});
+
+		System.assertEquals(1, results.size());
+		System.assertEquals(accountName, (String) results.get(0).get(Schema.Account.Name));
+	}
+
+	@IsTest
 	static void itShouldSetField()
 	{
 		Account record = new Account(Name = 'Hello', Rating = 'Cold');

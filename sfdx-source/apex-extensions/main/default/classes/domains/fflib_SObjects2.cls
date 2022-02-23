@@ -585,6 +585,34 @@ public virtual class fflib_SObjects2
 				.getLongFieldValues(sObjectField);
 	}
 
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Set<Id> values)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (values?.contains((Id) record.get(sObjectField)))
+			{
+				result.add(record);
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Set<String> values)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (values?.contains((String) record.get(sObjectField)))
+			{
+				result.add(record);
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Get a map with the record mapped to the given Id field value
 	 * Key fields containing null values are omitted
