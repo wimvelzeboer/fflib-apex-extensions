@@ -112,7 +112,6 @@ private class fflib_SObjects2Test
 		domain.getDoubleFieldValues(Account.BillingLatitude);
 		domain.getDoubleFieldValues(Account.BillingLatitude, criteria);
 		domain.getSObjectByIdField(Account.Id);
-		domain.getSObjectsByIdField(Account.Id);
 		domain.getSObjectByStringField(Account.Name);
 		domain.getSObjectsByStringField(Account.Name);
 		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
@@ -514,6 +513,27 @@ private class fflib_SObjects2Test
 
 		System.assertEquals(1, results.size());
 		System.assertEquals(accountName, (String) results.get(0).get(Schema.Account.Name));
+	}
+
+	@IsTest
+	static void itShouldGetRecordsByIdFieldValues()
+	{
+		final Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		final Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		List<Contact> records = new List<Contact> {
+				new Contact(AccountId = accountIdA),
+				new Contact(AccountId = accountIdA),
+				new Contact(AccountId = accountIdB),
+				new Contact(AccountId = accountIdB),
+				new Contact(AccountId = accountIdB)
+		};
+		fflib_SObjects2 domain = new fflib_SObjects2(records);
+
+		Map<Id, List<SObject>> results = domain.getSObjectsByIdField(Schema.Contact.AccountId);
+
+		System.assertEquals(2, results.size());
+		System.assertEquals(2, results.get(accountIdA).size());
+		System.assertEquals(3, results.get(accountIdB).size());
 	}
 
 	@IsTest

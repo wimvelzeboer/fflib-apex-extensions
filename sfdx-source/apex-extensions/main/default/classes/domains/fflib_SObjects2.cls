@@ -703,8 +703,8 @@ public virtual class fflib_SObjects2
 	 * @return Returns a map with the records mapped to the given String field value
 	 *
 	 * @example
-	 * Account account = Account.newInstance(records);
-	 * Map<String, SObject> accountByName = account.getSObjectsByStringField(Account.AccountName);
+	 * Accounts accounts = Account.newInstance(records);
+	 * Map<String, List<SObject>> accountByName = accounts.getSObjectsByStringField(Account.AccountName);
 	 */
 	@TestVisible
 	protected virtual Map<String, List<SObject>> getSObjectsByStringField(Schema.SObjectField sObjectField)

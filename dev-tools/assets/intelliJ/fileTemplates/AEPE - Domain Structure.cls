@@ -22,9 +22,25 @@ public inherited sharing class ${NAME}
         return (List<${SObject_API_Name}>) getRecords();
     }
 
+    public Map<Id, ${SObject_API_Name}> getById()
+    {
+        return new Map<Id, ${SObject_API_Name}>(get${NAME}());
+    }
+
     public I${NAME} selectById(Set<Id> ids)
     {
         return new ${NAME}(getRecords(ids));
+    }
+
+    private I${NAME} get${NAME}ByIdField(Schema.SObjectField sObjectField)
+    {
+        Map<Id, List<SObject>> sObjectsById = getSObjectsById(sObjectField);
+        Map<Id, I${NAME}> result = new Map<Id, I${NAME}>();
+        for (Id idValue : sObjectsById.keySet())
+        {
+            result.put(idValue, new ${NAME}(sObjectsById.get(idValue)));
+        }
+        return result;
     }
 
     private I${NAME} selectBy(fflib_Criteria criteria)
