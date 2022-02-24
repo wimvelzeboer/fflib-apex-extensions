@@ -22,6 +22,11 @@ public inherited sharing class ${NAME}
         return (List<${SObject_API_Name}>) getRecords();
     }
 
+    public Map<Id, ${SObject_API_Name}> getById()
+    {
+        return new Map<Id, ${SObject_API_Name}>(get${NAME}());
+    }
+
     public I${NAME} selectById(Set<Id> ids)
     {
         return new ${NAME}(getRecords(ids));
