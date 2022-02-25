@@ -324,6 +324,32 @@ public virtual with sharing class fflib_Criteria
 	}
 
 	/**
+	 * Add a criteria checking if a fields value contains the given value
+	 *
+	 * @param field The sObjectField to evaluate
+	 * @param value The value to be compared to the fields value
+	 *
+	 * @return An instance of itself to enable method chaining
+	 *
+	 * @example
+	 *  new fflib_Criteria()
+	 *          .equalTo(Account.Name, 'Example')
+	 *
+	 * Evaluates:
+	 *   SOQL
+	 *      Name LIKE '%Example%'
+	 *
+	 *   Condition
+	 *      'My Condition Example'.contains('Example')
+	 */
+	public virtual fflib_Criteria contains(Schema.SObjectField field, Object value)
+	{
+		evaluators.add(new FieldEvaluator(field, fflib_Operator.LIKEx, value));
+		return this;
+	}
+
+
+	/**
 	 * Add an equal to criteria comparing a fields value to a given value
 	 *
 	 * @param field The sObjectField to evaluate
@@ -820,15 +846,15 @@ public virtual with sharing class fflib_Criteria
 		else if (operator == fflib_Operator.GREATER_THAN_OR_EQUAL_TO)
 			return '>=';
 		else if (operator == fflib_Operator.LIKEx)
-			return 'LIKE';
+			return ' LIKE ';
 		else if (operator == fflib_Operator.INx)
-			return 'IN';
+			return ' IN ';
 		else if (operator == fflib_Operator.NOT_IN)
-			return 'NOT IN';
+			return ' NOT IN ';
 		else if (operator == fflib_Operator.INCLUDES)
-			return 'INCLUDES';
+			return ' INCLUDES ';
 		else if (operator == fflib_Operator.EXCLUDES)
-			return 'EXCLUDES';
+			return ' EXCLUDES ';
 		else
 				return null;
 	}
@@ -875,7 +901,9 @@ public virtual with sharing class fflib_Criteria
 		}
 
 		throw new CriteriaException(
-				'invalid value; value must a primitive type (String|Id|Boolean|Integer|Long|Double|Decimal|Date|Datetime)'
+				String.format(
+						'invalid value \'{0}\'; value must a primitive type (String|Id|Boolean|Integer|Long|Double|Decimal|Date|Datetime)',
+						new List<String> {String.valueOf(value)})
 		);
 	}
 
@@ -904,6 +932,52 @@ public virtual with sharing class fflib_Criteria
 	{
 		Boolean evaluate(Object obj);
 		String toSOQL();
+	}
+
+	private abstract class ToSOQL
+	{
+		protected String toSOQL(Schema.SObjectField sObjectField, fflib_Operator operator, Object value)
+		{
+			return toSOQL(sObjectField, operator, toLiteral(value));
+		}
+
+		protected String toSOQL(String fieldName, fflib_Operator operator, Object value)
+		{
+			return toSOQL(fieldName, operator, toLiteral(value));
+		}
+
+		protected String toSOQL(Schema.SObjectField sObjectField, fflib_Operator operator, String value)
+		{
+			return toSOQL(sObjectField.getDescribe().getName(), operator, value);
+		}
+
+		protected String toSOQL(String fieldName, fflib_Operator operator, String value)
+		{
+			if (operator == fflib_Operator.LIKEx)
+				return toLikeSOQL(fieldName, operator, value);
+			else
+					return toNonLikeSOQL(fieldName, operator, value);
+		}
+
+		private String toLikeSOQL(String fieldName, fflib_Operator operator, String value)
+		{
+			if (value.startsWith('\'')) value = value.right(value.length() - 1);
+			if (value.endsWith('\'')) value = value.left(value.length() - 1);
+			return toNonLikeSOQL(fieldName, operator, '\'%' + value + '%\'');
+		}
+
+		protected String toNonLikeSOQL(String fieldName, fflib_Operator operator, String value)
+		{
+			return String.join(
+					new List<String>
+					{
+							fieldName,
+							operatorToString(operator),
+							value
+					},
+					''
+			);
+		}
 	}
 
 	/**
@@ -935,7 +1009,7 @@ public virtual with sharing class fflib_Criteria
 		public String toSOQL()
 		{
 			return String.format(
-					'{0} {1} {2}',
+					'{0}{1}{2}',
 					new List<String>
 					{
 							this.sObjectField.getDescribe().getName(),
@@ -949,7 +1023,7 @@ public virtual with sharing class fflib_Criteria
 	/**
 	 * Generic field Evaluator
 	 */
-	private class FieldEvaluator implements Evaluator
+	private class FieldEvaluator extends ToSOQL implements Evaluator
 	{
 		private Schema.SObjectField sObjectField;
 		private Object value;
@@ -974,19 +1048,11 @@ public virtual with sharing class fflib_Criteria
 
 		public String toSOQL()
 		{
-			return String.join(
-					new List<String>
-					{
-							this.sObjectField.getDescribe().getName(),
-							operatorToString(this.operator),
-							toLiteral(this.value)
-					},
-					''
-			);
+			return toSOQL(this.sObjectField, this.operator, this.value);
 		}
 	}
 
-	private abstract class AbstractRelatedFieldEvaluator implements Evaluator
+	private abstract class AbstractRelatedFieldEvaluator extends ToSOQL implements Evaluator
 	{
 		protected String fieldName;
 		protected fflib_Operator operator;
@@ -1035,15 +1101,7 @@ public virtual with sharing class fflib_Criteria
 
 		public String toSOQL()
 		{
-			return String.join(
-					new List<String>
-					{
-							this.fieldName,
-							operatorToString(this.operator),
-							toLiteral(this.value)
-					},
-					''
-			);
+			return toSOQL(this.fieldName, operator, this.value);
 		}
 	}
 
@@ -1071,7 +1129,7 @@ public virtual with sharing class fflib_Criteria
 		public String toSOQL()
 		{
 			return String.format(
-					'{0} {1} {2}',
+					'{0}{1}{2}',
 					new List<String>
 					{
 							this.fieldName,
