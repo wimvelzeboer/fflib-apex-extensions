@@ -33,8 +33,15 @@ public with sharing class fflib_Comparator
 
 	public static Boolean compareTo(Object object1, fflib_Operator operator, Object object2)
 	{
-		Integer result = compare(object1, object2);
+		if (operator == fflib_Operator.LIKEx)
+		{
+			String value1 = String.valueOf(object1);
+			String value2 = String.valueOf(object2);
+			if (value1 == null || value2 == null) return false;
+			return value1.contains(value2);
+		}
 
+		Integer result = compare(object1, object2);
 		if (operator == fflib_Operator.EQUALS && result == 0)
 			return true;
 		else if (operator == fflib_Operator.NOT_EQUALS && result != 0)

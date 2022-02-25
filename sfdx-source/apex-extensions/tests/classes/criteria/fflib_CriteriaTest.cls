@@ -80,6 +80,30 @@ private with sharing class fflib_CriteriaTest
 	}
 
 	@IsTest
+	static void itShouldEvaluateAnContainsCondition()
+	{
+		fflib_Criteria criteria = new fflib_Criteria()
+				.contains(Account.Name, A_STRING);
+		System.assert(criteria.evaluate(new Account(Name = SAME_STRING)));
+		System.assert(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING)));
+		System.assert(criteria.evaluate(new Account(Name = SAME_STRING + ' suffix')));
+		System.assert(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING + ' suffix')));
+		System.assertEquals('Name LIKE \'%' + A_STRING + '%\'', criteria.toSOQL());
+	}
+
+	@IsTest
+	static void itShouldEvaluateAnContainsCondition_nullField()
+	{
+		fflib_Criteria criteria = new fflib_Criteria()
+				.contains(Account.Name, null);
+		System.assert(false == criteria.evaluate(new Account(Name = SAME_STRING)));
+		System.assert(false == criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING)));
+		System.assert(false == criteria.evaluate(new Account(Name = SAME_STRING + ' suffix')));
+		System.assert(false == criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING + ' suffix')));
+		System.assertEquals('Name LIKE \'%null%\'', criteria.toSOQL());
+	}
+
+	@IsTest
 	static void itShouldEvaluateAnEqualsToCondition()
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
