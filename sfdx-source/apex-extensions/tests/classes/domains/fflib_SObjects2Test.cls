@@ -160,12 +160,13 @@ private class fflib_SObjects2Test
 	static void itShouldReturnDateFieldByIdField()
 	{
 		final Date today = Date.today();
+		final Datetime todayDatetime = Datetime.newInstance(today.year(), today.month(), today.day());
 		final String accountName = 'My Account';
 		final Id accountId = fflib_IDGenerator.generate(Account.SObjectType);
 		DomainAccounts domain = new DomainAccounts(
 				new List<Account>
 				{
-						(Account) fflib_MockSObjectUtil.addFieldValue(new Account(Id = accountId), Account.CreatedDate, today),
+						(Account) fflib_MockSObjectUtil.addFieldValue(new Account(Id = accountId), Account.CreatedDate, todayDatetime),
 						new Account(Name = accountName + ' 2')              // This one should be ignored
 				});
 
