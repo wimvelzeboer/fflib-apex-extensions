@@ -165,7 +165,7 @@ private class fflib_SObjects2Test
 		DomainAccounts domain = new DomainAccounts(
 				new List<Account>
 				{
-						new Account(Id = accountId),
+						(Account) fflib_MockSObjectUtil.addFieldValue(new Account(Id = accountId), Account.CreatedDate, today),
 						new Account(Name = accountName + ' 2')              // This one should be ignored
 				});
 
