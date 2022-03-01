@@ -40,6 +40,7 @@ Protected methods
 - [getSObjectByStringField](#getsobjectbystringfield)
 - [getSObjectsByStringField](#getsobjectsbystringfield)
 - [getStringFieldByIdField](#getstringfieldbyidfield)
+- [getDateFieldByIdField](#getdatefieldbyidfield)
 - [getStringFieldByStringField](#getstringfieldbystringfield)
 - [getStringFieldValues](#getstringfieldvalues)
 - [setFieldValue](#setfieldvalue) _(Added method overload)_
@@ -269,7 +270,18 @@ Account account = Account.newInstance(records);
 Map<Id, String> accountNameById = account.getStringFieldByIdField(Account.AccountName, Account.Id);
 ```
 <br/><br/>
+#### getDateFieldByIdField
+Get a map with the given Date field value mapped to the given Id field. Key fields containing null values are omitted.
 
+`protected Map<Id, Date> getDateFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)`
+
+_Example_
+
+```apex
+Account account = Account.newInstance(records);
+Map<Id, Date> createdDateById = account.getDateFieldByIdField(Account.CreatedDate, Account.Id);
+```
+<br/><br/>
 #### getStringFieldByStringField
 Get a map with the records mapped to the given String field value. Key fields containing null values are omitted.
 
