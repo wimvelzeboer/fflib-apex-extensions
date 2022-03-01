@@ -348,6 +348,11 @@ public virtual with sharing class fflib_Criteria
 		return this;
 	}
 
+	public virtual fflib_Criteria contains(String relatedField, Object value)
+	{
+		evaluators.add(new RelatedFieldEvaluator(relatedField, fflib_Operator.LIKEx, value));
+		return this;
+	}
 
 	/**
 	 * Add an equal to criteria comparing a fields value to a given value
