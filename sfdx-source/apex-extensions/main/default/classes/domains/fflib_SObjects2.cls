@@ -613,6 +613,24 @@ public virtual class fflib_SObjects2
 		return result;
 	}
 
+	protected virtual List<SObject> getRecordsByFieldValueIsNot(Schema.SObjectField sObjectField, Object value)
+	{
+		return getRecordsByFieldValuesNotIn(sObjectField, new Set<Object>{ value });
+	}
+
+	protected virtual List<SObject> getRecordsByFieldValuesNotIn(Schema.SObjectField sObjectField, Set<Object> values)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (values?.contains(record.get(sObjectField)) == false)
+			{
+				result.add(record);
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Get a map with the record mapped to the given Id field value
 	 * Key fields containing null values are omitted
