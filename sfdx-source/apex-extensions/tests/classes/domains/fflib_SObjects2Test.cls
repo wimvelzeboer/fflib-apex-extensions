@@ -112,6 +112,7 @@ private class fflib_SObjects2Test
 		domain.getDoubleFieldValues(Account.BillingLatitude);
 		domain.getDoubleFieldValues(Account.BillingLatitude, criteria);
 		domain.getSObjectByIdField(Account.Id);
+		domain.getSObjectsByIdField(Account.Id);
 		domain.getSObjectByStringField(Account.Name);
 		domain.getSObjectsByStringField(Account.Name);
 		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
@@ -153,6 +154,29 @@ private class fflib_SObjects2Test
 		System.assertEquals(1, result.size(), 'Incorrect returned amount of results');
 		System.assert(result.keySet().contains(accountId), 'The accountId is missing from the results');
 		System.assertEquals(accountName, result.get(accountId), 'Incorrect returned account name');
+	}
+
+	@IsTest
+	static void itShouldReturnDateFieldByIdField()
+	{
+		final Date today = Date.today();
+		final Datetime todayDatetime = Datetime.newInstance(today.year(), today.month(), today.day());
+		final String accountName = 'My Account';
+		final Id accountId = fflib_IDGenerator.generate(Account.SObjectType);
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						(Account) fflib_MockSObjectUtil.addFieldValue(new Account(Id = accountId), Account.CreatedDate, todayDatetime),
+						new Account(Name = accountName + ' 2')              // This one should be ignored
+				});
+
+		System.Test.startTest();
+		Map<Id, Date> result = domain.getDateFieldByIdField(Account.CreatedDate, Account.Id);
+		System.Test.stopTest();
+
+		System.assertEquals(1, result.size(), 'Incorrect returned amount of results');
+		System.assert(result.keySet().contains(accountId), 'The accountId is missing from the results');
+		System.assertEquals(today, result.get(accountId), 'Incorrect returned date');
 	}
 
 	@IsTest
@@ -303,7 +327,7 @@ private class fflib_SObjects2Test
 				'A',
 				domain.getRecords(
 						new fflib_Criteria()
-						.equalTo(Schema.Account.Id, idA)
+								.equalTo(Schema.Account.Id, idA)
 				)
 						.get(0)
 						.get('Name')
@@ -479,61 +503,6 @@ private class fflib_SObjects2Test
 		);
 
 		System.assert(domain.getFirstSObject().get('Rating') == 'Warm');
-	}
-
-	@IsTest
-	static void itShouldGetRecordByIdFieldValues()
-	{
-		final Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
-		List<Account> records = new List<Account> {
-				new Account(Id = accountId),
-				new Account(Id = fflib_IDGenerator.generate(Schema.Account.SObjectType)),
-				new Account(Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
-		};
-		fflib_SObjects2 domain = new fflib_SObjects2(records);
-
-		List<SObject> results = domain.getRecords(Schema.Account.Id, new Set<Id> {accountId});
-
-		System.assertEquals(1, results.size());
-		System.assertEquals(accountId, results.get(0).Id);
-	}
-
-	@IsTest
-	static void itShouldGetRecordByStringFieldValues()
-	{
-		final String accountName = 'Test';
-		List<Account> records = new List<Account> {
-				new Account(Name = accountName),
-				new Account(Name = accountName + 'A'),
-				new Account(Name = 'Demo')
-		};
-		fflib_SObjects2 domain = new fflib_SObjects2(records);
-
-		List<SObject> results = domain.getRecords(Schema.Account.Name, new Set<String> {accountName});
-
-		System.assertEquals(1, results.size());
-		System.assertEquals(accountName, (String) results.get(0).get(Schema.Account.Name));
-	}
-
-	@IsTest
-	static void itShouldGetRecordsByIdFieldValues()
-	{
-		final Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
-		final Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
-		List<Contact> records = new List<Contact> {
-				new Contact(AccountId = accountIdA),
-				new Contact(AccountId = accountIdA),
-				new Contact(AccountId = accountIdB),
-				new Contact(AccountId = accountIdB),
-				new Contact(AccountId = accountIdB)
-		};
-		fflib_SObjects2 domain = new fflib_SObjects2(records);
-
-		Map<Id, List<SObject>> results = domain.getSObjectsByIdField(Schema.Contact.AccountId);
-
-		System.assertEquals(2, results.size());
-		System.assertEquals(2, results.get(accountIdA).size());
-		System.assertEquals(3, results.get(accountIdB).size());
 	}
 
 	@IsTest
