@@ -586,6 +586,12 @@ public virtual class fflib_SObjects2
 	}
 
 	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Id idValue)
+	{
+		return getRecords(sObjectField, new Set<Id>{ idValue });
+	}
+
+	@TestVisible
 	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Set<Id> values)
 	{
 		List<SObject> result = new List<SObject>();
@@ -597,6 +603,12 @@ public virtual class fflib_SObjects2
 			}
 		}
 		return result;
+	}
+
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, String value)
+	{
+		return getRecords(sObjectField, new Set<String>{ value });
 	}
 
 	@TestVisible
@@ -613,17 +625,35 @@ public virtual class fflib_SObjects2
 		return result;
 	}
 
-	protected virtual List<SObject> getRecordsByFieldValueIsNot(Schema.SObjectField sObjectField, Object value)
+	@TestVisible
+	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, String value)
 	{
-		return getRecordsByFieldValuesNotIn(sObjectField, new Set<Object>{ value });
+		return getRecordsNotIn(sObjectField, new Set<String>{ value });
 	}
 
-	protected virtual List<SObject> getRecordsByFieldValuesNotIn(Schema.SObjectField sObjectField, Set<Object> values)
+	@TestVisible
+	protected virtual List<SObject> getRecordsNotIn(Schema.SObjectField sObjectField, Set<String> values)
 	{
 		List<SObject> result = new List<SObject>();
 		for (SObject record : getRecords())
 		{
-			if (values?.contains(record.get(sObjectField)) == false)
+			if (values?.contains((String) record.get(sObjectField))) continue;
+			result.add(record);
+		}
+		return result;
+	}
+
+	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, Id idValue)
+	{
+		return getRecordsNotIn(sObjectField, new Set<Id>{ idValue });
+	}
+
+	protected virtual List<SObject> getRecordsNotIn(Schema.SObjectField sObjectField, Set<Id> idValues)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (idValues?.contains((Id) record.get(sObjectField)) == false)
 			{
 				result.add(record);
 			}
@@ -763,6 +793,66 @@ public virtual class fflib_SObjects2
 		for (Object obj : fieldByField.keySet())
 		{
 			result.put((Id) obj, (String) fieldByField.get(obj));
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the given Date field value mapped to the given Id field
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Date field to use as value for the map
+	 * @param keyField The Id field to use as key for the map
+	 *
+	 * @return a map with the given Date field value mapped to the given Id field
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, Date> createdDateById = account.getDateFieldByIdField(Account.CreatedDate, Account.Id);
+	 */
+	@TestVisible
+	protected virtual Map<Id, Date> getDateFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, Date> result = new Map<Id, Date>();
+		Map<Object, Object> fieldByField = getFieldByField(valueField, keyField);
+		for (Object obj : fieldByField.keySet())
+		{
+			Object value = fieldByField.get(obj);
+			Date dateValue;
+			if (value instanceof Date)
+			{
+				dateValue = (Date) value;
+			}
+			else if (value != null)
+			{
+				dateValue = ((Datetime) value).date();
+			}
+			result.put((Id) obj, dateValue);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the given Date field value mapped to the given Id field
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The DateTime field to use as value for the map
+	 * @param keyField The Id field to use as key for the map
+	 *
+	 * @return a map with the given Date field value mapped to the given Id field
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, Datetime> createdDateById = account.getDateFieldByIdField(Account.CreatedDate, Account.Id);
+	 */
+	@TestVisible
+	protected virtual Map<Id, Datetime> getDateTimeFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, Datetime> result = new Map<Id, Datetime>();
+		Map<Object, Object> fieldByField = getFieldByField(valueField, keyField);
+		for (Object obj : fieldByField.keySet())
+		{
+			result.put((Id) obj, (Datetime) fieldByField.get(obj));
 		}
 		return result;
 	}
