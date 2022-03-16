@@ -32,7 +32,26 @@
 private class fflib_SObjectFactoryTest
 {
 	@IsTest
-	static void itShouldGenerateAccountRecords()
+	static void itShouldGenerateContactRecords()
+	{
+		// GIVEN a set of Ids
+		final Set<Id> ids = new Set<Id>
+		{
+				fflib_IDGenerator.generate(Schema.Contact.SObjectType),
+				fflib_IDGenerator.generate(Schema.Contact.SObjectType),
+				fflib_IDGenerator.generate(Schema.Contact.SObjectType)
+		};
+
+		// WHEN we generate Contact records
+		List<Contact> result = (List<Contact>) new ContactsFactory().generateById(ids);
+
+		// THEN there should be three Contact records
+		System.assertEquals(3, result.size(), 'Not enough records created');
+		System.assert(new Map<Id, Contact>(result).keySet().containsAll(ids), 'Records should contain the given ids');
+	}
+
+	@IsTest
+	static void itShouldGenerateContactRecordsWithAccountId()
 	{
 		// GIVEN a set of Ids
 		final Set<Id> ids = new Set<Id>
@@ -42,24 +61,31 @@ private class fflib_SObjectFactoryTest
 				fflib_IDGenerator.generate(Schema.Account.SObjectType)
 		};
 
-		// WHEN we generate Account records
-		List<Account> result = (List<Account>) new AccountsFactory().generateById(ids);
+		// WHEN we generate Contact records
+		List<Contact> result = (List<Contact>) new ContactsFactory().generateByAccountId(ids);
 
-		// THEN there should be three Account records
+		// THEN there should be three Contact records
 		System.assertEquals(3, result.size(), 'Not enough records created');
-		System.assert(new Map<Id, Account>(result).keySet().containsAll(ids), 'Records should contain the given ids');
+		Set<Id> accountIds = new Set<Id>();
+		for (Contact record : result) accountIds.add(record.AccountId);
+		System.assert(accountIds.containsAll(ids), 'Records should contain the given ids');
 	}
 
-	private class AccountsFactory extends fflib_SObjectFactory
+	private class ContactsFactory extends fflib_SObjectFactory
 	{
-		public List<Account> generateById(Set<Id> accountIds)
+		public List<Contact> generateById(Set<Id> ContactIds)
 		{
-			return (List<Account>) generateSObjectById(accountIds);
+			return (List<Contact>) generateSObjectById(ContactIds);
+		}
+
+		public List<Contact> generateByAccountId(Set<Id> ContactIds)
+		{
+			return (List<Contact>) generateSObjectByIdField(Schema.Contact.AccountId, ContactIds);
 		}
 
 		public SObjectType getSObjectType()
 		{
-			return Schema.Account.SObjectType;
+			return Schema.Contact.SObjectType;
 		}
 	}
 }
