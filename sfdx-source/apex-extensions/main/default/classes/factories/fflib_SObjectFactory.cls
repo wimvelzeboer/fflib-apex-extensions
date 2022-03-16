@@ -40,5 +40,18 @@ public abstract inherited sharing class fflib_SObjectFactory implements fflib_IS
 		return result;
 	}
 
+	public virtual List<SObject> generateSObjectByIdField(Schema.SObjectField sObjectField, Set<Id> ids)
+	{
+		SObjectType sObjectType = getSObjectType();
+		List<SObject> result = new List<SObject>();
+		for (Id recordId : ids)
+		{
+			SObject newSObject = sObjectType.newSObject();
+			newSObject.put(sObjectField, recordId);
+			result.add(newSObject);
+		}
+		return result;
+	}
+
 	abstract Schema.SObjectType getSObjectType();
 }
