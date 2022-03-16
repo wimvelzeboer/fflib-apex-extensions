@@ -238,6 +238,27 @@ private class fflib_ArrayUtilsTest
         System.assertEquals(8, result, 'Did not return the last value in the list of objects');
     }
 
+    @IsTest
+    static void itShouldReturnAllValuesForTheGivenIds()
+    {
+        // GIVEN a map with String by Ids
+        Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Map<Id, String> stringsByIds = new Map<Id, String>
+        {
+                accountIdA => 'Account A',
+                accountIdB => 'Account B',
+                accountIdC => 'Account C'
+        };
+
+        // WHEN we retrieve a sub-set of Ids
+        Set<String> result = fflib_ArrayUtils.getAllValues(stringsByIds, new Set<Id> {accountIdA, accountIdB});
+
+        // THEN we get the values of the provide sub-set Ids
+        System.assert(result.containsAll(new Set<String>{'Account A', 'Account B'}));
+    }
+
     private static List<Datetime> generateDateTimes()
     {
         return new List<Datetime>

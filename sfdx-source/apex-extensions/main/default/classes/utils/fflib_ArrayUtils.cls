@@ -74,6 +74,26 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Gets all String values for the given Ids
+	 *
+	 * @param stringsByIds the data map to process
+	 * @param idsToRetrieve The keys for which to retrieve their string values
+	 *
+	 * @return Returns all the values for the provided keys
+	 */
+	public static Set<String> getAllValues(Map<Id, String> stringsByIds, Set<Id> idsToRetrieve)
+	{
+		Set<String> result = new Set<String>();
+		for (Id id : idsToRetrieve)
+		{
+			if (stringsByIds.containsKey(id) == false) continue;
+
+			result.add(stringsByIds.get(id));
+		}
+		return result;
+	}
+
+	/**
 	 * Validates if a list is empty
 	 *
 	 * @param objects The list to validate
