@@ -238,6 +238,57 @@ private class fflib_ArrayUtilsTest
         System.assertEquals(8, result, 'Did not return the last value in the list of objects');
     }
 
+    @IsTest
+    static void itShouldReturnAllValuesForTheGivenIds()
+    {
+        // GIVEN a map with String by Ids
+        final Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Map<Id, String> stringsByIds = new Map<Id, String>
+        {
+                accountIdA => 'Account A',
+                accountIdB => 'Account B',
+                accountIdC => 'Account C'
+        };
+
+        // WHEN we retrieve a sub-set of Ids
+        Set<String> result = fflib_ArrayUtils.getAllValues(stringsByIds, new Set<Id> {accountIdA, accountIdB});
+
+        // THEN we get the values of the provide sub-set Ids
+        System.assert(result.containsAll(new Set<String> {'Account A', 'Account B'}));
+    }
+
+    @IsTest
+    static void itShouldReturnMergedMap()
+    {
+        final Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Set<Id> ids = new Set<Id> {accountIdA, accountIdB, accountIdC};
+
+        final Map<Id, Set<String>> stringsByIdsA = new Map<Id, Set<String>>
+        {
+                accountIdA => new Set<String> {'A1', 'A2'},
+                accountIdB => new Set<String> {'B1'}
+        };
+        final Map<Id, Set<String>> stringsByIdsB = new Map<Id, Set<String>>
+        {
+                accountIdA => new Set<String> {'A3'},
+                accountIdC => new Set<String> {'C1'}
+        };
+
+        Map<Id, Set<String>> result = fflib_ArrayUtils.mergeMaps(stringsByIdsA, stringsByIdsB);
+
+        System.assert(result.keySet().containsAll(ids));
+        System.assert(result.get(accountIdA).containsAll(new Set<String>{'A1', 'A2', 'A3'}));
+        System.assert(result.get(accountIdA).size() == 3);
+        System.assert(result.get(accountIdB).contains('B1'));
+        System.assert(result.get(accountIdB).size() == 1);
+        System.assert(result.get(accountIdC).contains('C1'));
+        System.assert(result.get(accountIdC).size() == 1);
+    }
+
     private static List<Datetime> generateDateTimes()
     {
         return new List<Datetime>

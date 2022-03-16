@@ -74,6 +74,26 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Gets all String values for the given Ids
+	 *
+	 * @param stringsByIds the data map to process
+	 * @param idsToRetrieve The keys for which to retrieve their string values
+	 *
+	 * @return Returns all the values for the provided keys
+	 */
+	public static Set<String> getAllValues(Map<Id, String> stringsByIds, Set<Id> idsToRetrieve)
+	{
+		Set<String> result = new Set<String>();
+		for (Id id : idsToRetrieve)
+		{
+			if (stringsByIds.containsKey(id) == false) continue;
+
+			result.add(stringsByIds.get(id));
+		}
+		return result;
+	}
+
+	/**
 	 * Validates if a list is empty
 	 *
 	 * @param objects The list to validate
@@ -183,6 +203,31 @@ public class fflib_ArrayUtils
 		if (isEmpty(input)) return null;
 
 		return lastValue(cloneAndSort(input));
+	}
+
+	/**
+	 * Merge the given two maps, without modifying the source.
+	 *
+	 * @param mapA Map<Id, Set<String>>
+	 * @param mapB Map<Id, Set<String>>
+	 *
+	 * @return Returns the merged map
+	 */
+	public static Map<Id, Set<String>> mergeMaps(Map<Id, Set<String>> mapA, Map<Id, Set<String>> mapB)
+	{
+		Map<Id, Set<String>> result = mapA.clone();
+		for (Id idValue : mapB.keySet())
+		{
+			if (result.containsKey(idValue))
+			{
+				result.get(idValue).addAll(mapB.get(idValue));
+			}
+			else
+			{
+				result.put(idValue, mapB.get(idValue));
+			}
+		}
+		return result;
 	}
 
 	/**
