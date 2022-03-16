@@ -206,6 +206,31 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Merge the given two maps, without modifying the source.
+	 *
+	 * @param mapA Map<Id, Set<String>>
+	 * @param mapB Map<Id, Set<String>>
+	 *
+	 * @return Returns the merged map
+	 */
+	public static Map<Id, Set<String>> mergeMaps(Map<Id, Set<String>> mapA, Map<Id, Set<String>> mapB)
+	{
+		Map<Id, Set<String>> result = mapA.clone();
+		for (Id idValue : mapB.keySet())
+		{
+			if (result.containsKey(idValue))
+			{
+				result.get(idValue).addAll(mapB.get(idValue));
+			}
+			else
+			{
+				result.put(idValue, mapB.get(idValue));
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Sorts the list with Datetime values and return the oldest value in the list
 	 *
 	 * @param input List of Datetime values
