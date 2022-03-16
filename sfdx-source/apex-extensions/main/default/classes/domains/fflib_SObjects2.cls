@@ -661,6 +661,20 @@ public virtual class fflib_SObjects2
 		return result;
 	}
 
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Boolean value)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if ((Boolean) record.get(sObjectField) == value)
+			{
+				result.add(record);
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Get a map with the record mapped to the given Id field value
 	 * Key fields containing null values are omitted
