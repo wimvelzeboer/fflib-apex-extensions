@@ -30,7 +30,7 @@
  */
 public virtual class fflib_ClassicServiceFactory
 		extends fflib_Application.ServiceFactory
-		implements fflib_IServiceFactory
+		implements fflib_IServiceFactory2
 {
 	/**
 	 * Constructs a simple Service Factory

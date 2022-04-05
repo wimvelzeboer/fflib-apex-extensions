@@ -1,5 +1,5 @@
 /**
- * File Name: fflib_IServiceFactory
+ * File Name: fflib_IServiceFactory2
  * @description Interface for creating instances of Service classes
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,7 +28,7 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public interface fflib_IServiceFactory
+public interface fflib_IServiceFactory2 extends fflib_IServiceFactory
 {
 	/**
 	 * Returns a new instance of the Apex class associated with the given Apex interface

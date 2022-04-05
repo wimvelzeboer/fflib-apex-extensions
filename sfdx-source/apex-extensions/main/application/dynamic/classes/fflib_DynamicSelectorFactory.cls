@@ -30,7 +30,7 @@
  */
 public virtual class fflib_DynamicSelectorFactory
 		extends fflib_DynamicAppFactory
-		implements fflib_ISelectorFactory
+		implements fflib_ISelectorFactory2
 {
 	public static final fflib_AppBindingType SELECTOR_BINDING_TYPE = fflib_AppBindingType.Selector;
 

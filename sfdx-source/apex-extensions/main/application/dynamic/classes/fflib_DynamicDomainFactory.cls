@@ -31,10 +31,10 @@
  */
 public virtual class fflib_DynamicDomainFactory
 		extends fflib_DynamicAppFactory
-		implements fflib_IDomainFactory
+		implements fflib_IDomainFactory2
 {
 	protected Map<Object, fflib_IDomain> mockDomainByObjectType = new Map<Object, fflib_IDomain>();
-	protected fflib_ISelectorFactory selectorFactory;
+	protected fflib_ISelectorFactory2 selectorFactory;
 
 
 	/**
@@ -43,7 +43,7 @@ public virtual class fflib_DynamicDomainFactory
 	 * @param resolver A reference to the resolve instance
 	 * @param selectorFactory A reference to the selector factory instance
 	 */
-	public fflib_DynamicDomainFactory(fflib_IAppBindingResolver resolver, fflib_ISelectorFactory selectorFactory)
+	public fflib_DynamicDomainFactory(fflib_IAppBindingResolver resolver, fflib_ISelectorFactory2 selectorFactory)
 	{
 		this.resolver = resolver;
 		this.selectorFactory = selectorFactory;

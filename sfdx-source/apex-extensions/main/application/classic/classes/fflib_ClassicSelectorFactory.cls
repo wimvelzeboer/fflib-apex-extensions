@@ -30,7 +30,7 @@
  */
 public virtual class fflib_ClassicSelectorFactory
 		extends fflib_Application.SelectorFactory
-		implements fflib_ISelectorFactory
+		implements fflib_ISelectorFactory2
 {
 	/**
 	 * Constructs a simple Selector Factory

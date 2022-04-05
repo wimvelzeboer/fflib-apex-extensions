@@ -1,5 +1,5 @@
 /**
- * File Name: fflib_IUnitOfWorkFactory
+ * File Name: fflib_IUnitOfWorkFactory2
  * @description Interface for creating instances of fflib_ISObjectUnitOfWork
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,7 +28,8 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public interface fflib_IUnitOfWorkFactory
+public interface fflib_IUnitOfWorkFactory2 extends
+		fflib_IUnitOfWorkFactory
 {
 	/**
 	 * Returns a new fflib_SObjectUnitOfWork configured with the

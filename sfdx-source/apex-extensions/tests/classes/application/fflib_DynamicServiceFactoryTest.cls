@@ -128,7 +128,7 @@ public class fflib_DynamicServiceFactoryTest
     private static fflib_IAppBindingResolver bindingResolver =
             new fflib_AppBindingResolver();
 
-    private static final fflib_IServiceFactory Service =
+    private static final fflib_IServiceFactory2 Service =
             new fflib_DynamicServiceFactory(bindingResolver)
                     .setSharingMode(fflib_SharingMode.WithSharing);
 

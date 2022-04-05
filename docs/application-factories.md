@@ -135,48 +135,49 @@ To use the backwards compatible version of the factories, change your Applicatio
 Pay special attention to the interface types and implementation classes of the factories.
 
 **Example**
+
 ```apex
 public class Application
 {
-    public static final fflib_IUnitOfWorkFactory UnitOfWork =
-            new fflib_ClassicUnitOfWorkFactory(
-                    new List<SObjectType>
-                    {
-                            Schema.Account.SObjectType,
-                            Schema.Contact.SObjectType,
-                            ...
-                    }
-            );
+  public static final fflib_ClassicUnitOfWorkFactory UnitOfWork =
+          new fflib_ClassicUnitOfWorkFactory(
+                  new List<SObjectType>
+                  {
+                          Schema.Account.SObjectType,
+                          Schema.Contact.SObjectType,
+                          ...
+                  }
+          );
 
-    public static final fflib_IServiceFactory Service =
-            new fflib_ClassicServiceFactory(
-                    new Map<Type, Type>
-                    {
-                            IAccountsService.class => AccountsServiceImpl.class,
-                            IContactsService.class => ContactsServiceImpl.class,
-                            ...
-                    }
-            );
+  public static final fflib_ClassicServiceFactory Service =
+          new fflib_ClassicServiceFactory(
+                  new Map<Type, Type>
+                  {
+                          IAccountsService.class => AccountsServiceImpl.class,
+                          IContactsService.class => ContactsServiceImpl.class,
+                          ...
+                  }
+          );
 
-    public static final fflib_ISelectorFactory Selector =
-            new fflib_ClassicSelectorFactory(
-                    new Map<SObjectType, Type>
-                    {
-                            Schema.Account.SObjectType => AccountsSelector.class,
-                            Schema.Contact.SObjectType => ContactsSelector.class,
-                            ...
-                    }
-            );
+  public static final fflib_ClassicSelectorFactory Selector =
+          new fflib_ClassicSelectorFactory(
+                  new Map<SObjectType, Type>
+                  {
+                          Schema.Account.SObjectType => AccountsSelector.class,
+                          Schema.Contact.SObjectType => ContactsSelector.class,
+                          ...
+                  }
+          );
 
-    public static final fflib_IDomainFactory Domain =
-            new fflib_ClassicDomainFactory(
-                    Application.Selector,
-                    new Map<SObjectType, Type>
-                    {
-                            Schema.Account.SObjectType => Accounts.Constructor.class,
-                            Schema.Contact.SObjectType => Contacts.Constructor.class,
-                            ...
-                    }
-            );
+  public static final fflib_ClassicDomainFactory Domain =
+          new fflib_ClassicDomainFactory(
+                  Application.Selector,
+                  new Map<SObjectType, Type>
+                  {
+                          Schema.Account.SObjectType => Accounts.Constructor.class,
+                          Schema.Contact.SObjectType => Contacts.Constructor.class,
+                          ...
+                  }
+          );
 }
 ```

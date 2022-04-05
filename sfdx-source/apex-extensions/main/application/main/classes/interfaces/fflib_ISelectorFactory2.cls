@@ -1,5 +1,5 @@
 /**
- * File Name: fflib_ISelectorFactory 
+ * File Name: fflib_ISelectorFactory2
  * @description Interface for creating instances of Selector classes
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,7 +28,7 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public interface fflib_ISelectorFactory
+public interface fflib_ISelectorFactory2 extends fflib_ISelectorFactory
 {
 	/**
 	 * Creates a new instance of the associated Apex Class implementing fflib_ISObjectSelector

@@ -30,7 +30,7 @@
  */
 public virtual class fflib_ClassicUnitOfWorkFactory
 		extends fflib_Application.UnitOfWorkFactory
-		implements fflib_IUnitOfWorkFactory
+		implements fflib_IUnitOfWorkFactory2
 {
 	/**
 	 * Constructs a Unit Of Work factory

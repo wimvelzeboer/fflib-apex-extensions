@@ -1,5 +1,5 @@
 /**
- * File Name: fflib_IDomainFactory 
+ * File Name: fflib_IDomainFactory2
  * @description Interface for creating instances of Domain classes
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,7 +28,7 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public interface fflib_IDomainFactory
+public interface fflib_IDomainFactory2 extends fflib_IDomainFactory
 {
 	/**
 	 * Dynamically constructs an instance of a Domain class for the given record Ids

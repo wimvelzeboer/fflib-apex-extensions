@@ -31,9 +31,9 @@
  */
 public virtual class fflib_ClassicDomainFactory
 		extends fflib_Application.DomainFactory
-		implements fflib_IDomainFactory
+		implements fflib_IDomainFactory2
 {
-	protected fflib_ISelectorFactory selectorFactory;
+	protected fflib_ISelectorFactory2 selectorFactory;
 
 	/**
 	 * Constructs a Domain factory
@@ -50,7 +50,7 @@ public virtual class fflib_ClassicDomainFactory
 	 * @param constructorTypeByObject Map of Domain classes by Object Type
 	 **/
 	public fflib_ClassicDomainFactory(
-			fflib_ISelectorFactory selectorFactory,
+			fflib_ISelectorFactory2 selectorFactory,
 			Map<Object, Type> constructorTypeByObject)
 	{
 		this.selectorFactory = selectorFactory;
@@ -68,7 +68,7 @@ public virtual class fflib_ClassicDomainFactory
 	 * @param selectorFactory , e.g. Application.Selector
 	 * @param sObjectByDomainConstructorType Map of Apex classes by SObjectType
 	 **/
-	public fflib_ClassicDomainFactory(fflib_ISelectorFactory selectorFactory,
+	public fflib_ClassicDomainFactory(fflib_ISelectorFactory2 selectorFactory,
 			Map<SObjectType, Type> sObjectByDomainConstructorType)
 	{
 		this.selectorFactory = selectorFactory;

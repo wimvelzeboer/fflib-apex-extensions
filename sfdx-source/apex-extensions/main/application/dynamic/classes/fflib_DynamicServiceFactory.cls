@@ -30,7 +30,7 @@
  */
 public virtual class fflib_DynamicServiceFactory
 		extends fflib_DynamicAppFactory
-		implements fflib_IServiceFactory
+		implements fflib_IServiceFactory2
 {
 	public static final fflib_AppBindingType SERVICE_BINDING_TYPE = fflib_AppBindingType.Service;
 
