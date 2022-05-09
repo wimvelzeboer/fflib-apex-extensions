@@ -129,7 +129,7 @@ public virtual class fflib_DynamicSelectorFactory
 
 		public Set<Id> getRelatedIds(Schema.SObjectField relationshipField)
 		{
-			return getIdFieldValues(relationshipField).getIds();
+			return getIdFieldValues(relationshipField);
 		}
 	}
 

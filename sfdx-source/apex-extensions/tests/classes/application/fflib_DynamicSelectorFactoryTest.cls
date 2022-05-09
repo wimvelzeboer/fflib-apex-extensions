@@ -36,7 +36,7 @@ public class fflib_DynamicSelectorFactoryTest
 			new fflib_AppBindingResolver();
 
 	@TestVisible
-	private static final fflib_ISelectorFactory Selector =
+	private static final fflib_DynamicSelectorFactory Selector =
 			new fflib_DynamicSelectorFactory(bindingResolver)
 					.setSharingMode(fflib_SharingMode.WithSharing);
 
