@@ -133,61 +133,6 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
-	 * Adds an error message to the records in the domain
-	 *
-	 * @param message The error message to add to each record
-	 */
-	@TestVisible
-	protected virtual void addError(String message)
-	{
-		for (SObject record : getRecords())
-		{
-			record.addError(error(message, record));
-		}
-	}
-
-	/**
-	 * Adds an error message to the a field records in the domain
-	 *
-	 * @param sObjectField The field where the error should be reported
-	 * @param message The error message to add to the given field on each record
-	 */
-	@TestVisible
-	protected virtual void addError(Schema.SObjectField sObjectField, String message)
-	{
-		for (SObject record : getRecords())
-		{
-			record.addError(sObjectField, error(message, record, sObjectField));
-		}
-	}
-
-	/**
-	 * Clear the field value on all the records of the domain
-	 * @param sObjectField The field to nullify
-	 */
-	@TestVisible
-	protected virtual void clearField(Schema.SObjectField sObjectField)
-	{
-		clearFields(new Set<Schema.SObjectField>{ sObjectField });
-	}
-
-	/**
-	 * Clear the field values on all the records of the domain
-	 * @param sObjectFields The fields to nullify
-	 */
-	@TestVisible
-	protected virtual void clearFields(Set<Schema.SObjectField> sObjectFields)
-	{
-		for (SObject record : getRecords())
-		{
-			for (SObjectField sObjectField : sObjectFields)
-			{
-				record.put(sObjectField, null);
-			}
-		}
-	}
-
-	/**
 	 * @param sObjectField The Schema.SObjectField to get their Id values
 	 *
 	 * @return The Date values of the given sObjectField, null values are omitted
@@ -487,29 +432,6 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
-	 * Gets the values from the given Id field
-	 *
-	 * @param sObjectField The Schema.SObjectField to get their Id values
-	 * Fields containing null values are omitted
-	 *
-	 * @return The Id values of the given sObjectField, null values are omitted
-	 */
-	@TestVisible
-	protected virtual fflib_Ids getIdFieldValues(Schema.SObjectField sObjectField)
-	{
-		Set<Id> result = new Set<Id>();
-		for (SObject record : getRecords())
-		{
-			Object fieldValue = record.get(sObjectField);
-			if (fieldValue == null) continue;
-
-			result.add(Id.valueOf(String.valueOf(fieldValue)));
-		}
-		return new fflib_Ids(result);
-		// todo - alternative return to avoid code duplications: return new Ids(getFieldValues(sObjectField));
-	}
-
-	/**
 	 * @param sObjectField The Schema.SObjectField to get their Id values
 	 * @param criteria The criteria condition that must be met to include the value in the return
 	 *
@@ -518,8 +440,8 @@ public virtual class fflib_SObjects2
 	@TestVisible
 	protected virtual fflib_Ids getIdFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
-				.getIdFieldValues(sObjectField);
+		return new fflib_Ids(new fflib_SObjects2(getRecords(criteria), getSObjectType())
+				.getIdFieldValues(sObjectField));
 	}
 
 	/**
@@ -896,23 +818,6 @@ public virtual class fflib_SObjects2
 		return result;
 	}
 
-	/**
-	 * Gets the values for the provided String field
-	 *
-	 * @param sObjectField The Schema.SObjectField to get their values
-	 *
-	 * @return The String values of the given sObjectField
-	 */
-	@TestVisible
-	protected virtual fflib_Strings getStringFieldValues(Schema.SObjectField sObjectField)
-	{
-		Set<String> result = new Set<String>();
-		for (SObject record : getRecords())
-		{
-			result.add(String.valueOf(record.get(sObjectField)));
-		}
-		return new fflib_Strings(result);
-	}
 
 	/**
 	 * @param sObjectField The Schema.SObjectField to get their values
@@ -923,8 +828,8 @@ public virtual class fflib_SObjects2
 	@TestVisible
 	protected virtual fflib_Strings getStringFieldValues(Schema.SObjectField sObjectField, fflib_Criteria criteria)
 	{
-		return new fflib_SObjects2(getRecords(criteria), getSObjectType())
-				.getStringFieldValues(sObjectField);
+		return new fflib_Strings(new fflib_SObjects2(getRecords(criteria), getSObjectType())
+				.getStringFieldValues(sObjectField));
 	}
 
 	/**

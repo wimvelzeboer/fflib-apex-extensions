@@ -46,11 +46,10 @@ private class fflib_SObjects2Test
 				}
 		);
 
-		domain.addError('Oops');
 		domain.addError(Schema.Account.Name,'Oops');
 
 		System.assertEquals(
-				4,
+				2,
 				fflib_SObjects.Errors.getAll().size()
 		);
 	}
@@ -425,7 +424,7 @@ private class fflib_SObjects2Test
 		System.assert(
 				domain.getStringFieldValues(Schema.Account.ShippingCountry)
 						.containsAll(
-						new Set<Object>
+						new Set<String>
 						{
 								'USA',
 								'Ireland',

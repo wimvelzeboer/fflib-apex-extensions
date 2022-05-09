@@ -56,7 +56,7 @@ public virtual class fflib_DynamicDomainFactory
 
 	public fflib_IDomain newInstance(Set<Id> recordIds, SObjectType sObjectType)
 	{
-		return newInstance(this.selectorFactory.selectById(recordIds, sObjectType));
+		return newInstance(this.selectorFactory.selectById(recordIds));
 	}
 
 	public fflib_IDomain newInstance(List<SObject> records)

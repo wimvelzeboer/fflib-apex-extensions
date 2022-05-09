@@ -104,7 +104,7 @@ public virtual class fflib_ClassicDomainFactory
 	 **/
 	public virtual fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)
 	{
-		return newInstance(selectorFactory.selectById(recordIds, sObjectType), sObjectType);
+		return newInstance(selectorFactory.selectById(recordIds));
 	}
 
 	/**

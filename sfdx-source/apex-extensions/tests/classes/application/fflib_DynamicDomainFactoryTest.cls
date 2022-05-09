@@ -35,7 +35,7 @@ public class fflib_DynamicDomainFactoryTest
             new fflib_AppBindingResolver();
 
 
-    private static final fflib_IDomainFactory Domain =
+    private static final fflib_DynamicDomainFactory Domain =
             new fflib_DynamicDomainFactory(
                     bindingResolver,
                     fflib_DynamicSelectorFactoryTest.Selector);
