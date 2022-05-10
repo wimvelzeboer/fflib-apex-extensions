@@ -104,6 +104,10 @@ public virtual class fflib_ClassicDomainFactory
 	 **/
 	public virtual fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)
 	{
+		// Avoid unexpected exceptions when the recordIds contains incorrect data
+		if (recordIds.isEmpty() || new List<Id>(recordIds).get(0) == null )
+			return newInstance(new List<SObject>(), sObjectType);
+
 		return newInstance(selectorFactory.selectById(recordIds));
 	}
 
