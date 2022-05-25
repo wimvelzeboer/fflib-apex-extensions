@@ -121,6 +121,51 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
+	static void itShouldReturnTheRelatedParentDomainId()
+	{
+		// GIVEN a case related to contact related to Account ,
+		//   a case record related to contact but not to Account,
+		//   and a case record related to nothing.
+		//   All encapsulated in domains.
+		Id caseIdA = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdB = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdC = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		Account accountRecord = new Account(Id = accountId);
+		Contact contactRecordA = new Contact(Id = contactIdA, AccountId = accountId);
+		Contact contactRecordB = new Contact(Id = contactIdB);
+		Case caseRecordA = new Case(Id = caseIdA, ContactId = contactIdA);
+		Case caseRecordB = new Case(Id = caseIdB, ContactId = contactIdB);
+		Case caseRecordC = new Case(Id = caseIdC);
+
+		DomainAccounts accountDomain = new DomainAccounts(new List<Account> {accountRecord});
+		DomainContacts contactDomain = new DomainContacts(new List<Contact> {contactRecordA, contactRecordB});
+		DomainCases caseDomain = new DomainCases(new List<Case> {caseRecordA, caseRecordB, caseRecordC});
+
+		// WHEN we request the relation between Case and Account
+		System.Test.startTest();
+		Map<Id, Id> result = caseDomain.getGrandParentIdById(
+				new List<fflib_SObjects2>
+				{
+						contactDomain,
+						accountDomain
+				}
+		);
+		System.Test.stopTest();
+
+		// THEN it should return the AccountId By CaseId
+		System.assertEquals(3, result.size(), 'Expected one related account to the case');
+		System.assert(result.containsKey(caseIdA));
+		System.assert(result.containsKey(caseIdB));
+		System.assert(result.containsKey(caseIdC));
+		System.assertEquals(accountId, result.get(caseIdA), 'Account Id should be related to the Case Id A');
+		System.assertEquals(null, result.get(caseIdB), 'Case Id B should have no related Account Id');
+		System.assertEquals(null, result.get(caseIdC), 'Case Id B should have no related Account Id');
+	}
+
+	@IsTest
 	static void itShouldReturnStringById()
 	{
 		final String accountName = 'My Account';
@@ -612,6 +657,38 @@ private class fflib_SObjects2Test
 		public void clearShippingCountry()
 		{
 			clearField(Schema.Account.ShippingCountry);
+		}
+	}
+
+	private class DomainContacts extends fflib_SObjects2
+	{
+		public DomainContacts(List<SObject> records)
+		{
+			super(records, Schema.Contact.SObjectType);
+		}
+
+		protected override Map<SObjectType, Schema.SObjectField> getRelatedFieldByDomainType()
+		{
+			return new Map<SObjectType, Schema.SObjectField>
+			{
+					Schema.Account.SObjectType => Contact.AccountId
+			};
+		}
+	}
+
+	private class DomainCases extends fflib_SObjects2
+	{
+		public DomainCases(List<SObject> records)
+		{
+			super(records, Schema.Case.SObjectType);
+		}
+
+		protected override Map<SObjectType, Schema.SObjectField> getRelatedFieldByDomainType()
+		{
+			return new Map<SObjectType, Schema.SObjectField>
+			{
+					Schema.Contact.SObjectType => Case.ContactId
+			};
 		}
 	}
 }

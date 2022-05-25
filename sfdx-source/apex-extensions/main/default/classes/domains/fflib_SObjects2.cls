@@ -30,7 +30,7 @@
  */
 public virtual class fflib_SObjects2
 		extends fflib_SObjects
-		implements fflib_ISObjects
+		implements fflib_ISObjects2
 {
 	protected Schema.DescribeSObjectResult SObjectDescribe { get; private set; }
 
@@ -77,6 +77,58 @@ public virtual class fflib_SObjects2
 		List<SObject> result = getRecords(new Set<Id> {id});
 
 		return (result.size() == 0) ? null : result.get(0);
+	}
+
+	/**
+	 * Creates a map between the record Ids of this domain to the last given grandparent domain.
+	 * This method is using getRelatedFieldByDomainType to determine which SObjectField
+	 * is related to the given parent domain
+	 *
+	 * @param relatedDomains A List of domains in hierarchical order from first parent to grandparent
+	 *
+	 * @return Returns a map with KEY: The Ids of the records in this domain,
+	 *   to the VALUE: The Id of the last grandparent record listed in the relatedDomains,
+	 *   null if no grandparent exists.
+	 *
+	 * @see getRelatedFieldByDomainType
+	 *
+	 * @example
+	 * IInvoiceLines invoiceLineDomain = InvoiceLines.newInstance(invoiceLineRecords);
+	 * IInvoices invoicesDomain = Invoices.newInstance(invoiceRecords);
+	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
+	 *
+	 * // A map with key - InvoiceLine.Id to value - Account.Id
+	 * Map<Id, Id> accountIdByInvoiceLineId =
+	 *         invoiceLineDomain.getGrandParentIdById(
+	 *                 new List<fflib_SObjects2>
+	 *                 {
+	 *                         invoicesDomain,
+	 *                         accountDomain
+	 *                 });
+	 */
+	public virtual Map<Id, Id> getGrandParentIdById(List<fflib_ISObjects2> relatedDomains)
+	{
+		fflib_ISObjects2 relatedDomain = relatedDomains.remove(0);
+		SObjectType relatedDomainType = relatedDomain.getSObjectType();
+		Map<SObjectType, SObjectField> relatedFieldByDomainType = getRelatedFieldByDomainType();
+
+		if (relatedFieldByDomainType.containsKey(relatedDomainType) == false)
+			throw new DeveloperException(
+					String.format(
+							'RelatedDomain type {0} not present in method getRelatedFieldByDomainType',
+							new List<String> {String.valueOf(relatedDomainType)}));
+
+		Map<Id, Id> result = getIdFieldByIdField(
+				relatedFieldByDomainType.get(relatedDomainType),
+				getSObjectType().getDescribe().fields.getMap().get('Id'));
+
+		// Check if we need to resolve another parent relation, if not return the results
+		if (relatedDomains.isEmpty()) return result;
+
+		Map<Id, Id> grandChildIdByChildId = relatedDomain.getGrandParentIdById(relatedDomains);
+
+		// Replace the maps value (childId) with the grand child Id
+		return fflib_ArrayUtils.replaceValue(result, grandChildIdByChildId);
 	}
 
 	/**
@@ -598,6 +650,16 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Get Parent Domain SObjectType to SObjectField.relationship field on this domain SObjectType
+	 *
+	 * @return Returns a map of the Parent Domain SObjectType to SObjectField.relationship field on the SObjectType
+	 */
+	protected virtual Map<SObjectType, Schema.SObjectField> getRelatedFieldByDomainType()
+	{
+		return new Map<SObjectType, Schema.SObjectField>();
+	}
+
+	/**
 	 * Get a map with the record mapped to the given Id field value
 	 * Key fields containing null values are omitted
 	 *
@@ -892,4 +954,6 @@ public virtual class fflib_SObjects2
 		}
 
 	}
+
+	public class DeveloperException extends Exception { }
 }
