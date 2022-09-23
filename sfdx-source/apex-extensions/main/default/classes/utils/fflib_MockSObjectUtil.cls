@@ -64,12 +64,43 @@ public with sharing class fflib_MockSObjectUtil
 		return (SObject) JSON.deserialize(serializedRecord, SObject.class);
 	}
 
+	@TestVisible
+	private static SObject setFieldValue(
+			SObject record,
+			Map<Schema.SObjectField, Object> valueBySObjectField)
+	{
+		String serializedRecord = JSON.serialize(record);
+		Map<String, Object> valuesByFieldName =
+				(Map<String, Object>) JSON.deserializeUntyped(serializedRecord);
+		for (SObjectField fieldToken : valueBySObjectField.keySet())
+		{
+			String fieldName = fieldToken.getDescribe().getName();
+			valuesByFieldName.put(fieldName, valueBySObjectField.get(fieldToken));
+		}
+		serializedRecord = JSON.serialize(valuesByFieldName);
+		return (SObject) JSON.deserialize(serializedRecord, SObject.class);
+	}
+
 	@IsTest
 	static void itShouldTestAddingReadOnlyField()
 	{
 		final Decimal amount = 10.0;
 		Opportunity opp = new Opportunity(Id = fflib_IDGenerator.generate(Schema.Opportunity.SObjectType));
 		SObject result = addFieldValue(opp, Opportunity.ExpectedRevenue, amount);
+		System.assertEquals(amount, result.get(Opportunity.ExpectedRevenue));
+	}
+
+	@IsTest
+	static void itShouldTestAddingManyReadOnlyFields()
+	{
+		final Decimal amount = 10.0;
+		Opportunity opp = new Opportunity(Id = fflib_IDGenerator.generate(Schema.Opportunity.SObjectType));
+		Opportunity result = (Opportunity) setFieldValue(
+				(SObject) opp,
+				new Map<Schema.SObjectField, Object>
+				{
+						Opportunity.ExpectedRevenue => amount
+				});
 		System.assertEquals(amount, result.get(Opportunity.ExpectedRevenue));
 	}
 
