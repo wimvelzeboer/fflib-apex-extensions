@@ -51,8 +51,15 @@ Some of the changes that have major impact are listed here;
 
 ### 2022
 
-- Added domain methods
-- Minor bug fixes
+- **fflib_MockSObjectUtil** 
+  - _SetFieldvalue_ method overload added to fflib_MockSObjectUtil. With this you can set multiple readonly fields. 
+- **fflib_Ids**
+  - _Join_ method added to simply join all Id values into a string, using a provided separator
+- **fflib_ArrayUtils**
+  - _replaceValue_, Takes two maps and replaces the value of the source with the value of the replacement, where the source value matches the replacement key.
+  
+- **Minor bug fixes**
+  -  fflib_ClassicDomainFactory: Avoid unexpected exceptions when the recordIds contains incorrect data
 
 ### October 2021
 - **Logger functionality** <br/>A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
