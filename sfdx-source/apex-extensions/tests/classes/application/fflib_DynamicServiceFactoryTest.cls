@@ -46,7 +46,7 @@ public class fflib_DynamicServiceFactoryTest
         Object instance = Service.newInstance(MY_SERVICE_TYPE);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_DynamicServiceFactoryTest.MyService);
+        System.Assert.isInstanceOfType(instance, fflib_DynamicServiceFactoryTest.MyService.class);
     }
 
     @IsTest
@@ -61,7 +61,7 @@ public class fflib_DynamicServiceFactoryTest
         Object instance = Service.newInstance(MY_SERVICE_TYPE);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_DynamicServiceFactoryTest.MyAltService);
+        System.Assert.isInstanceOfType(instance, fflib_DynamicServiceFactoryTest.MyAltService.class);
     }
 
     @IsTest
@@ -77,7 +77,7 @@ public class fflib_DynamicServiceFactoryTest
         Object instance = Service.newInstance(MY_SERVICE_TYPE);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_DynamicServiceFactoryTest.MyAltService);
+        System.Assert.isInstanceOfType(instance, fflib_DynamicServiceFactoryTest.MyAltService.class);
     }
 
     @IsTest
@@ -89,7 +89,7 @@ public class fflib_DynamicServiceFactoryTest
         Object instance = Service.newInstance(MY_SERVICE_INTERFACE_TYPE);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_DynamicServiceFactoryTest.MyService);
+        System.Assert.isInstanceOfType(instance, fflib_DynamicServiceFactoryTest.MyService.class);
     }
 
     @IsTest
@@ -101,7 +101,7 @@ public class fflib_DynamicServiceFactoryTest
         Object instance = Service.newInstance(MY_SERVICE_INTERFACE_TYPE);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_DynamicServiceFactoryTest.MyAltService);
+        System.Assert.isInstanceOfType(instance, fflib_DynamicServiceFactoryTest.MyAltService.class);
     }
 
 

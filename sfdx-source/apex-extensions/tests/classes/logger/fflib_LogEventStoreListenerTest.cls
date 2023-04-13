@@ -48,7 +48,7 @@ private class fflib_LogEventStoreListenerTest
 		System.Test.stopTest();
 
 		// THEN - a record should be created in the Log Event Store
-		System.assertEquals(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
+		System.Assert.areEqual(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
 	}
 
 	/**
@@ -72,8 +72,8 @@ private class fflib_LogEventStoreListenerTest
 
 		// THEN - a record should be created in the Log Event Store
 		List<fflib_LogEntry__c> logEntries = [SELECT Id, LogLevel__c, Message__c, User__c FROM fflib_LogEntry__c];
-		System.assert(logEntries.size() == 1);
-		System.assertEquals(testUser.Id, logEntries.get(0).User__c, 'Log Entry stored with wrong CreatedById');
+		System.Assert.areEqual(1, logEntries.size());
+		System.Assert.areEqual(testUser.Id, logEntries.get(0).User__c, 'Log Entry stored with wrong CreatedById');
 	}
 
 	private static fflib_LogEvent__e generateLoggingLevelEvent(LoggingLevel loggingLevel, String message)

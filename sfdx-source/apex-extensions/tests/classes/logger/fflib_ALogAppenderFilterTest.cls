@@ -43,7 +43,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.ERROR);
 
 		// THEN - It should be valid
-		System.assert(isValid);
+		System.Assert.isTrue(isValid);
 	}
 
 	@IsTest
@@ -57,7 +57,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.ERROR);
 
 		// THEN - It should not be valid
-		System.assert(!isValid);
+		System.Assert.isFalse(isValid);
 	}
 
 	@IsTest
@@ -70,7 +70,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.WARN);
 
 		// THEN - It should not be valid
-		System.assert(!isValid);
+		System.Assert.isFalse(isValid);
 	}
 
 	/**
@@ -98,7 +98,7 @@ private class fflib_ALogAppenderFilterTest
 		}
 
 		// Then - It should be valid
-		System.assert(isValid);
+		System.Assert.istrue(isValid);
 	}*/
 
 	/**
@@ -126,7 +126,7 @@ private class fflib_ALogAppenderFilterTest
 		}
 
 		// Then - It should be valid
-		System.assert(isValid);
+		System.Assert.istrue(isValid);
 	}*/
 
 	@IsTest
@@ -144,7 +144,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.WARN);
 
 		// Then - It should be valid
-		System.assert(isValid);
+		System.Assert.isTrue(isValid);
 	}
 
 	@IsTest
@@ -162,7 +162,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.WARN);
 
 		// Then - It should be valid
-		System.assert(isValid);
+		System.Assert.isTrue(isValid);
 	}
 
 
@@ -181,7 +181,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.WARN);
 
 		// Then - It should be valid
-		System.assert(!isValid);
+		System.Assert.isFalse(isValid);
 	}
 
 	@IsTest
@@ -195,7 +195,7 @@ private class fflib_ALogAppenderFilterTest
 		Boolean isValid = appender.checkValidLogLevel(System.LoggingLevel.WARN);
 
 		// Then - It should not be valid
-		System.assert(!isValid);
+		System.Assert.isFalse(isValid);
 	}
 
 

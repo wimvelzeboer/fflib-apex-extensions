@@ -11,7 +11,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void testObjectToString()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<String> {'123', '456', '789'},
                 fflib_ArrayUtils.objectToString(
                         new List<Object> {123, 456, 789}
@@ -22,7 +22,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void testObjectStringToString()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<String> {'123', '456', '789'},
                 fflib_ArrayUtils.objectToString(
                         new List<Object> {'123', '456', '789'}
@@ -33,7 +33,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void itShouldReturnEmptyListOnEmptyObjectToString()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<String>(),
                 fflib_ArrayUtils.objectToString(
                         new List<Object>()
@@ -44,7 +44,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void itShouldConvertSetToListOfString()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<String> {'1', '2', '3'},
                 fflib_ArrayUtils.objectToString(
                         new Set<Object> {1, 2, 3}
@@ -57,7 +57,7 @@ private class fflib_ArrayUtilsTest
     {
         Id idA = fflib_IDGenerator.generate(Account.SObjectType);
         Id idB = fflib_IDGenerator.generate(Account.SObjectType);
-        System.assertEquals(
+        System.Assert.areEqual(
                 new Set<Id> {idA, idB},
                 fflib_ArrayUtils.objectToIds(
                         new Set<Object>
@@ -72,7 +72,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void itShouldReturnReversedObjectList()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<Object>
                 {
                         (Object) 'C',
@@ -93,7 +93,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void itShouldReturnReversedSObjectList()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<SObject>
                 {
                         (SObject) new Account(Name = 'C'),
@@ -114,7 +114,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void itShouldConvertListOfStringsIntoUpperCase()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<String>
                 {
                         'TEST A',
@@ -135,7 +135,7 @@ private class fflib_ArrayUtilsTest
     @IsTest
     static void testLowerCase()
     {
-        System.assertEquals(
+        System.Assert.areEqual(
                 new List<String> {'abc', 'def'},
                 fflib_ArrayUtils.lowerCase(
                         new List<String> {'ABC', 'DEF'}
@@ -147,28 +147,28 @@ private class fflib_ArrayUtilsTest
     static void testIsEmpty()
     {
         List<String> aNull = null;
-        System.assertEquals(true, fflib_ArrayUtils.isEmpty(aNull));
-        System.assertEquals(true, fflib_ArrayUtils.isEmpty(new List<String> {}));
-        System.assertEquals(false, fflib_ArrayUtils.isEmpty(new List<String> {'a'}));
-        System.assertEquals(false, fflib_ArrayUtils.isEmpty(new List<String> {'a', 'b'}));
-        System.assertEquals(true, fflib_ArrayUtils.isEmpty(new List<Integer> {}));
-        System.assertEquals(false, fflib_ArrayUtils.isEmpty(new List<Integer> {1}));
-        System.assertEquals(false, fflib_ArrayUtils.isEmpty(new List<Integer> {1, 2}));
+        System.Assert.istrue(fflib_ArrayUtils.isEmpty(aNull));
+        System.Assert.istrue(fflib_ArrayUtils.isEmpty(new List<String> {}));
+        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<String> {'a'}));
+        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<String> {'a', 'b'}));
+        System.Assert.istrue(fflib_ArrayUtils.isEmpty(new List<Integer> {}));
+        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<Integer> {1}));
+        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<Integer> {1, 2}));
     }
 
     @IsTest
     static void testIsNotEmpty()
     {
         List<String> aNull = null;
-        System.assertEquals(false, fflib_ArrayUtils.isNotEmpty(aNull));
-        System.assertEquals(false, fflib_ArrayUtils.isNotEmpty(new List<String> {}));
-        System.assertEquals(true, fflib_ArrayUtils.isNotEmpty(new List<String> {'a'}));
-        System.assertEquals(true, fflib_ArrayUtils.isNotEmpty(new List<String> {'a', 'b'}));
-        System.assertEquals(false, fflib_ArrayUtils.isNotEmpty(new List<Integer> {}));
-        System.assertEquals(true, fflib_ArrayUtils.isNotEmpty(new List<Integer> {1}));
-        System.assertEquals(true, fflib_ArrayUtils.isNotEmpty(new List<Integer> {1, 2}));
-        System.assertEquals(false, fflib_ArrayUtils.isNotEmpty(new List<Account> {}));
-        System.assertEquals(true, fflib_ArrayUtils.isNotEmpty(new List<Account> {new Account(Name = 'test')}));
+        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(aNull));
+        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(new List<String> {}));
+        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<String> {'a'}));
+        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<String> {'a', 'b'}));
+        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(new List<Integer> {}));
+        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<Integer> {1}));
+        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<Integer> {1, 2}));
+        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(new List<Account> {}));
+        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<Account> {new Account(Name = 'test')}));
     }
 
     @IsTest
@@ -181,7 +181,7 @@ private class fflib_ArrayUtilsTest
         Datetime maxDatetime = fflib_ArrayUtils.maxDatetime(datetimes);
 
         // THEN - the highest Datetime should be returned
-        System.assertEquals(datetimes.get(1), maxDatetime);
+        System.Assert.areEqual(datetimes.get(1), maxDatetime);
     }
 
     @IsTest
@@ -194,18 +194,18 @@ private class fflib_ArrayUtilsTest
         Datetime maxDatetime = fflib_ArrayUtils.minDatetime(datetimes);
 
         // THEN - the highest Datetime should be returned
-        System.assertEquals(datetimes.get(4), maxDatetime);
+        System.Assert.areEqual(datetimes.get(4), maxDatetime);
     }
 
     @IsTest
     static void itShouldHandleNullInputsForMaxDatatime()
     {
-        System.assertEquals(
-                null, fflib_ArrayUtils.maxDatetime(new List<Datetime>()),
+        System.Assert.isNull(
+                fflib_ArrayUtils.maxDatetime(new List<Datetime>()),
                 'maxDatetime method was unable to handle an empty list as input'
         );
-        System.assertEquals(
-                null, fflib_ArrayUtils.maxDatetime(null),
+        System.Assert.isNull(
+                fflib_ArrayUtils.maxDatetime(null),
                 'maxDatetime method was unable to handle null as input'
         );
     }
@@ -221,8 +221,8 @@ private class fflib_ArrayUtilsTest
 
         // WHEN - we request the a cloned and sorted list
         List<Integer> sorted = fflib_ArrayUtils.cloneAndSort(unsorted);
-        System.assertNotEquals(unsorted, sorted, 'The original object was modified, something went wrong with the cloning');
-        System.assertEquals(new List<Integer> {-7, 1, 2, 30, 76}, sorted, 'Incorrect sorted list returned');
+        System.Assert.areNotEqual(unsorted, sorted, 'The original object was modified, something went wrong with the cloning');
+        System.Assert.areEqual(new List<Integer> {-7, 1, 2, 30, 76}, sorted, 'Incorrect sorted list returned');
     }
 
     @IsTest
@@ -235,7 +235,7 @@ private class fflib_ArrayUtilsTest
         Object result = fflib_ArrayUtils.lastValue(objects);
 
         // THEN - the highest Datetime should be returned
-        System.assertEquals(8, result, 'Did not return the last value in the list of objects');
+        System.Assert.areEqual(8, result, 'Did not return the last value in the list of objects');
     }
 
     @IsTest
@@ -260,10 +260,10 @@ private class fflib_ArrayUtilsTest
 
         Map<Id, Id> result = fflib_ArrayUtils.replaceValue(source, replacement);
 
-        System.assertEquals(3, result.size());
-        System.assertEquals(accountIdB, result.get(accountIdA));
-        System.assertEquals(accountIdA, result.get(accountIdB));
-        System.assertEquals(null, result.get(accountIdC));
+        System.Assert.areEqual(3, result.size());
+        System.Assert.areEqual(accountIdB, result.get(accountIdA));
+        System.Assert.areEqual(accountIdA, result.get(accountIdB));
+        System.Assert.isNull(result.get(accountIdC));
     }
 
     @IsTest
@@ -284,7 +284,7 @@ private class fflib_ArrayUtilsTest
         Set<String> result = fflib_ArrayUtils.getAllValues(stringsByIds, new Set<Id> {accountIdA, accountIdB});
 
         // THEN we get the values of the provide sub-set Ids
-        System.assert(result.containsAll(new Set<String> {'Account A', 'Account B'}));
+        System.Assert.istrue(result.containsAll(new Set<String> {'Account A', 'Account B'}));
     }
 
     @IsTest
@@ -308,13 +308,13 @@ private class fflib_ArrayUtilsTest
 
         Map<Id, Set<String>> result = fflib_ArrayUtils.mergeMaps(stringsByIdsA, stringsByIdsB);
 
-        System.assert(result.keySet().containsAll(ids));
-        System.assert(result.get(accountIdA).containsAll(new Set<String>{'A1', 'A2', 'A3'}));
-        System.assert(result.get(accountIdA).size() == 3);
-        System.assert(result.get(accountIdB).contains('B1'));
-        System.assert(result.get(accountIdB).size() == 1);
-        System.assert(result.get(accountIdC).contains('C1'));
-        System.assert(result.get(accountIdC).size() == 1);
+        System.Assert.istrue(result.keySet().containsAll(ids));
+        System.Assert.istrue(result.get(accountIdA).containsAll(new Set<String>{'A1', 'A2', 'A3'}));
+        System.Assert.areEqual(3, result.get(accountIdA).size());
+        System.Assert.istrue(result.get(accountIdB).contains('B1'));
+        System.Assert.areEqual(1, result.get(accountIdB).size());
+        System.Assert.istrue(result.get(accountIdC).contains('C1'));
+        System.Assert.areEqual(1, result.get(accountIdC).size());
     }
 
     private static List<Datetime> generateDateTimes()

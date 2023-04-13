@@ -52,26 +52,26 @@ private with sharing class fflib_CriteriaTest
 						'{"attributes":{"type":"Account"},"Name":"Test", "LastViewedDate":"2021-01-01T10:10:00.000+0000"}', Account.class
 				);
 
-		System.assert(
+		System.Assert.isTrue(
 			new fflib_Criteria()
 					.greaterOrEqualTo(Schema.Account.LastViewedDate, Datetime.newInstance(2020,01,01))
 					.evaluate(record),
 				'Datetime is not greater or equal too'
 		);
-		System.assert(
+		System.Assert.isTrue(
 			new fflib_Criteria()
 					.greaterOrEqualTo(Schema.Account.LastViewedDate, Datetime.newInstance(2030,01,01))
 					.evaluate(record) == false,
 				'Datetime should not be greater or equal too'
 		);
 
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.lessOrEqualTo(Schema.Account.LastViewedDate, Datetime.newInstance(2030,01,01))
 						.evaluate(record),
 				'Datetime is not less or equal too'
 		);
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.lessOrEqualTo(Schema.Account.LastViewedDate, Datetime.newInstance(2000,01,01))
 						.evaluate(record) == false,
@@ -84,11 +84,11 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.contains(Account.Name, A_STRING);
-		System.assert(criteria.evaluate(new Account(Name = SAME_STRING)));
-		System.assert(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING)));
-		System.assert(criteria.evaluate(new Account(Name = SAME_STRING + ' suffix')));
-		System.assert(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING + ' suffix')));
-		System.assertEquals('Name LIKE \'%' + A_STRING + '%\'', criteria.toSOQL());
+		System.Assert.isTrue(criteria.evaluate(new Account(Name = SAME_STRING)));
+		System.Assert.isTrue(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING)));
+		System.Assert.isTrue(criteria.evaluate(new Account(Name = SAME_STRING + ' suffix')));
+		System.Assert.isTrue(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING + ' suffix')));
+		System.Assert.areEqual('Name LIKE \'%' + A_STRING + '%\'', criteria.toSOQL());
 	}
 
 	@IsTest
@@ -96,11 +96,11 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.contains(Account.Name, null);
-		System.assert(false == criteria.evaluate(new Account(Name = SAME_STRING)));
-		System.assert(false == criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING)));
-		System.assert(false == criteria.evaluate(new Account(Name = SAME_STRING + ' suffix')));
-		System.assert(false == criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING + ' suffix')));
-		System.assertEquals('Name LIKE \'%null%\'', criteria.toSOQL());
+		System.Assert.isFalse(criteria.evaluate(new Account(Name = SAME_STRING)));
+		System.Assert.isFalse(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING)));
+		System.Assert.isFalse(criteria.evaluate(new Account(Name = SAME_STRING + ' suffix')));
+		System.Assert.isFalse(criteria.evaluate(new Account(Name = 'prefix ' + SAME_STRING + ' suffix')));
+		System.Assert.areEqual('Name LIKE \'%null%\'', criteria.toSOQL());
 	}
 
 	@IsTest
@@ -109,29 +109,27 @@ private with sharing class fflib_CriteriaTest
 		fflib_Criteria criteria = new fflib_Criteria()
 				.andCriteria()
 				.equalTo(Account.Name, A_STRING);
-		System.assert(criteria.evaluate(new Account(Name = SAME_STRING)));
-		System.assertEquals('Name=\'' + A_STRING + '\'',criteria.toSOQL());
+		System.Assert.istrue(criteria.evaluate(new Account(Name = SAME_STRING)));
+		System.Assert.areEqual('Name=\'' + A_STRING + '\'',criteria.toSOQL());
 	}
 
 	@IsTest
 	static void itShouldEvaluateAnEqualsToCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.equalTo(Account.Name, A_STRING)
 						.evaluate(new Account(Name = ANOTHER_STRING))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAnEqualsToCondition_NullValues()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.equalTo(Account.Name, A_STRING)
 						.evaluate(new Account())
-						== FAILING
 		);
 	}
 
@@ -140,18 +138,17 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.notEqualTo(Account.Name, A_STRING);
-		System.assert(criteria.evaluate(new Account(Name = ANOTHER_STRING)));
-		System.assertEquals('Name!=\'' + A_STRING + '\'', criteria.toSOQL());
+		System.Assert.istrue(criteria.evaluate(new Account(Name = ANOTHER_STRING)));
+		System.Assert.areEqual('Name!=\'' + A_STRING + '\'', criteria.toSOQL());
 	}
 
 	@IsTest
 	static void itShouldEvaluateANotEqualsToCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.notEqualTo('Name', A_STRING)
 						.evaluate(new Account(Name = SAME_STRING))
-						== FAILING
 		);
 	}
 
@@ -160,14 +157,14 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.greaterOrEqualTo(Account.AnnualRevenue, A_NUMBER);
-		System.assert(criteria.evaluate(new Account(AnnualRevenue = HIGHER_NUMBER)));
-		System.assertEquals('AnnualRevenue>=' + A_NUMBER, criteria.toSOQL());
+		System.Assert.istrue(criteria.evaluate(new Account(AnnualRevenue = HIGHER_NUMBER)));
+		System.Assert.areEqual('AnnualRevenue>=' + A_NUMBER, criteria.toSOQL());
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddGreaterOrEqualToCondition_Equal()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.greaterOrEqualTo('AnnualRevenue', A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = SAME_NUMBER))
@@ -177,21 +174,19 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddGreaterOrEqualToCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.greaterOrEqualTo(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = LOWER_NUMBER))
-						== FAILING
 		);
 	}
 	@IsTest
 	static void itShouldEvaluateAddGreaterOrEqualToCondition_NullValues()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.greaterOrEqualTo(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account())
-						== FAILING
 		);
 	}
 
@@ -200,46 +195,43 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.greaterThan(Account.AnnualRevenue, A_NUMBER);
-		System.assert(criteria.evaluate(new Account(AnnualRevenue = HIGHER_NUMBER)));
-		System.assertEquals('AnnualRevenue>' + A_NUMBER, criteria.toSOQL());
+		System.Assert.istrue(criteria.evaluate(new Account(AnnualRevenue = HIGHER_NUMBER)));
+		System.Assert.areEqual('AnnualRevenue>' + A_NUMBER, criteria.toSOQL());
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddGreaterThanCondition_EqualValues()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.greaterThan('AnnualRevenue', A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = SAME_NUMBER))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddGreaterThanCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.greaterThan(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = LOWER_NUMBER))
-						== FAILING
 		);
 	}
 	@IsTest
 	static void itShouldEvaluateAddGreaterThanCondition_NullValues()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.greaterThan(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account())
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddLessOrEqualToCondition()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.lessOrEqualTo(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = LOWER_NUMBER))
@@ -249,7 +241,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddLessOrEqualToCondition_Equal()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.lessOrEqualTo('AnnualRevenue', A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = SAME_NUMBER))
@@ -259,17 +251,16 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddLessOrEqualToCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.lessOrEqualTo(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = HIGHER_NUMBER))
-						== FAILING
 		);
 	}
 	@IsTest
 	static void itShouldEvaluateAddLessOrEqualToCondition_NullValues()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.lessOrEqualTo(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account())
@@ -279,7 +270,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddLessThanCondition()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.lessThan(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = LOWER_NUMBER))
@@ -289,29 +280,27 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddLessThanCondition_EqualValues()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.lessThan('AnnualRevenue', A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = SAME_NUMBER))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddLessThanCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.lessThan(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account(AnnualRevenue = HIGHER_NUMBER))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddLessThanCondition_NullValues()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.lessThan(Account.AnnualRevenue, A_NUMBER)
 						.evaluate(new Account())
@@ -323,13 +312,13 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.inSet(Account.AnnualRevenue, new Set<Decimal> {1.1, 2.2});
-		System.assert(criteria.evaluate(new Account(AnnualRevenue = 1.1)));
-		System.assertEquals('AnnualRevenue IN (1.1,2.2)', criteria.toSOQL());
+		System.Assert.istrue(criteria.evaluate(new Account(AnnualRevenue = 1.1)));
+		System.Assert.areEqual('AnnualRevenue IN (1.1,2.2)', criteria.toSOQL());
 
 		fflib_Criteria criteriaB = new fflib_Criteria()
 				.inSet('AnnualRevenue', new Set<Decimal> {1.1, 2.2});
-		System.assert(criteriaB.evaluate(new Account(AnnualRevenue = 1.1)));
-		System.assertEquals('AnnualRevenue IN (1.1,2.2)', criteriaB.toSOQL());
+		System.Assert.istrue(criteriaB.evaluate(new Account(AnnualRevenue = 1.1)));
+		System.Assert.areEqual('AnnualRevenue IN (1.1,2.2)', criteriaB.toSOQL());
 
 	}
 
@@ -338,12 +327,12 @@ private with sharing class fflib_CriteriaTest
 	{
 		Id idOne = fflib_IDGenerator.generate(Account.SObjectType);
 		Id idTwo = fflib_IDGenerator.generate(Account.SObjectType);
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.inSet(Account.Id, new Set<Id> {idOne, idTwo})
 						.evaluate(new Account(Id = idOne))
 		);
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.inSet('Id', new Set<Id> {idOne, idTwo})
 						.evaluate(new Account(Id = idOne))
@@ -353,12 +342,12 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateInSetCondition_Integer()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.inSet(Account.NumberOfEmployees, new Set<Integer> {1, 10})
 						.evaluate(new Account(NumberOfEmployees = 1))
 		);
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.inSet('NumberOfEmployees', new Set<Integer> {1, 10})
 						.evaluate(new Account(NumberOfEmployees = 1))
@@ -368,12 +357,12 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateInSetCondition()
 	{
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.inSet(Account.Type, new Set<String> {A_STRING, HELLO_WORLD})
 						.evaluate(new Account(Type = SAME_STRING))
 		);
-		System.assert(
+		System.Assert.istrue(
 				new fflib_Criteria()
 						.inSet('Type', new Set<String> {A_STRING, HELLO_WORLD})
 						.evaluate(new Account(Type = SAME_STRING))
@@ -383,22 +372,20 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateInSetCondition_ReturningFalse()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.inSet(Account.Type, new Set<String> {A_STRING, HELLO_WORLD})
 						.evaluate(new Account(Type = ANOTHER_STRING))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateInSetCondition_NullValues()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.inSet(Account.Type, new Set<String> {A_STRING, HELLO_WORLD})
 						.evaluate(new Account())
-						== FAILING
 		);
 	}
 
@@ -407,31 +394,30 @@ private with sharing class fflib_CriteriaTest
 	{
 		fflib_Criteria criteria = new fflib_Criteria()
 				.notInSet(Account.Name, new Set<String> {A_STRING, HELLO_WORLD});
-		System.assert(criteria.evaluate(new Account(Name = ANOTHER_STRING)));
-		System.assertEquals('Name NOT IN (\'Example\',\'Hello World!\')', criteria.toSOQL());
+		System.Assert.isTrue(criteria.evaluate(new Account(Name = ANOTHER_STRING)));
+		System.Assert.areEqual('Name NOT IN (\'Example\',\'Hello World!\')', criteria.toSOQL());
 
 	}
 
 	@IsTest
 	static void itShouldEvaluateNotInSetCondition_Failing()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.notInSet('Name', new Set<String> {A_STRING, HELLO_WORLD})
 						.evaluate(new Account(Name = SAME_STRING))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateNotInSetCondition_Decimal()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.notInSet(Account.AnnualRevenue, new Set<Decimal> {1.1, 2.2})
 						.evaluate(new Account(AnnualRevenue = 3.3))
 		);
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.notInSet('AnnualRevenue', new Set<Decimal> {1.1, 2.2})
 						.evaluate(new Account(AnnualRevenue = 3.3))
@@ -444,12 +430,12 @@ private with sharing class fflib_CriteriaTest
 		Id idOne = fflib_IDGenerator.generate(Account.SObjectType);
 		Id idTwo = fflib_IDGenerator.generate(Account.SObjectType);
 		Id idThree = fflib_IDGenerator.generate(Account.SObjectType);
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.notInSet(Account.Id, new Set<Id> {idOne, idTwo})
 						.evaluate(new Account(Id = idThree))
 		);
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.notInSet('Id', new Set<Id> {idOne, idTwo})
 						.evaluate(new Account(Id = idThree))
@@ -459,12 +445,12 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateNotInSetCondition_Integer()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.notInSet(Account.NumberOfEmployees, new Set<Integer> {1, 10})
 						.evaluate(new Account(NumberOfEmployees = 2))
 		);
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.notInSet('NumberOfEmployees', new Set<Integer> {1, 10})
 						.evaluate(new Account(NumberOfEmployees = 2))
@@ -474,7 +460,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateOrCondition_First()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.orCriteria()
 						.equalTo(Account.Name, A_STRING)
@@ -486,7 +472,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateOrCondition_Second()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.orCriteria()
 						.equalTo(Account.Name, A_STRING)
@@ -498,20 +484,19 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateOrCondition_Failing()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.orCriteria()
 						.equalTo(Account.Name, A_STRING)
 						.equalTo(Account.Name, ANOTHER_STRING)
 						.evaluate(new Account(Name = HELLO_WORLD))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddOrCondition_First()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.equalTo(Account.Name, A_STRING)
 						.addOrCriteria(
@@ -526,7 +511,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddOrCondition_Second()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.equalTo(Account.Name, A_STRING)
 						.addOrCriteria(
@@ -541,7 +526,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddOrCondition_Failing()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.equalTo(Account.Name, A_STRING)
 						.addOrCriteria(
@@ -550,14 +535,13 @@ private with sharing class fflib_CriteriaTest
 								.equalTo(Account.AccountNumber, '002')
 				)
 						.evaluate(new Account(Name = ANOTHER_STRING, AccountNumber = '001'))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateAddAndCondition_First()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.orCriteria()
 						.equalTo(Account.Name, A_STRING)
@@ -574,7 +558,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddAndCondition_Second()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.orCriteria()
 						.equalTo(Account.Name, A_STRING)
@@ -591,7 +575,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateAddAndCondition_SecondFailing()
 	{
-		System.assert(
+		System.Assert.isFalse(
 				new fflib_Criteria()
 						.orCriteria()
 						.equalTo(Account.Name, A_STRING)
@@ -602,14 +586,13 @@ private with sharing class fflib_CriteriaTest
 								.equalTo(Account.AccountNumber, '002')
 				)
 						.evaluate(new Account(Name = HELLO_WORLD))
-						== FAILING
 		);
 	}
 
 	@IsTest
 	static void itShouldEvaluateEmptyCondition()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.evaluate(new Account())
 		);
@@ -618,7 +601,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldGenerateQueryString_EqualsToCondition()
 	{
-		System.assertEquals(
+		System.Assert.areEqual(
 				'Name=\'Example\'',
 				new fflib_Criteria()
 						.andCriteria()
@@ -630,7 +613,7 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldGenerateQueryString_AddOrCondition()
 	{
-		System.assertEquals(
+		System.Assert.areEqual(
 				'Name=\'Example\' AND (AccountNumber=\'001\' OR AccountNumber=\'002\')',
 				new fflib_Criteria()
 						.equalTo(Account.Name, A_STRING)
@@ -657,18 +640,18 @@ private with sharing class fflib_CriteriaTest
 		// WHEN we run a criteria con the contact record validating related data on the parent Account
 		fflib_Criteria criteriaA = new fflib_Criteria()
 				.equalTo('Account.Name', 'Dummy');
-		System.assert(criteriaA.evaluate(record));
-		System.assertEquals('Account.Name=\'Dummy\'', criteriaA.toSOQL());
+		System.Assert.isTrue(criteriaA.evaluate(record));
+		System.Assert.areEqual('Account.Name=\'Dummy\'', criteriaA.toSOQL());
 
 		fflib_Criteria criteriaB = new fflib_Criteria()
 				.inSet('Account.Name', new Set<String>{'Dummy', A_STRING });
-		System.assert(criteriaB.evaluate(record));
-		System.assertEquals('Account.Name IN (\'Dummy\',\'' + A_STRING + '\')', criteriaB.toSOQL());
+		System.Assert.isTrue(criteriaB.evaluate(record));
+		System.Assert.areEqual('Account.Name IN (\'Dummy\',\'' + A_STRING + '\')', criteriaB.toSOQL());
 
 		fflib_Criteria criteriaC = new fflib_Criteria()
 				.notInSet('Account.Name', new Set<String>{ A_STRING, ANOTHER_STRING });
-		System.assert(criteriaC.evaluate(record) );
-		System.assertEquals('Account.Name NOT IN (\'' + A_STRING + '\',\'' + ANOTHER_STRING + '\')', criteriaC.toSOQL());
+		System.Assert.isTrue(criteriaC.evaluate(record) );
+		System.Assert.areEqual('Account.Name NOT IN (\'' + A_STRING + '\',\'' + ANOTHER_STRING + '\')', criteriaC.toSOQL());
 	}
 
 	@IsTest
@@ -687,12 +670,12 @@ private with sharing class fflib_CriteriaTest
 				.equalTo(Contact.LastName, 'Smith')
 				.equalTo(Contact.FirstName, 'John')
 				.equalTo(Contact.Department, 'MIB');
-		System.assert(criteria.evaluate(record));
-		System.assertEquals('(TRUE AND TRUE) OR (TRUE AND FALSE)', criteria.getEvaluatedFormula(), 'Incorrect formula returned');
-		System.assertEquals(
+		System.Assert.isTrue(criteria.evaluate(record));
+		System.Assert.areEqual('(TRUE AND TRUE) OR (TRUE AND FALSE)', criteria.getEvaluatedFormula(), 'Incorrect formula returned');
+		System.Assert.areEqual(
 				'(LastName=\'Smith\' AND FirstName=\'John\') OR (LastName=\'Smith\' AND Department=\'MIB\')',
 				criteria.toSOQL());
-		System.assertEquals(false,
+		System.Assert.areEqual(false,
 				new fflib_Criteria()
 						.FormulaCriteria('(1 AND 2) OR (1 AND 3)')
 						.equalTo(Contact.LastName, 'Ford')
@@ -706,13 +689,13 @@ private with sharing class fflib_CriteriaTest
 	@IsTest
 	static void itShouldEvaluateFormula_WithSingleItem()
 	{
-		System.assert(
+		System.Assert.isTrue(
 				new fflib_Criteria()
 						.FormulaCriteria('1')
 						.equalTo(Contact.LastName, 'Smith')
 						.evaluate(new Contact(LastName = 'Smith'))
 		);
-		System.assertEquals(false,
+		System.Assert.areEqual(false,
 				new fflib_Criteria()
 						.FormulaCriteria('1')
 						.equalTo(Contact.LastName, 'Ford')
@@ -728,7 +711,7 @@ private with sharing class fflib_CriteriaTest
 				new Account(Id = fflib_IDGenerator.generate(Account.SObjectType), Industry = 'Energy'),
 				'Account');
 
-		System.assertEquals(null,
+		System.Assert.areEqual(null,
 				new fflib_Criteria()
 						.FormulaCriteria('1')
 						.equalTo('AccountTypo.Industry', 'Energy')

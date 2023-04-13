@@ -63,7 +63,7 @@ private class fflib_LoggerTest
 		log.add(ERROR_MESSAGE);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.INFO).contains(ERROR_MESSAGE));
+		System.Assert.isTrue(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.INFO).contains(ERROR_MESSAGE));
 	}
 
 	@IsTest
@@ -76,7 +76,7 @@ private class fflib_LoggerTest
 		log.debug(ERROR_MESSAGE);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.DEBUG)
 						.contains(ERROR_MESSAGE)
@@ -97,7 +97,7 @@ private class fflib_LoggerTest
 		log.debug(e);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.DEBUG)
 						.contains(ERROR_MESSAGE_FORMATTED_WITH_EXCEPTION)
@@ -115,7 +115,7 @@ private class fflib_LoggerTest
 		log.debug(ERROR_MESSAGE_WITH_ARGS, ARGUMENTS);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.DEBUG)
 						.contains(ERROR_MESSAGE_FORMATTED_WITH_ARGS)
@@ -132,7 +132,7 @@ private class fflib_LoggerTest
 		log.error(ERROR_MESSAGE);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.ERROR).contains(ERROR_MESSAGE));
+		System.Assert.isTrue(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.ERROR).contains(ERROR_MESSAGE));
 	}
 
 	@IsTest
@@ -145,7 +145,7 @@ private class fflib_LoggerTest
 		log.error(ERROR_MESSAGE_WITH_ARGS, ARGUMENTS);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.ERROR)
 						.contains(ERROR_MESSAGE_FORMATTED_WITH_ARGS)
@@ -162,7 +162,7 @@ private class fflib_LoggerTest
 		log.info(ERROR_MESSAGE);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.INFO).contains(ERROR_MESSAGE));
+		System.Assert.isTrue(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.INFO).contains(ERROR_MESSAGE));
 	}
 
 	@IsTest
@@ -175,7 +175,7 @@ private class fflib_LoggerTest
 		log.info(ERROR_MESSAGE_WITH_ARGS, ARGUMENTS);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.INFO)
 						.contains(ERROR_MESSAGE_FORMATTED_WITH_ARGS)
@@ -192,7 +192,7 @@ private class fflib_LoggerTest
 		log.warning(ERROR_MESSAGE);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.WARN).contains(ERROR_MESSAGE));
+		System.Assert.isTrue(APPENDER_MOCK.getAppendedMessages(System.LoggingLevel.WARN).contains(ERROR_MESSAGE));
 	}
 
 	@IsTest
@@ -205,7 +205,7 @@ private class fflib_LoggerTest
 		log.warning(ERROR_MESSAGE_WITH_ARGS, ARGUMENTS);
 
 		// THEN - It should be appended to the logAppender
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.WARN)
 						.contains(ERROR_MESSAGE_FORMATTED_WITH_ARGS)
@@ -225,12 +225,12 @@ private class fflib_LoggerTest
 		log.error(ERROR_MESSAGE);
 
 		// THEN - It Should be added to both appenders
-		System.assert(
+		System.Assert.isTrue(
 				APPENDER_MOCK
 						.getAppendedMessages(System.LoggingLevel.ERROR)
 						.contains(ERROR_MESSAGE)
 		);
-		System.assert(
+		System.Assert.istrue(
 				APPENDER_MOCK_B
 						.getAppendedMessages(System.LoggingLevel.ERROR)
 						.contains(ERROR_MESSAGE)

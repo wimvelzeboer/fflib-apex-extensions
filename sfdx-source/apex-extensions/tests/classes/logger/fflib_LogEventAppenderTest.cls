@@ -52,7 +52,7 @@ private class fflib_LogEventAppenderTest
 		}
 
 		// THEN - An Log Event should be thrown
-		System.assert(!caughtException);
+		System.Assert.isTrue(!caughtException);
 	}
 
 	@IsTest
@@ -65,7 +65,7 @@ private class fflib_LogEventAppenderTest
 		eventAppender.append(new fflib_LogEntry(System.LoggingLevel.INFO, TEST_ERROR_MESSAGE));
 
 		// THEN - It should be ignored
-		System.assertEquals(0, Limits.getDmlStatements(), 'Oops, the log entry should have been ignored');
+		System.Assert.areEqual(0, Limits.getDmlStatements(), 'Oops, the log entry should have been ignored');
 	}
 
 	@IsTest
@@ -81,7 +81,7 @@ private class fflib_LogEventAppenderTest
 		System.Test.stopTest();
 
 		// THEN - It should be ignored
-		System.assertEquals(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
+		System.Assert.areEqual(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
 	}
 
 	@IsTest
@@ -101,6 +101,6 @@ private class fflib_LogEventAppenderTest
 		System.Test.stopTest();
 
 		// THEN - It should be ignored
-		System.assertEquals(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
+		System.Assert.areEqual(1, [SELECT COUNT() FROM fflib_LogEntry__c]);
 	}
 }

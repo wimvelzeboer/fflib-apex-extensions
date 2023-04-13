@@ -33,17 +33,17 @@ private class fflib_OperatorUtilsTest
 	@IsTest
 	static void testBehavior()
 	{
-		System.assertEquals('=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.EQUALS));
-		System.assertEquals('!=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.NOT_EQUALS));
-		System.assertEquals('<', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.LESS_THAN));
-		System.assertEquals('<=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.LESS_THAN_OR_EQUAL_TO));
-		System.assertEquals('>', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.GREATER_THAN));
-		System.assertEquals('>=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.GREATER_THAN_OR_EQUAL_TO));
-		System.assertEquals('like', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.LIKEx));
-		System.assertEquals('IN', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.INx));
-		System.assertEquals('NOT IN', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.NOT_IN));
-		System.assertEquals('INCLUDES', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.INCLUDES));
-		System.assertEquals('EXCLUDES', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.EXCLUDES));
-		System.assertEquals(null, fflib_OperatorUtils.operatorToString(null));
+		System.Assert.areEqual('=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.EQUALS));
+		System.Assert.areEqual('!=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.NOT_EQUALS));
+		System.Assert.areEqual('<', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.LESS_THAN));
+		System.Assert.areEqual('<=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.LESS_THAN_OR_EQUAL_TO));
+		System.Assert.areEqual('>', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.GREATER_THAN));
+		System.Assert.areEqual('>=', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.GREATER_THAN_OR_EQUAL_TO));
+		System.Assert.areEqual('like', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.LIKEx));
+		System.Assert.areEqual('IN', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.INx));
+		System.Assert.areEqual('NOT IN', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.NOT_IN));
+		System.Assert.areEqual('INCLUDES', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.INCLUDES));
+		System.Assert.areEqual('EXCLUDES', fflib_OperatorUtils.operatorToString(fflib_OperatorUtils.EXCLUDES));
+		System.Assert.areEqual(null, fflib_OperatorUtils.operatorToString(null));
 	}
 }

@@ -52,7 +52,7 @@ public class fflib_DynamicSelectorFactoryTest
 		Object instance = Selector.newInstance(Schema.Account.SObjectType);
 		System.Test.stopTest();
 
-		System.assert(instance instanceof fflib_DynamicSelectorFactoryTest.MySelector);
+		System.Assert.isInstanceOfType(instance, fflib_DynamicSelectorFactoryTest.MySelector.class);
 	}
 
 	@IsTest
@@ -67,8 +67,8 @@ public class fflib_DynamicSelectorFactoryTest
 		Object instanceB = Selector.newInstance(Schema.Account.SObjectType);
 		System.Test.stopTest();
 
-		System.assert(instanceA instanceof fflib_DynamicSelectorFactoryTest.MySelector);
-		System.assert(instanceB instanceof fflib_DynamicSelectorFactoryTest.MyMockSelector);
+		System.Assert.isInstanceOfType(instanceA, fflib_DynamicSelectorFactoryTest.MySelector.class);
+		System.Assert.isInstanceOfType(instanceB, fflib_DynamicSelectorFactoryTest.MyMockSelector.class);
 	}
 
 	@IsTest
@@ -90,7 +90,7 @@ public class fflib_DynamicSelectorFactoryTest
 		List<SObject> result = Selector.selectById(ids);
 		System.Test.stopTest();
 
-		System.assert(result == records);
+		System.Assert.areEqual(records, result);
 		((fflib_ISObjectSelector) mocks.verify(selectorMock)).selectSObjectsById(ids);
 	}
 
@@ -115,7 +115,7 @@ public class fflib_DynamicSelectorFactoryTest
 		List<SObject> result = Selector.selectByRelationship(contacts, Schema.Contact.AccountId);
 		System.Test.stopTest();
 
-		System.assert(result == accounts);
+		System.Assert.areEqual(accounts, result);
 		((fflib_ISObjectSelector) mocks.verify(selectorMock)).selectSObjectsById(ids);
 	}
 
