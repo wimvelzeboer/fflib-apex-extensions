@@ -247,6 +247,27 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * @param decimalField The field to use as the Value of the returned Map
+	 * @param idField The field to use as the Key of the returned map
+	 *
+	 * @return Returns a map with the values of two fields
+	 */
+	@TestVisible
+	protected virtual Map<Id, Decimal> getDecimalById(Schema.SObjectField decimalField, Schema.SObjectField idField) {
+		Map<Id, Decimal> result = new Map<Id, Decimal>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(idField) == null) continue;
+
+			result.put(
+					(Id) record.get(idField),
+					(Decimal) record.get(decimalField)
+			);
+		}
+		return result;
+	}
+
+	/**
 	 * @param sObjectField The Schema.SObjectField to get the SUM of
 	 *
 	 * @return The total SUM of the given field
