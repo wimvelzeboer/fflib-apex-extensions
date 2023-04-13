@@ -50,10 +50,10 @@ private class fflib_UnitOfWorkTest
         System.Test.stopTest();
 
         // THEN - Then all three work items should be executed
-        System.assert(workA.didWork, 'Work item A did not execute');
-        System.assert(workB.didWork, 'Work item B did not execute');
-        System.assert(workC.didWork, 'Work item C did not execute');
-        System.assertEquals(3, [SELECT COUNT() FROM fflib_LogEntry__c]);
+        System.Assert.istrue(workA.didWork, 'Work item A did not execute');
+        System.Assert.istrue(workB.didWork, 'Work item B did not execute');
+        System.Assert.istrue(workC.didWork, 'Work item C did not execute');
+        System.Assert.areEqual(3, [SELECT COUNT() FROM fflib_LogEntry__c]);
 	}
 
     @IsTest
@@ -72,10 +72,10 @@ private class fflib_UnitOfWorkTest
         myWork.doWork();  // Execute without start-stop test due to Salesforce limitation
 
         // THEN - Then all three work items should be executed
-        System.assert(workA.didWork, 'Work item A did not execute');
-        System.assert(workB.didWork, 'Work item B did not execute');
-        System.assert(workC.didWork, 'Work item C was executed in realtime while is should be queued');
-        System.assertEquals(3, [SELECT COUNT() FROM fflib_LogEntry__c]);
+        System.Assert.istrue(workA.didWork, 'Work item A did not execute');
+        System.Assert.istrue(workB.didWork, 'Work item B did not execute');
+        System.Assert.istrue(workC.didWork, 'Work item C was executed in realtime while is should be queued');
+        System.Assert.areEqual(3, [SELECT COUNT() FROM fflib_LogEntry__c]);
     }
 
     @IsTest
@@ -97,7 +97,7 @@ private class fflib_UnitOfWorkTest
         myWork.doWork();    // Execute without start-stop test due to Salesforce limitation
 
         // THEN - Then all three work items should be executed
-        System.assertEquals(3, [SELECT COUNT() FROM fflib_LogEntry__c]);
+        System.Assert.areEqual(3, [SELECT COUNT() FROM fflib_LogEntry__c]);
     }
 
     @IsTest
@@ -117,9 +117,9 @@ private class fflib_UnitOfWorkTest
         System.Test.stopTest();
 
         // THEN - Then all three work items should be executed
-        System.assert(orderOfExecution.get(0).contains('WorkC'), 'Expected Work C with priority 3 to be executed first');
-        System.assert(orderOfExecution.get(1).contains('WorkB'), 'Expected Work B with priority 2 to be executed second');
-        System.assert(orderOfExecution.get(2).contains('WorkA'), 'Expected Work B with priority 1 to be executed last');
+        System.Assert.istrue(orderOfExecution.get(0).contains('WorkC'), 'Expected Work C with priority 3 to be executed first');
+        System.Assert.istrue(orderOfExecution.get(1).contains('WorkB'), 'Expected Work B with priority 2 to be executed second');
+        System.Assert.istrue(orderOfExecution.get(2).contains('WorkA'), 'Expected Work B with priority 1 to be executed last');
     }
 
     @IsTest
@@ -139,9 +139,9 @@ private class fflib_UnitOfWorkTest
         System.Test.stopTest();
 
         // THEN - Then all three work items should be executed
-        System.assert(orderOfExecution.get(0).contains('WorkC'), 'Expected Work C with priority 3 to be executed first');
-        System.assert(orderOfExecution.get(1).contains('WorkB'), 'Expected Work B with priority 2 to be executed second');
-        System.assert(orderOfExecution.get(2).contains('WorkA'), 'Expected Work B with priority 1 to be executed last');
+        System.Assert.istrue(orderOfExecution.get(0).contains('WorkC'), 'Expected Work C with priority 3 to be executed first');
+        System.Assert.istrue(orderOfExecution.get(1).contains('WorkB'), 'Expected Work B with priority 2 to be executed second');
+        System.Assert.istrue(orderOfExecution.get(2).contains('WorkA'), 'Expected Work B with priority 1 to be executed last');
     }
 
     private virtual class Work extends fflib_DoWork

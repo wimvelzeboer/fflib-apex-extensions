@@ -46,8 +46,8 @@ private class fflib_SObjectFactoryTest
 		List<Contact> result = (List<Contact>) new ContactsFactory().generateById(ids);
 
 		// THEN there should be three Contact records
-		System.assertEquals(3, result.size(), 'Not enough records created');
-		System.assert(new Map<Id, Contact>(result).keySet().containsAll(ids), 'Records should contain the given ids');
+		System.Assert.areEqual(3, result.size(), 'Not enough records created');
+		System.Assert.isTrue(new Map<Id, Contact>(result).keySet().containsAll(ids), 'Records should contain the given ids');
 	}
 
 	@IsTest
@@ -65,10 +65,10 @@ private class fflib_SObjectFactoryTest
 		List<Contact> result = (List<Contact>) new ContactsFactory().generateByAccountId(ids);
 
 		// THEN there should be three Contact records
-		System.assertEquals(3, result.size(), 'Not enough records created');
+		System.Assert.areEqual(3, result.size(), 'Not enough records created');
 		Set<Id> accountIds = new Set<Id>();
 		for (Contact record : result) accountIds.add(record.AccountId);
-		System.assert(accountIds.containsAll(ids), 'Records should contain the given ids');
+		System.Assert.isTrue(accountIds.containsAll(ids), 'Records should contain the given ids');
 	}
 
 	private class ContactsFactory extends fflib_SObjectFactory

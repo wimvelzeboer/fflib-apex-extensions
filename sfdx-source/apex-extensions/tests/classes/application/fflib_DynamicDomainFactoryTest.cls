@@ -52,7 +52,7 @@ public class fflib_DynamicDomainFactoryTest
         Object instance = Domain.newInstance(records);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_SObjects);
+        System.Assert.isInstanceOfType(instance, fflib_SObjects.class);
     }
 
     @IsTest
@@ -76,8 +76,8 @@ public class fflib_DynamicDomainFactoryTest
         Object instance = Domain.newInstance(ids);
         System.Test.stopTest();
 
-        System.assert(instance instanceof fflib_SObjects);
-        System.assertEquals(records, ((fflib_SObjects) instance).getRecords());
+        System.Assert.isInstanceOfType(instance, fflib_SObjects.class);
+        System.Assert.areEqual(records, ((fflib_SObjects) instance).getRecords());
     }
 
     @IsTest
@@ -103,8 +103,8 @@ public class fflib_DynamicDomainFactoryTest
         fflib_SObjects instanceB = (fflib_SObjects) Domain.newInstance(records, ACCOUNT_OBJECT_TYPE);
         System.Test.stopTest();
 
-        System.assertEquals(records, instanceA.getRecords());
-        System.assert(instanceB.getRecords().isEmpty());
+        System.Assert.areEqual(records, instanceA.getRecords());
+        System.Assert.isTrue(instanceB.getRecords().isEmpty());
     }
 
 

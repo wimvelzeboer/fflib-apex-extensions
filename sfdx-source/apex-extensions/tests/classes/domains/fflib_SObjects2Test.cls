@@ -48,7 +48,7 @@ private class fflib_SObjects2Test
 
 		domain.addError(Schema.Account.Name,'Oops');
 
-		System.assertEquals(
+		System.Assert.areEqual(
 				2,
 				fflib_SObjects.Errors.getAll().size()
 		);
@@ -59,23 +59,23 @@ private class fflib_SObjects2Test
 	{
 		Account record = new Account(ShippingCountry = 'Holland');
 		DomainAccounts domain = new DomainAccounts(new List<Account> {record});
-		System.assert(!domain.selectByShippingCountry('Holland').isEmpty(), 'Incorrect test data');
+		System.Assert.isFalse(domain.selectByShippingCountry('Holland').isEmpty(), 'Incorrect test data');
 
 		domain.clearShippingCountry();
 
-		System.assert(domain.selectByShippingCountry('Holland').isEmpty(), 'Field should have been nullified');
+		System.Assert.isTrue(domain.selectByShippingCountry('Holland').isEmpty(), 'Field should have been nullified');
 	}
 
 	@IsTest
 	static void itShouldReturnTheCreatedData()
 	{
-		System.assertEquals(
+		System.Assert.areEqual(
 				(Object) Schema.Account.SObjectType,
 				new DomainAccounts(new List<Account>())
 						.getType(),
 				'Unexpected Domain Type'
 		);
-		System.assertEquals(
+		System.Assert.areEqual(
 				Schema.Account.SObjectType,
 				new DomainAccounts(new List<Account>())
 						.getSObjectType(),
@@ -156,13 +156,13 @@ private class fflib_SObjects2Test
 		System.Test.stopTest();
 
 		// THEN it should return the AccountId By CaseId
-		System.assertEquals(3, result.size(), 'Expected one related account to the case');
-		System.assert(result.containsKey(caseIdA));
-		System.assert(result.containsKey(caseIdB));
-		System.assert(result.containsKey(caseIdC));
-		System.assertEquals(accountId, result.get(caseIdA), 'Account Id should be related to the Case Id A');
-		System.assertEquals(null, result.get(caseIdB), 'Case Id B should have no related Account Id');
-		System.assertEquals(null, result.get(caseIdC), 'Case Id B should have no related Account Id');
+		System.Assert.areEqual(3, result.size(), 'Expected one related account to the case');
+		System.Assert.isTrue(result.containsKey(caseIdA));
+		System.Assert.isTrue(result.containsKey(caseIdB));
+		System.Assert.isTrue(result.containsKey(caseIdC));
+		System.Assert.areEqual(accountId, result.get(caseIdA), 'Account Id should be related to the Case Id A');
+		System.Assert.isNull(result.get(caseIdB), 'Case Id B should have no related Account Id');
+		System.Assert.isNull(result.get(caseIdC), 'Case Id B should have no related Account Id');
 	}
 
 	@IsTest
@@ -175,8 +175,8 @@ private class fflib_SObjects2Test
 		System.Test.startTest();
 		Map<String, Id> nameById = domain.getIdFieldByStringField(Schema.Account.Id, Schema.Account.Name);
 		System.Test.stopTest();
-		System.assert(nameById.containsKey(accountName));
-		System.assertEquals(accountId, nameById.get(accountName));
+		System.Assert.isTrue(nameById.containsKey(accountName));
+		System.Assert.areEqual(accountId, nameById.get(accountName));
 	}
 
 	@IsTest
@@ -195,9 +195,9 @@ private class fflib_SObjects2Test
 		Map<Id, String> result = domain.getStringFieldByIdField(Account.Name, Account.Id);
 		System.Test.stopTest();
 
-		System.assertEquals(1, result.size(), 'Incorrect returned amount of results');
-		System.assert(result.keySet().contains(accountId), 'The accountId is missing from the results');
-		System.assertEquals(accountName, result.get(accountId), 'Incorrect returned account name');
+		System.Assert.areEqual(1, result.size(), 'Incorrect returned amount of results');
+		System.Assert.isTrue(result.keySet().contains(accountId), 'The accountId is missing from the results');
+		System.Assert.areEqual(accountName, result.get(accountId), 'Incorrect returned account name');
 	}
 
 	@IsTest
@@ -218,9 +218,9 @@ private class fflib_SObjects2Test
 		Map<Id, Date> result = domain.getDateFieldByIdField(Account.CreatedDate, Account.Id);
 		System.Test.stopTest();
 
-		System.assertEquals(1, result.size(), 'Incorrect returned amount of results');
-		System.assert(result.keySet().contains(accountId), 'The accountId is missing from the results');
-		System.assertEquals(today, result.get(accountId), 'Incorrect returned date');
+		System.Assert.areEqual(1, result.size(), 'Incorrect returned amount of results');
+		System.Assert.istrue(result.keySet().contains(accountId), 'The accountId is missing from the results');
+		System.Assert.areEqual(today, result.get(accountId), 'Incorrect returned date');
 	}
 
 	@IsTest
@@ -246,12 +246,12 @@ private class fflib_SObjects2Test
 						.getIntegerSet();
 		System.Test.stopTest();
 
-		System.assertEquals(2, result.size(), 'Incorrect amount of results');
-		System.assert(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
-		System.assert(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.areEqual(2, result.size(), 'Incorrect amount of results');
+		System.Assert.istrue(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
+		System.Assert.istrue(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 
-		System.assertEquals(1, result2.size(), 'Incorrect amount of results');
-		System.assert(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.areEqual(1, result2.size(), 'Incorrect amount of results');
+		System.Assert.istrue(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 	}
 
 	@IsTest
@@ -277,12 +277,12 @@ private class fflib_SObjects2Test
 						.getLongSet();
 		System.Test.stopTest();
 
-		System.assertEquals(2, result.size(), 'Incorrect amount of results');
-		System.assert(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
-		System.assert(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.areEqual(2, result.size(), 'Incorrect amount of results');
+		System.Assert.istrue(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
+		System.Assert.istrue(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 
-		System.assertEquals(1, result2.size(), 'Incorrect amount of results');
-		System.assert(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.areEqual(1, result2.size(), 'Incorrect amount of results');
+		System.Assert.istrue(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 	}
 
 	@IsTest
@@ -295,8 +295,8 @@ private class fflib_SObjects2Test
 		System.Test.startTest();
 		Map<Id, Id> accountIdByContactId = domain.getIdFieldByIdField(Schema.Contact.AccountId, Schema.Contact.Id);
 		System.Test.stopTest();
-		System.assert(accountIdByContactId.containsKey(contactId));
-		System.assertEquals(accountId, accountIdByContactId.get(contactId));
+		System.Assert.istrue(accountIdByContactId.containsKey(contactId));
+		System.Assert.areEqual(accountId, accountIdByContactId.get(contactId));
 	}
 
 	@IsTest
@@ -317,7 +317,7 @@ private class fflib_SObjects2Test
 		);
 
 		Set<Id> recordIds = new Set<Id> {idA, idB, idC};
-		System.assert(
+		System.Assert.istrue(
 				domain.getSObjectById().keySet().containsAll(recordIds),
 				'The domain should return all the record Ids'
 		);
@@ -342,7 +342,7 @@ private class fflib_SObjects2Test
 		);
 
 		Set<Id> recordIds = new Set<Id> {idA, idB, idC};
-		System.assert(
+		System.Assert.istrue(
 				domain.getRecordIds().containsAll(recordIds),
 				'The domain should return all the record Ids'
 		);
@@ -353,7 +353,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(domain.getRecords().size() == 6);
+		System.Assert.areEqual(6, domain.getRecords().size());
 	}
 
 	@IsTest
@@ -367,7 +367,7 @@ private class fflib_SObjects2Test
 						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
 				});
 
-		System.assertEquals(
+		System.Assert.areEqual(
 				'A',
 				domain.getRecords(
 						new fflib_Criteria()
@@ -389,7 +389,7 @@ private class fflib_SObjects2Test
 						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
 				});
 
-		System.assertEquals('A', domain.getRecord(idA).get('Name'));
+		System.Assert.areEqual('A', domain.getRecord(idA).get('Name'));
 	}
 
 	@IsTest
@@ -404,7 +404,7 @@ private class fflib_SObjects2Test
 						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
 				});
 
-		System.assertEquals('A', domain.getRecords(ids).get(0).get('Name'));
+		System.Assert.areEqual('A', domain.getRecords(ids).get(0).get('Name'));
 	}
 
 	@IsTest
@@ -418,7 +418,7 @@ private class fflib_SObjects2Test
 						new Account(Name = 'B', Id = fflib_IDGenerator.generate(Schema.Account.SObjectType))
 				});
 
-		System.assertEquals('A', domain.getRecords(new Set<Id> {idA}).get(0).get('Name'));
+		System.Assert.areEqual('A', domain.getRecords(new Set<Id> {idA}).get(0).get('Name'));
 	}
 
 	@IsTest
@@ -426,7 +426,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(domain.selectByShippingCountry('USA').size() == 1);
+		System.Assert.areEqual(1, domain.selectByShippingCountry('USA').size());
 	}
 
 	@IsTest
@@ -434,7 +434,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(domain.selectWithoutShippingCountry().size() == 3);
+		System.Assert.areEqual(3, domain.selectWithoutShippingCountry().size());
 	}
 
 	@IsTest
@@ -442,7 +442,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(domain.selectWithEmptyRecord().size() == 1);
+		System.Assert.areEqual(1, domain.selectWithEmptyRecord().size());
 	}
 
 	@IsTest
@@ -450,7 +450,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(domain.selectWithShippingCountry().size() == 3);
+		System.Assert.areEqual(3, domain.selectWithShippingCountry().size());
 	}
 
 	@IsTest
@@ -458,7 +458,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(domain.selectPopulatedRecords().size() == 3);
+		System.Assert.areEqual(3, domain.selectPopulatedRecords().size());
 	}
 
 	@IsTest
@@ -466,7 +466,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.assert(
+		System.Assert.istrue(
 				domain.getStringFieldValues(Schema.Account.ShippingCountry)
 						.containsAll(
 						new Set<String>
@@ -487,7 +487,7 @@ private class fflib_SObjects2Test
 		String country = 'Holland';
 		domain.setShippingCountry(country);
 
-		System.assert(domain.selectByShippingCountry(country).size() == 6);
+		System.Assert.areEqual(6, domain.selectByShippingCountry(country).size());
 	}
 
 	@IsTest
@@ -501,15 +501,15 @@ private class fflib_SObjects2Test
 				}
 		);
 
-		System.assert(domain.selectByRating('Hot').size() == 1);
+		System.Assert.areEqual(1, domain.selectByRating('Hot').size());
 	}
 
 	@IsTest
 	static void itShouldGetTheSumOfAnnualRevenue()
 	{
 		DomainAccounts domain = generateDomain();
-		System.assert(domain.getDecimalFieldSum(Account.AnnualRevenue) == 11);
-		System.assert(domain.getDecimalFieldValues(Account.AnnualRevenue).contains((Decimal) 5));
+		System.Assert.areEqual(11, domain.getDecimalFieldSum(Account.AnnualRevenue));
+		System.Assert.isTrue(domain.getDecimalFieldValues(Account.AnnualRevenue).contains((Decimal) 5));
 	}
 
 	@IsTest
@@ -528,7 +528,7 @@ private class fflib_SObjects2Test
 				}
 		);
 
-		System.assert(domain.getFirstSObject().get('Name') == 'Hello');
+		System.Assert.areEqual('Hello', domain.getFirstSObject().get('Name'));
 	}
 
 	@IsTest
@@ -546,7 +546,7 @@ private class fflib_SObjects2Test
 				}
 		);
 
-		System.assert(domain.getFirstSObject().get('Rating') == 'Warm');
+		System.Assert.areEqual('Warm', domain.getFirstSObject().get('Rating'));
 	}
 
 	@IsTest
@@ -557,7 +557,7 @@ private class fflib_SObjects2Test
 
 		domain.setFieldValue(Account.Name, 'Hello World', new fflib_Criteria().equalTo(Account.Rating, 'Cold'));
 
-		System.assert(domain.getFirstSObject().get('Name') == 'Hello World');
+		System.Assert.areEqual('Hello World', domain.getFirstSObject().get('Name'));
 	}
 
 	private static DomainAccounts generateDomain()

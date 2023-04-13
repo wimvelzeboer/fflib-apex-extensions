@@ -37,9 +37,9 @@ private with sharing class fflib_ComparatorTest
 		String aNull = null;
 		Object aNullO = aNull;
 		Object xyz = 'xyz';
-		System.assertEquals(-1, fflib_Comparator.compare(aNullO, xyz));
-		System.assertEquals(0, fflib_Comparator.compare(aNullO, aNullO));
-		System.assertEquals(1, fflib_Comparator.compare(xyz, aNullO));
+		System.Assert.areEqual(-1, fflib_Comparator.compare(aNullO, xyz));
+		System.Assert.areEqual(0, fflib_Comparator.compare(aNullO, aNullO));
+		System.Assert.areEqual(1, fflib_Comparator.compare(xyz, aNullO));
 	}
 
 	private static testmethod void testBlob()
@@ -55,7 +55,7 @@ private with sharing class fflib_ComparatorTest
 		{
 			exceptionThrown = true;
 		}
-		System.assert(exceptionThrown);
+		System.Assert.isTrue(exceptionThrown);
 	}
 
 	private static testmethod void testBoolean()
@@ -68,7 +68,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareBoolean(Object b1, Object b2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(b1, b2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(b1, b2));
 	}
 
 	private static testmethod void testDate()
@@ -80,7 +80,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareDate(Object d1, Object d2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(d1, d2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(d1, d2));
 	}
 
 	private static testmethod void testDatetime()
@@ -103,7 +103,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareDatetime(Object d1, Object d2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(d1, d2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(d1, d2));
 	}
 
 	private static testmethod void testDecimal()
@@ -117,7 +117,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareDecimal(Object d1, Object d2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(d1, d2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(d1, d2));
 	}
 
 	private static testmethod void testDouble()
@@ -131,7 +131,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareDouble(Object d1, Object d2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(d1, d2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(d1, d2));
 	}
 
 	private static testmethod void testInteger()
@@ -145,7 +145,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompare(Object i1, Object i2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(i1, i2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(i1, i2));
 	}
 
 	private static testmethod void testLong()
@@ -159,7 +159,7 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareLong(Object l1, Object l2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(l1, l2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(l1, l2));
 	}
 
 	private static testmethod void testTime()
@@ -172,7 +172,7 @@ private with sharing class fflib_ComparatorTest
 	}
 	private static void assertCompareTime(Object t1, Object t2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(t1, t2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(t1, t2));
 	}
 
 	private static testmethod void testString()
@@ -186,46 +186,46 @@ private with sharing class fflib_ComparatorTest
 
 	private static void assertCompareString(Object s1, Object s2, Integer expected)
 	{
-		System.assertEquals(expected, fflib_Comparator.compare(s1, s2));
+		System.Assert.areEqual(expected, fflib_Comparator.compare(s1, s2));
 	}
 
 	private static testMethod void assertContainsNull()
 	{
-		System.assert(fflib_Comparator.contains(null, null));
+		System.Assert.isTrue(fflib_Comparator.contains(null, null));
 	}
 
 	private static testMethod void assertContainsSourceNull()
 	{
-		System.assert(!fflib_Comparator.contains(null, 0));
+		System.Assert.isTrue(!fflib_Comparator.contains(null, 0));
 	}
 
 	private static testMethod void assertContainsSearchNull()
 	{
-		System.assert(!fflib_Comparator.contains(new Set<String>(), null));
+		System.Assert.isTrue(!fflib_Comparator.contains(new Set<String>(), null));
 	}
 
 	private static testMethod void assertContainsDate()
 	{
 		Date myDate = Date.newInstance(1976, 6, 1);
-		System.assert(fflib_Comparator.contains(new Set<Date> {myDate}, myDate));
+		System.Assert.isTrue(fflib_Comparator.contains(new Set<Date> {myDate}, myDate));
 	}
 
 	private static testMethod void assertContainsDateTime()
 	{
 		Datetime myDateTime = DateTime.newInstance(1976, 6, 1, 11, 55, 0);
-		System.assert(fflib_Comparator.contains(new Set<Datetime> {myDateTime}, myDateTime));
+		System.Assert.isTrue(fflib_Comparator.contains(new Set<Datetime> {myDateTime}, myDateTime));
 	}
 
 	private static testMethod void assertContainsDouble()
 	{
 		Double myDouble = Double.valueOf(123);
-		System.assert(fflib_Comparator.contains(new Set<Double> {myDouble}, myDouble));
+		System.Assert.isTrue(fflib_Comparator.contains(new Set<Double> {myDouble}, myDouble));
 	}
 
 	private static testMethod void assertContainsId()
 	{
 		Id id = fflib_IDGenerator.generate(Account.SObjectType);
-		System.assert(fflib_Comparator.contains(new Set<Id> {id}, id));
+		System.Assert.isTrue(fflib_Comparator.contains(new Set<Id> {id}, id));
 	}
 
 	private static testMethod void assertContainsInteger()
@@ -235,34 +235,34 @@ private with sharing class fflib_ComparatorTest
 				0, 1, 2, 3
 		};
 		Object obj = (object) integerSet;
-		System.assertEquals(true, fflib_Comparator.contains(obj, 2));
-		System.assertEquals(false, fflib_Comparator.contains(obj, 5));
+		System.Assert.istrue(fflib_Comparator.contains(obj, 2));
+		System.Assert.isfalse(fflib_Comparator.contains(obj, 5));
 
 		Account acc = new Account(Name = 'TEST', NumberOfEmployees = 1);
-		System.assertEquals(true, (object) acc.get('NumberOfEmployees') instanceof integer);
+		System.Assert.istrue((object) acc.get('NumberOfEmployees') instanceof integer);
 	}
 
 	private static testMethod void assertContainsLong()
 	{
 		Long myLong = Long.valueOf('3123');
-		System.assert(fflib_Comparator.contains(new Set<Long> {myLong}, myLong));
+		System.Assert.isTrue(fflib_Comparator.contains(new Set<Long> {myLong}, myLong));
 	}
 
 	private static testMethod void assertContainsObject()
 	{
 		Object obj = (Object) '134';
-		System.assert(fflib_Comparator.contains(new Set<Object>{obj}, obj));
+		System.Assert.istrue(fflib_Comparator.contains(new Set<Object>{obj}, obj));
 	}
 
 	private static testMethod void assertContainsTime()
 	{
 		Time myTime = Time.newInstance(11, 55, 0, 0);
-		System.assert(fflib_Comparator.contains(new Set<Time> {myTime}, myTime));
+		System.Assert.istrue(fflib_Comparator.contains(new Set<Time> {myTime}, myTime));
 	}
 
 	private static testMethod void assertContainsString()
 	{
-		System.assert(fflib_Comparator.contains(new Set<String> {'Test'}, 'Test'));
+		System.Assert.istrue(fflib_Comparator.contains(new Set<String> {'Test'}, 'Test'));
 	}
 
 	private static testMethod void assertContainsSObject()
@@ -276,7 +276,7 @@ private with sharing class fflib_ComparatorTest
 		{
 			exceptionThrown = true;
 		}
-		System.assert(exceptionThrown);
+		System.Assert.istrue(exceptionThrown);
 
 	}
 }
