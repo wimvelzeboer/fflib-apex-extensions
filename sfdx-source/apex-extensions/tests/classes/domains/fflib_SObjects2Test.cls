@@ -166,6 +166,16 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
+	static void itShouldReturnDecimalById() {
+		final Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		final Account record = new Account(Id = accountId, AnnualRevenue = 123.45);
+		fflib_SObjects2 domain = new fflib_SObjects2(new List<Account>{ record });
+		System.Test.startTest();
+		Map<Id, Decimal> result = domain.getDecimalById(Schema.Account.AnnualRevenue, Schema.Account.Id);
+		System.Test.stopTest();
+	}
+
+	@IsTest
 	static void itShouldReturnStringById()
 	{
 		final String accountName = 'My Account';
