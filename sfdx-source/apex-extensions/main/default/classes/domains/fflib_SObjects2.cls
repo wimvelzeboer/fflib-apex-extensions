@@ -132,6 +132,59 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Creates a map between the record Ids of this domain to the last given child domain.
+	 * This method is using getRelatedFieldByDomainType to determine which SObjectField
+	 * is related to the given parent domain
+	 *
+	 * @param relatedDomains A List of domains in hierarchical order from first child to grandchild
+	 *
+	 * @return Returns a map with KEY: The Ids of the records in this domain,
+	 *   to the VALUE: The record Ids of the lowest child related record listed in the relatedDomains,
+	 *   null if no grandchild exists.
+	 *
+	 * @see getRelatedFieldByDomainType
+	 *
+	 * @example
+	 * IInvoiceLines invoiceLineDomain = InvoiceLines.newInstance(invoiceLineRecords);
+	 * IInvoices invoicesDomain = Invoices.newInstance(invoiceRecords);
+	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
+	 *
+	 * // A map with key - Account.Id to value - InvoiceLine.Id
+	 * Map<Id, Set<Id>> invoiceLineIdsByAccountId =
+	 *         accountDomain.getChildIdsById(
+	 *                 new List<fflib_SObjects2>
+	 *                 {
+	 *                         invoicesDomain,
+	 *                         invoiceLineDomain
+	 *                 });
+	 */
+	public virtual Map<Id, Set<Id>> getChildIdsById(List<fflib_SObjects2> relatedDomains)
+	{
+		SObjectType thisDomainType = getSObjectType();
+		fflib_SObjects2 relatedDomain = relatedDomains.remove(0);
+		Map<SObjectType, SObjectField> relatedFieldByDomainType = relatedDomain.getRelatedFieldByDomainType();
+
+		if (relatedFieldByDomainType.containsKey(thisDomainType) == false)
+			throw new DeveloperException(
+					String.format(
+							'RelatedDomain type {0} not present in method getRelatedFieldByDomainType',
+							new List<String> {String.valueOf(thisDomainType)}));
+
+		SObjectField relatedLookupFieldOnChild = relatedFieldByDomainType.get(thisDomainType);
+		Map<Id, Set<Id>> result = relatedDomain.getIdFieldsByIdField(
+				relatedDomain.getSObjectType().getDescribe().fields.getMap().get('Id'),
+				relatedLookupFieldOnChild);
+
+		// Check if we need to resolve another child relation, if not return the results
+		if (relatedDomains.isEmpty()) return result;
+
+		Map<Id, Set<Id>> childIdsById = relatedDomain.getChildIdsById(relatedDomains);
+
+		// Replace the maps value (childIds) with the grand child Id
+		return fflib_ArrayUtils.replaceValues(result, childIdsById);
+	}
+
+	/**
 	 * @return Returns the contents of the Domain by their primary Key ('Id' field)
 	 */
 	public virtual Map<Id, SObject> getSObjectById()

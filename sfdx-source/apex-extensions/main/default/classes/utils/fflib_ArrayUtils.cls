@@ -341,6 +341,43 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Takes two maps and replaces the value of the source with the values of the replacement,
+	 * where the source value matches the replacement key.
+	 * If multiple matches are found the values will merged into one set.
+	 * The value will become null if the source value does not exists as key in replacement map
+	 *
+	 * @param source The map to replace its value
+	 * @param replacement The map to use its values for replacement
+	 *
+	 * @return Returns a Map<{Source} Id, Set<{Replacement} Id>>
+	 */
+	public static Map<Id, Set<Id>> replaceValues(Map<Id, Set<Id>> source, Map<Id, Set<Id>> replacement)
+	{
+		Map<Id, Set<Id>> result = new Map<Id, Set<Id>>();
+		for (Id keyId : source.keySet())
+		{
+			for (Id sourceValue : source.get(keyId)) {
+				if (replacement.containsKey(sourceValue)) {
+					if (result.containsKey(keyId))
+					{
+						result.get(keyId).addAll(replacement.get(sourceValue));
+					}
+					else
+					{
+						result.put(keyId, replacement.get(sourceValue));
+					}
+				}
+			}
+			// There is no replacement value for this keyId
+			if (result.containsKey(keyId) == false )
+			{
+				result.put(keyId, null);
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Reverse the order of a list of objects
 	 *
 	 * @param objects List of Objects

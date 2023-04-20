@@ -30,4 +30,5 @@
 public interface fflib_ISObjects2 extends fflib_ISObjects
 {
 	Map<Id, Id> getGrandParentIdById(List<fflib_ISObjects2> relatedDomains);
+	Map<Id, Set<Id>> getChildIdsById(List<fflib_SObjects2> relatedDomains);
 }
