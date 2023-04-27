@@ -29,6 +29,10 @@
  */
 public interface fflib_ISObjects2 extends fflib_ISObjects
 {
+	Map<Id, Set<Id>> getChildIdsById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField);
+	Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField);
+
+	// DEPRECATED METHODS
 	Map<Id, Id> getGrandParentIdById(List<fflib_ISObjects2> relatedDomains);
 	Map<Id, Set<Id>> getChildIdsById(List<fflib_SObjects2> relatedDomains);
 }

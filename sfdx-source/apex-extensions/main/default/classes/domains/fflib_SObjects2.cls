@@ -81,33 +81,57 @@ public virtual class fflib_SObjects2
 
 	/**
 	 * Creates a map between the record Ids of this domain to the last given grandparent domain.
-	 * This method is using getRelatedFieldByDomainType to determine which SObjectField
-	 * is related to the given parent domain
 	 *
-	 * @param relatedDomains A List of domains in hierarchical order from first parent to grandparent
+	 * @param domainsByRelationshipField A Map of domains and the in hierarchical order from first parent to grandparent
 	 *
 	 * @return Returns a map with KEY: The Ids of the records in this domain,
 	 *   to the VALUE: The Id of the last grandparent record listed in the relatedDomains,
 	 *   null if no grandparent exists.
 	 *
-	 * @see getRelatedFieldByDomainType
-	 *
 	 * @example
-	 * IInvoiceLines invoiceLineDomain = InvoiceLines.newInstance(invoiceLineRecords);
-	 * IInvoices invoicesDomain = Invoices.newInstance(invoiceRecords);
+	 * ICases casesDomain = Cases.newInstance(caseRecords);
+	 * IContacts contactsDomain = Contacts.newInstance(contactRecords);
 	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
 	 *
-	 * // A map with key - InvoiceLine.Id to value - Account.Id
-	 * Map<Id, Id> accountIdByInvoiceLineId =
-	 *         invoiceLineDomain.getGrandParentIdById(
-	 *                 new List<fflib_SObjects2>
+	 * // A map with key - Case.Id to value - Account.Id
+	 * Map<Id, Id> accountIdByCaseId =
+	 *         casesDomain.getParentIdById(
+	 *                 new Map<Schema.SObjectField, fflib_SObjects2>
 	 *                 {
-	 *                         invoicesDomain,
-	 *                         accountDomain
+	 *                         Schema.Case.ContactId => contactDomain,
+	 *                         Schema.Contact.AccountId => accountDomain
 	 *                 });
 	 */
+	public virtual Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+	{
+		// Takes the highest related domain from the domainsByRelationshipField
+		Schema.SObjectField relationshipField =
+				new List<Schema.SObjectField>(domainsByRelationshipField.keySet())
+				.get(0);
+		fflib_SObjects2 relatedDomain = domainsByRelationshipField.remove(relationshipField);
+
+		// Extract the Id values of the related SObjectType
+		Map<Id, Id> result = getIdFieldByIdField(
+				relationshipField,
+				getSObjectType().getDescribe().fields.getMap().get('Id'));
+
+		// Check if we need to resolve another parent relation, if not return the results
+		if (domainsByRelationshipField.isEmpty()) return result;
+
+		// Fetch the Ids of the related SObjectType
+		Map<Id, Id> parentIdByChildId = relatedDomain.getParentIdById(domainsByRelationshipField);
+
+		// Replace the maps value (ParentId) with the grand parent Id
+		return fflib_ArrayUtils.replaceValue(result, parentIdByChildId);
+	}
+
+	/** DEPRECATED **/
 	public virtual Map<Id, Id> getGrandParentIdById(List<fflib_ISObjects2> relatedDomains)
 	{
+		System.debug(LoggingLevel.WARN,
+				'The \'getGrandParentIdById(List<fflib_ISObjects2> relatedDomains)\' method is deprecated,' +
+						'please refactor to \'getParentIdById(Map<Schema.SObjectField, fflib_ISObjects2> relatedDomains)\'');
+
 		fflib_ISObjects2 relatedDomain = relatedDomains.remove(0);
 		SObjectType relatedDomainType = relatedDomain.getSObjectType();
 		Map<SObjectType, SObjectField> relatedFieldByDomainType = getRelatedFieldByDomainType();
@@ -136,30 +160,55 @@ public virtual class fflib_SObjects2
 	 * This method is using getRelatedFieldByDomainType to determine which SObjectField
 	 * is related to the given parent domain
 	 *
-	 * @param relatedDomains A List of domains in hierarchical order from first child to grandchild
+	 * @param domainsByRelationshipField A Map of domains in hierarchical order from first child to grandchild
 	 *
 	 * @return Returns a map with KEY: The Ids of the records in this domain,
 	 *   to the VALUE: The record Ids of the lowest child related record listed in the relatedDomains,
 	 *   null if no grandchild exists.
 	 *
-	 * @see getRelatedFieldByDomainType
-	 *
 	 * @example
-	 * IInvoiceLines invoiceLineDomain = InvoiceLines.newInstance(invoiceLineRecords);
-	 * IInvoices invoicesDomain = Invoices.newInstance(invoiceRecords);
+	 * ICases casesDomain = Cases.newInstance(caseRecords);
+	 * IContacts contactsDomain = Contacts.newInstance(contactRecords);
 	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
 	 *
-	 * // A map with key - Account.Id to value - InvoiceLine.Id
-	 * Map<Id, Set<Id>> invoiceLineIdsByAccountId =
-	 *         accountDomain.getChildIdsById(
-	 *                 new List<fflib_SObjects2>
+	 * // A map with key - Case.Id to value - Account.Id
+	 * Map<Id, Set<Id>> caseIdsByAccountId =
+	 *         accountsDomain.getChildIdsById(
+	 *                 new Map<Schema.SObjectField, fflib_SObjects2>
 	 *                 {
-	 *                         invoicesDomain,
-	 *                         invoiceLineDomain
+	 *                         Schema.Contact.AccountId => contactsDomain
+	 *                         Schema.Case.ContactId => casesDomain,
 	 *                 });
 	 */
+	public virtual Map<Id, Set<Id>> getChildIdsById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+	{
+		// Takes the highest related domain from the domainsByRelationshipField
+		Schema.SObjectField relationshipField =
+				new List<Schema.SObjectField>(domainsByRelationshipField.keySet())
+						.get(0);
+		fflib_SObjects2 relatedDomain = domainsByRelationshipField.remove(relationshipField);
+
+		Map<Id, Set<Id>> result = relatedDomain.getIdFieldsByIdField(
+				relatedDomain.getSObjectType().getDescribe().fields.getMap().get('Id'),
+				relationshipField);
+
+		// Check if we need to resolve another child relation, if not return the results
+		if (domainsByRelationshipField.isEmpty()) return result;
+
+		Map<Id, Set<Id>> childIdsById = relatedDomain.getChildIdsById(domainsByRelationshipField);
+
+		// Replace the maps value (childIds) with the grand child Id
+		return fflib_ArrayUtils.replaceValues(result, childIdsById);
+	}
+
+	/** DEPRECATED **/
 	public virtual Map<Id, Set<Id>> getChildIdsById(List<fflib_SObjects2> relatedDomains)
 	{
+		System.debug(LoggingLevel.WARN,
+				'The \'getChildIdsById(List<fflib_ISObjects2> relatedDomains)\' method is deprecated,' +
+						'please refactor to \'getChildIdsById(Map<Schema.SObjectField, fflib_ISObjects2> relatedDomains)\'');
+
+
 		SObjectType thisDomainType = getSObjectType();
 		fflib_SObjects2 relatedDomain = relatedDomains.remove(0);
 		Map<SObjectType, SObjectField> relatedFieldByDomainType = relatedDomain.getRelatedFieldByDomainType();
