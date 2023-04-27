@@ -121,7 +121,7 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
-	static void itShouldReturnTheRelatedChildDomainId()
+	static void itShouldReturnTheRelatedChildDomainId_deprecated()
 	{
 		// GIVEN a case A & Z related to contact A related to Account,
 		Id caseIdA = fflib_IDGenerator.generate(Schema.Case.SObjectType);
@@ -161,9 +161,96 @@ private class fflib_SObjects2Test
 		System.Assert.areEqual(2, result.get(accountId).size(), 'Incorrect amount of related cases to the account');
 		System.Assert.isTrue(result.get(accountId).containsAll(new Set<Id>{ caseIdA, caseIdZ }));
 	}
+	@IsTest
+	static void itShouldReturnTheRelatedChildDomainId()
+	{
+		// GIVEN a case A & Z related to contact A related to Account,
+		Id caseIdA = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdZ = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdB = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdC = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		Account accountRecord = new Account(Id = accountId);
+		Contact contactRecordA = new Contact(Id = contactIdA, AccountId = accountId);
+		Contact contactRecordB = new Contact(Id = contactIdB);
+		Case caseRecordA = new Case(Id = caseIdA, ContactId = contactIdA);
+		Case caseRecordZ = new Case(Id = caseIdZ, ContactId = contactIdA);
+		Case caseRecordB = new Case(Id = caseIdB, ContactId = contactIdB);
+		Case caseRecordC = new Case(Id = caseIdC);
+
+		DomainAccounts accountDomain = new DomainAccounts(new List<Account> {accountRecord});
+		DomainContacts contactDomain = new DomainContacts(new List<Contact> {contactRecordA, contactRecordB});
+		DomainCases caseDomain = new DomainCases(new List<Case> {caseRecordA, caseRecordB, caseRecordC, caseRecordZ});
+
+		// WHEN we request the relation between Case and Account
+		System.Test.startTest();
+		Map<Id, Set<Id>> result = accountDomain.getChildIdsById(
+				new Map<Schema.SObjectField, fflib_SObjects2>
+				{
+						Contact.AccountId => contactDomain,
+						Case.ContactId => caseDomain
+				}
+		);
+		System.Test.stopTest();
+		System.debug('result: ' + JSON.serializePretty(result));
+
+		// THEN it should return the AccountId By CaseId
+		System.Assert.areEqual(1, result.size(), 'Expected one account');
+		System.Assert.isTrue(result.containsKey(accountId), 'Account Id should be the main key');
+		System.Assert.areEqual(2, result.get(accountId).size(), 'Incorrect amount of related cases to the account');
+		System.Assert.isTrue(result.get(accountId).containsAll(new Set<Id>{ caseIdA, caseIdZ }));
+	}
 
 	@IsTest
 	static void itShouldReturnTheRelatedParentDomainId()
+	{
+		// GIVEN a case related to contact related to Account ,
+		//   a case record related to contact but not to Account,
+		//   and a case record related to nothing.
+		//   All encapsulated in domains.
+		Id caseIdA = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdB = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdC = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		Account accountRecord = new Account(Id = accountId);
+		Contact contactRecordA = new Contact(Id = contactIdA, AccountId = accountId);
+		Contact contactRecordB = new Contact(Id = contactIdB);
+		Case caseRecordA = new Case(Id = caseIdA, ContactId = contactIdA);
+		Case caseRecordB = new Case(Id = caseIdB, ContactId = contactIdB);
+		Case caseRecordC = new Case(Id = caseIdC);
+
+		DomainAccounts accountDomain = new DomainAccounts(new List<Account> {accountRecord});
+		DomainContacts contactDomain = new DomainContacts(new List<Contact> {contactRecordA, contactRecordB});
+		DomainCases caseDomain = new DomainCases(new List<Case> {caseRecordA, caseRecordB, caseRecordC});
+
+		// WHEN we request the relation between Case and Account
+		System.Test.startTest();
+		Map<Id, Id> result = caseDomain.getParentIdById(
+				new Map<Schema.SObjectField, fflib_SObjects2>
+				{
+						Schema.Case.ContactId => contactDomain,
+						Schema.Contact.AccountId => accountDomain
+				}
+		);
+		System.Test.stopTest();
+
+		// THEN it should return the AccountId By CaseId
+		System.Assert.areEqual(3, result.size(), 'Expected one related account to the case');
+		System.Assert.isTrue(result.containsKey(caseIdA));
+		System.Assert.isTrue(result.containsKey(caseIdB));
+		System.Assert.isTrue(result.containsKey(caseIdC));
+		System.Assert.areEqual(accountId, result.get(caseIdA), 'Account Id should be related to the Case Id A');
+		System.Assert.isNull(result.get(caseIdB), 'Case Id B should have no related Account Id');
+		System.Assert.isNull(result.get(caseIdC), 'Case Id B should have no related Account Id');
+	}
+
+	/** Unit test for the deprecated method **/
+	@IsTest
+	static void itShouldReturnTheRelatedParentDomainId_deprecated()
 	{
 		// GIVEN a case related to contact related to Account ,
 		//   a case record related to contact but not to Account,
