@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Uuid__c</fullName>
+    <externalId>false</externalId>
+    <isFilteringDisabled>false</isFilteringDisabled>
+    <isNameField>false</isNameField>
+    <isSortingDisabled>false</isSortingDisabled>
+    <label>UUID</label>
+    <description>A universally unique identifier (UUID) for the error. Its useful to expose this UUID in the UI/API when errors occur so that the log entry for that issue can easily be found</description>
+    <inlineHelpText>A universally unique identifier (UUID) for the error</inlineHelpText>
+    <length>36</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
