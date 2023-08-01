@@ -54,7 +54,12 @@ public with sharing class fflib_Logger implements fflib_ILogger
 
 	public void add(LoggingLevel loggingLevel, Exception e)
 	{
-		add(new fflib_LogEntry(loggingLevel, messageFormatter.format(e)));
+		fflib_LogEntry logEntry = new fflib_LogEntry(loggingLevel, messageFormatter.format(e));
+		if (e instanceof fflib_HttpException)
+		{
+			logEntry.uuid = ((fflib_HttpException) e).getUuid();
+		}
+		add(logEntry);
 	}
 
 	public void add(LoggingLevel loggingLevel, String message)

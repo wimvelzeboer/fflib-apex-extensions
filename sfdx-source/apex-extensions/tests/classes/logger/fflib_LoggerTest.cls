@@ -41,7 +41,7 @@ private class fflib_LoggerTest
 			{
 					'LogTestMockException:[]:',
 					ERROR_MESSAGE,
-					'()'
+					'Class.fflib_LoggerTest.itShouldAppendDebugException:'
 			}
 	);
 	private static final String ERROR_MESSAGE_FORMATTED_WITH_ARGS =
@@ -83,9 +83,6 @@ private class fflib_LoggerTest
 		);
 	}
 
-	/**
-	 * todo : For some reason this method fails when run by Jenkins deployment user during a build, need to investigate why and re-enable it
-
 	@IsTest
 	static void itShouldAppendDebugException()
 	{
@@ -97,13 +94,30 @@ private class fflib_LoggerTest
 		log.debug(e);
 
 		// THEN - It should be appended to the logAppender
-		System.Assert.isTrue(
-				APPENDER_MOCK
-						.getAppendedMessages(System.LoggingLevel.DEBUG)
-						.contains(ERROR_MESSAGE_FORMATTED_WITH_EXCEPTION)
-		);
+		final List<String> result = APPENDER_MOCK
+				.getAppendedMessages(System.LoggingLevel.DEBUG);
+		System.debug(result);
+		System.Assert.areEqual(1, result.size(), 'Expected only one error');
+		System.Assert.isTrue(result.get(0).startsWith(ERROR_MESSAGE_FORMATTED_WITH_EXCEPTION), 'Incorrect returned error message');
 	}
-	*/
+
+	@IsTest
+	static void itShouldAppendDebugExceptionWithUuid()
+	{
+		// GIVEN - An error message and a configured logger
+		fflib_ILogger log = generatedLoggerWithMockAppender();
+		final fflib_HttpException e = new fflib_HttpException(400);
+		final String uuid = e.getUuid();
+
+		// WHEN - When the error is logged
+		log.debug(e);
+
+		// THEN - It should be appended to the logAppender
+		final List<fflib_LogEntry> result = APPENDER_MOCK.getEntries();
+		System.Assert.areEqual(1, result.size(), 'Expected only one log entry');
+		System.Assert.areEqual(uuid, result.get(0).uuid, 'Incorrect UUID on the LogEntry');
+	}
+
 
 	@IsTest
 	static void itShouldAppendDebugMessageWithArguments()
@@ -255,6 +269,12 @@ private class fflib_LoggerTest
 		{
 			this.appendedEntries.add(logEntry);
 		}
+
+		public List<fflib_LogEntry> getEntries()
+		{
+			return this.appendedEntries;
+		}
+
 		public List<String> getAppendedMessages(System.LoggingLevel loggingLevel)
 		{
 			List<String> result = new List<String>();

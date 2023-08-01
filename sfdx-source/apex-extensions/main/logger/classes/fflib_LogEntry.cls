@@ -29,6 +29,7 @@
  */
 public with sharing class fflib_LogEntry
 {
+	public String uuid { get; set; }
 	public String className { get; set; }
 	public String executionContext { get; set; }
 	public Decimal lineNumber { get; set; }
@@ -61,6 +62,7 @@ public with sharing class fflib_LogEntry
 		this.methodName = logEvent.MethodName__c;
 		this.userId = logEvent.CreatedById;
 		this.createdDatetime = logEvent.CreatedDate;
+		this.uuid = String.isBlank(logEvent.Uuid__c) ? logEvent.EventUuid : logEvent.Uuid__c;
 	}
 
 	public fflib_LogEvent__e toPlatformEvent()
@@ -71,7 +73,8 @@ public with sharing class fflib_LogEntry
 				LineNumber__c = this.lineNumber,
 				LogLevel__c = this.logLevel.name(),
 				Message__c = this.message,
-				MethodName__c = this.methodName
+				MethodName__c = this.methodName,
+				Uuid__c = this.uuid
 		);
 	}
 }
