@@ -37,6 +37,7 @@ public virtual class fflib_AppBinding
 	protected System.Type implementationType { get; set; }
 	protected System.Type interfaceType { get; set; }
 	protected String namespacePrefix { get; set; }
+	protected String packageName { get; set; }
 	protected fflib_SharingMode sharingMode { get; set; }
 
 	public Integer compareTo(Object compareTo)
@@ -87,6 +88,14 @@ public virtual class fflib_AppBinding
 	public virtual String getNamespacePrefix()
 	{
 		return this.namespacePrefix;
+	}
+
+	/**
+	 * @return Returns the Application Package Name for the binding
+	 */
+	public String getPackageName()
+	{
+		return this.packageName;
 	}
 
 	/**
@@ -185,6 +194,19 @@ public virtual class fflib_AppBinding
 	public virtual fflib_IAppBinding setNamespacePrefix(String namespacePrefix)
 	{
 		this.namespacePrefix = namespacePrefix;
+		return this;
+	}
+
+	/**
+	 * Sets the Application Second Generation Package Name
+	 *
+	 * @param applicationPackageName The name of the 2GP package
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
+	public fflib_IAppBinding setPackageName(String applicationPackageName)
+	{
+		this.packageName = applicationPackageName;
 		return this;
 	}
 

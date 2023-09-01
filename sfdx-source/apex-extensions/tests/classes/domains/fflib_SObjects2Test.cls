@@ -153,7 +153,6 @@ private class fflib_SObjects2Test
 				}
 		);
 		System.Test.stopTest();
-		System.debug('result: ' + JSON.serializePretty(result));
 
 		// THEN it should return the AccountId By CaseId
 		System.Assert.areEqual(1, result.size(), 'Expected one account');
@@ -194,7 +193,6 @@ private class fflib_SObjects2Test
 				}
 		);
 		System.Test.stopTest();
-		System.debug('result: ' + JSON.serializePretty(result));
 
 		// THEN it should return the AccountId By CaseId
 		System.Assert.areEqual(1, result.size(), 'Expected one account');

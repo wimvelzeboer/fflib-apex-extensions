@@ -33,9 +33,8 @@ public virtual class fflib_DynamicDomainFactory
 		extends fflib_DynamicAppFactory
 		implements fflib_IDomainFactory
 {
-	protected Map<Object, fflib_IDomain> mockDomainByObjectType = new Map<Object, fflib_IDomain>();
 	protected fflib_ISelectorFactory selectorFactory;
-
+	protected fflib_ClassicDomainFactory domainFactory;
 
 	/**
 	 * Class constructor
@@ -45,8 +44,24 @@ public virtual class fflib_DynamicDomainFactory
 	 */
 	public fflib_DynamicDomainFactory(fflib_IAppBindingResolver resolver, fflib_ISelectorFactory selectorFactory)
 	{
+		this(resolver, selectorFactory, null);
+	}
+
+	/**
+	 * Class constructor
+	 *
+	 * @param resolver A reference to the resolve instance
+	 * @param selectorFactory A reference to the selector factory instance
+	 * @param packageName The package name
+	 */
+	public fflib_DynamicDomainFactory(
+			fflib_IAppBindingResolver resolver,
+			fflib_ISelectorFactory selectorFactory,
+			String packageName)
+	{
 		this.resolver = resolver;
 		this.selectorFactory = selectorFactory;
+		this.packageName = packageName;
 	}
 
 	public fflib_IDomain newInstance(Set<Id> recordIds)
@@ -61,42 +76,16 @@ public virtual class fflib_DynamicDomainFactory
 
 	public fflib_IDomain newInstance(List<SObject> records)
 	{
-		SObjectType sObjectType = records.getSObjectType();
+		if (domainFactory == null) loadBindings();
 
-		if (sObjectType == null)
-			throw new DeveloperException('Could not determine the SObjectType of the provided records');
-
-		return newInstance(
-				(List<Object>) records,
-				(Object) sObjectType
-		);
+		return this.domainFactory.newInstance(records);
 	}
 
 	public fflib_IDomain newInstance(List<Object> objects, Object objectType)
 	{
-		if (hasMock(objectType)) return (fflib_IDomain) getMock(objectType);
+		if (domainFactory == null) loadBindings();
 
-		List<fflib_IAppBinding> bindings = resolver.byObject(objectType)
-				.byType(fflib_AppBindingType.Domain)
-				.resolve();
-
-		if (bindings.isEmpty())
-			throw new DeveloperException('Unable to find domain binding for ' + objectType);
-
-		System.Type domainImplementationType = bindings.get(0).getImplementationType();
-
-		Object instance = domainImplementationType.newInstance();
-
-		if (!(instance instanceof fflib_IDomainConstructor))
-			throw new DeveloperException(
-					String.format(
-						'Domain implementation {0} should be an instance of fflib_IDomainConstructor',
-						new List<String> { domainImplementationType.getName() }
-					)
-			);
-
-		return ((fflib_IDomainConstructor) domainImplementationType.newInstance())
-				.construct(objects);
+		return this.domainFactory.newInstance(objects, objectType);
 	}
 
 	public fflib_IDomain newInstance(List<SObject> records, SObjectType domainSObjectType)
@@ -106,22 +95,47 @@ public virtual class fflib_DynamicDomainFactory
 
 	public void setMock(fflib_ISObjectDomain mockDomain)
 	{
-		super.setMock(mockDomain.getType(), mockDomain);
+		if (domainFactory == null) loadBindings();
+
+		this.domainFactory.setMock(mockDomain);
 	}
 
 	public void setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)
 	{
-		super.setMock(sObjectType, mockDomain);
+		if (domainFactory == null) loadBindings();
+
+		this.domainFactory.setMock(sObjectType, mockDomain);
 	}
 
 	public void setMock(fflib_IDomain mockDomain)
 	{
-		super.setMock(mockDomain.getType(), mockDomain);
+		if (domainFactory == null) loadBindings();
+
+		this.domainFactory.setMock(mockDomain);
 	}
 
 	public void setMock(Object domainType, fflib_IDomain mockDomain)
 	{
-		super.setMock(domainType, mockDomain);
+		if (domainFactory == null) loadBindings();
+
+		this.domainFactory.setMock(domainType, mockDomain);
+	}
+
+	private void loadBindings()
+	{
+		fflib_IAppBindings appBindings = new fflib_AppBindings(resolver.resolve());
+
+		// If a package name is provide we should filter on package name
+		if (String.isNotBlank(this.packageName))
+		{
+			appBindings = appBindings.selectByPackageName(this.packageName);
+		}
+
+		Map<Object, Type> constructorByObject =
+				appBindings.selectByType(fflib_AppBindingType.Domain)
+						.getImplementationByBindingObject();
+
+		this.domainFactory = new fflib_ClassicDomainFactory(this.selectorFactory, constructorByObject);
 	}
 
 	public class DeveloperException extends Exception {}

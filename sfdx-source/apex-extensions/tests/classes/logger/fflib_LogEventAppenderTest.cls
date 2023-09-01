@@ -91,7 +91,6 @@ private class fflib_LogEventAppenderTest
 		fflib_LogEventAppender eventAppender = new fflib_LogEventAppender();
 
 		fflib_LogLevelFilter__c orgSettings = fflib_LogLevelFilter__c.getOrgDefaults();
-		System.debug(orgSettings);
 		orgSettings.LogLevel__c = 'INFO';
 		insert orgSettings;
 

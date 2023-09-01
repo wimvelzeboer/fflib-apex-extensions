@@ -132,6 +132,11 @@ public virtual class fflib_AppBindingResolver
 		return this;
 	}
 
+	public fflib_IAppBindingResolver byPackageName(String packageName)
+	{
+		this.bindingToResolve.setPackageName(packageName);
+		return this;
+	}
 
 	/**
 	 * Handles lazy loading of modules, if no custom module is configured (via addModule) the default module is returned

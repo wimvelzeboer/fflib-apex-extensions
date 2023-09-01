@@ -111,6 +111,5 @@ public with sharing class fflib_MockSObjectUtil
 		Lead record = new Lead(Id = fflib_IDGenerator.generate(Schema.Lead.SObjectType));
 		SObject result = addFieldValue(record, Lead.ConvertedDate, today);
 		System.assertEquals(today, result.get(Lead.ConvertedDate));
-		System.debug('result: '+result);
 	}
 }

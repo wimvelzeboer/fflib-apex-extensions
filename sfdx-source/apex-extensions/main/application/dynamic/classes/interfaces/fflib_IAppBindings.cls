@@ -34,13 +34,17 @@ public interface fflib_IAppBindings
 	void addBinding(fflib_IAppBinding binding);
 	void addBindings(List<fflib_IAppBinding> bindings);
 
+	List<fflib_IAppBinding> getBindings();
+	Map<Object, Type> getImplementationByBindingObject();
+	Map<Type, Type> getImplementationByInterface();
+	Map<SObjectType, Type> getImplementationBySObjectType();
+	List<System.Type> getImplementations();
+
 	fflib_IAppBindings selectByObject(Object bindingObject);
 	fflib_IAppBindings selectBySequence(Decimal sequence);
 	fflib_IAppBindings selectByType(fflib_AppBindingType bindingType);
 	fflib_IAppBindings selectByInterfaceType(System.Type interfaceType);
 	fflib_IAppBindings selectBySharingMode(fflib_SharingMode sharingMode);
 	fflib_IAppBindings selectByNamespacePrefix(String namespacePrefix);
-
-	List<fflib_IAppBinding> getBindings();
-	List<System.Type> getImplementations();
+	fflib_IAppBindings selectByPackageName(String packageName);
 }

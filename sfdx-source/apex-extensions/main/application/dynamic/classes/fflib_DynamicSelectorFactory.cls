@@ -32,86 +32,66 @@ public virtual class fflib_DynamicSelectorFactory
 		extends fflib_DynamicAppFactory
 		implements fflib_ISelectorFactory
 {
-	public static final fflib_AppBindingType SELECTOR_BINDING_TYPE = fflib_AppBindingType.Selector;
-
-	protected Map<Object, Object> mockSelectorImplByObjectType = new Map<Object, Object>();
+	protected fflib_ClassicSelectorFactory selectorFactory;
 
 	public fflib_DynamicSelectorFactory(fflib_IAppBindingResolver resolver)
 	{
+		this(resolver, null);
+	}
+
+	public fflib_DynamicSelectorFactory(fflib_IAppBindingResolver resolver, String packageName)
+	{
 		this.resolver = resolver;
+		this.packageName = packageName;
 	}
 
 	public fflib_ISObjectSelector newInstance(SObjectType sObjectType)
 	{
-		if (hasMock(sObjectType)) return (fflib_ISObjectSelector) getMock(sObjectType);
+		if (this.selectorFactory == null) loadBindings();
 
-		List<fflib_IAppBinding> bindings = resolver
-				.byType(SELECTOR_BINDING_TYPE)
-				.byObject(sObjectType)
-				.bySharingMode(sharingMode)
-				.resolve();
-
-		if (bindings.isEmpty())
-			throw new DeveloperException(
-					String.format(
-							'Unable to find selector binding for {0} with sharing mode {1}',
-							new List<String>
-							{
-									sObjectType.getDescribe().getName(),
-									sharingMode.name()
-							}
-					)
-			);
-
-		return (fflib_ISObjectSelector) bindings.get(0).newImplInstance();
+		return this.selectorFactory.newInstance(sObjectType);
 	}
 
 	public List<SObject> selectById(Set<Id> recordIds)
 	{
-		if (null == recordIds || recordIds.size() == 0)
-			throw new fflib_Application.DeveloperException('Invalid record Id\'s set');
+		if (this.selectorFactory == null) loadBindings();
 
-		return selectById(recordIds, new List<Id>(recordIds)[0].getSObjectType());
+		return this.selectorFactory.selectById(recordIds);
 	}
 
 	public List<SObject> selectById(Set<Id> recordIds, SObjectType sObjectType)
 	{
-		if (null == recordIds || recordIds.size() == 0)
-			throw new fflib_Application.DeveloperException('Invalid record Id\'s set');
+		if (this.selectorFactory == null) loadBindings();
 
-		return newInstance(sObjectType)
-				.selectSObjectsById(recordIds);
+		return this.selectorFactory.selectById(recordIds, sObjectType);
 	}
 
 	public List<SObject> selectByRelationship(List<SObject> relatedRecords, SObjectField relationshipField)
 	{
-		Set<Id> relatedIds =
-				new RelatedRecordsDomain(relatedRecords)
-						.getRelatedIds(relationshipField);
+		if (this.selectorFactory == null) loadBindings();
 
-		if (relatedIds.isEmpty()) return new List<SObject>();
-
-		return selectById(relatedIds);
+		return this.selectorFactory.selectByRelationship(relatedRecords, relationshipField);
 	}
 
 	public void replaceWith(SObjectType sObjectType, Type replacementImplType)
 	{
-		resolver.byType(fflib_AppBindingType.Selector)
-				.byObject(sObjectType)
-				.bySharingMode(this.sharingMode)
-				.resolve()
-				.get(0)
-				.setImplementationType(replacementImplType);
+		if (this.selectorFactory == null) loadBindings();
+
+		this.selectorFactory.replaceWith(sObjectType, replacementImplType);
 	}
 
 	public void setMock(fflib_ISObjectSelector selectorInstance)
 	{
-		setMock(selectorInstance.sObjectType(), selectorInstance);
+		if (this.selectorFactory == null) loadBindings();
+
+		this.selectorFactory.setMock(selectorInstance);
 	}
 
 	public void setMock(SObjectType sObjectType, fflib_ISObjectSelector selectorInstance)
 	{
-		super.setMock(sObjectType, selectorInstance);
+		if (this.selectorFactory == null) loadBindings();
+
+		this.selectorFactory.setMock(sObjectType, selectorInstance);
 	}
 
 	public fflib_DynamicSelectorFactory setSharingMode(fflib_SharingMode sharingMode)
@@ -120,17 +100,22 @@ public virtual class fflib_DynamicSelectorFactory
 		return this;
 	}
 
-	private class RelatedRecordsDomain extends fflib_SObjects2
+	private void loadBindings()
 	{
-		public 	RelatedRecordsDomain(List<SObject> records)
+		fflib_IAppBindings appBindings = new fflib_AppBindings(resolver.resolve());
+
+		// If a package name is provide we should filter on package name
+		if (String.isNotBlank(this.packageName))
 		{
-			super(records);
+			appBindings = appBindings.selectByPackageName(this.packageName);
 		}
 
-		public Set<Id> getRelatedIds(Schema.SObjectField relationshipField)
-		{
-			return getIdFieldValues(relationshipField);
-		}
+		Map<SObjectType, Type> implementationBySObjectType =
+				appBindings.selectByType(fflib_AppBindingType.Selector)
+						.selectBySharingMode(this.sharingMode)
+						.getImplementationBySObjectType();
+
+		this.selectorFactory = new fflib_ClassicSelectorFactory(implementationBySObjectType);
 	}
 
 	public class DeveloperException extends Exception {}

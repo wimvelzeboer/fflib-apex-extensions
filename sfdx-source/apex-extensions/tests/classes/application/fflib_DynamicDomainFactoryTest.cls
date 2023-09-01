@@ -31,15 +31,24 @@
 @IsTest(IsParallel=true)
 public class fflib_DynamicDomainFactoryTest
 {
+    private static final SObjectType ACCOUNT_OBJECT_TYPE = Schema.Account.SObjectType;
+    private static final String PACKAGE_FORCE_APP = 'force-app';
+    private static final String PACKAGE_OTHER_APP = 'other-app';
+
     private static final fflib_IAppBindingResolver bindingResolver =
             new fflib_AppBindingResolver();
-
 
     private static final fflib_DynamicDomainFactory Domain =
             new fflib_DynamicDomainFactory(
                     bindingResolver,
-                    fflib_DynamicSelectorFactoryTest.Selector);
-    private static final SObjectType ACCOUNT_OBJECT_TYPE = Schema.Account.SObjectType;
+                    fflib_DynamicSelectorFactoryTest.Selector,
+                    PACKAGE_FORCE_APP);
+
+    private static final fflib_DynamicDomainFactory OtherDomain =
+            new fflib_DynamicDomainFactory(
+                    bindingResolver,
+                    fflib_DynamicSelectorFactoryTest.Selector,
+                    PACKAGE_OTHER_APP);
 
     @IsTest
 	static void itShouldReturnDomain()
@@ -107,6 +116,19 @@ public class fflib_DynamicDomainFactoryTest
         System.Assert.isTrue(instanceB.getRecords().isEmpty());
     }
 
+    @IsTest
+    static void itShouldReturnTheRightDomainForThePackage()
+    {
+        fflib_AppBindingsSelector.SELECTOR_IMPL_TYPE = AppBindingsSelectorMock.class;
+
+        final List<Account> records = generateAccountRecords();
+
+        System.Test.startTest();
+        fflib_IDomain otherDomain = OtherDomain.newInstance(records);
+        System.Test.stopTest();
+
+        System.Assert.isTrue(otherDomain instanceof fflib_SObjects2, 'Incorrect returned instance');
+    }
 
     private static List<Account> generateAccountRecords()
     {
@@ -128,17 +150,45 @@ public class fflib_DynamicDomainFactoryTest
         }
     }
 
+    public class OtherDomainConstructor implements fflib_IDomainConstructor
+    {
+        public fflib_IDomain construct(List<Object> objects)
+        {
+            return new fflib_SObjects2((List<SObject>) objects);
+        }
+    }
+
     private class AppBindingsSelectorMock extends fflib_AppBindingsSelector
     {
         public override List<fflib_AppBinding__mdt> selectAll()
         {
+            fflib_ApplicationPackage__mdt forceApp =
+                    new fflib_ApplicationPackage__mdt(
+                            Id = fflib_IDGenerator.generate(fflib_ApplicationPackage__mdt.SObjectType),
+                            DeveloperName = PACKAGE_FORCE_APP);
+            fflib_ApplicationPackage__mdt otherApp =
+                    new fflib_ApplicationPackage__mdt(
+                            Id = fflib_IDGenerator.generate(fflib_ApplicationPackage__mdt.SObjectType),
+                            DeveloperName = PACKAGE_OTHER_APP);
+
             return new List<fflib_AppBinding__mdt>
             {
                     new fflib_AppBinding__mdt(
+                            ApplicationPackage__c = forceApp.Id,
+                            ApplicationPackage__r = forceApp,
                             Type__c = 'Domain',
                             BindingObject__c = '',
                             BindingObjectAlternate__c = ACCOUNT_OBJECT_TYPE.getDescribe().getName(),
                             ImplementationType__c = MyDomainConstructor.class.getName(),
+                            SharingMode__c = 'None'
+                    ),
+                    new fflib_AppBinding__mdt(
+                            ApplicationPackage__c = otherApp.Id,
+                            ApplicationPackage__r = otherApp,
+                            Type__c = 'Domain',
+                            BindingObject__c = '',
+                            BindingObjectAlternate__c = ACCOUNT_OBJECT_TYPE.getDescribe().getName(),
+                            ImplementationType__c = OtherDomainConstructor.class.getName(),
                             SharingMode__c = 'None'
                     )
             };

@@ -56,6 +56,10 @@ public interface fflib_IAppBinding
 	 * @return Returns the Namespace for the binding
 	 */
 	String getNamespacePrefix();
+	/**
+	 * @return Returns the Application Package Name for the binding
+	 */
+	String getPackageName();
 
 	/**
 	 * @return Returns the number of the order sequence in which the binding should be returned
@@ -126,6 +130,13 @@ public interface fflib_IAppBinding
 	 * @return An instance of itself to enable method chaining
 	 */
 	fflib_IAppBinding setNamespacePrefix(String namespacePrefix);
+
+	/**
+	 * @param applicationPackageName The name of the Application Second Generation Package
+	 *
+	 * @return An instance of itself to enable method chaining
+	 */
+	fflib_IAppBinding setPackageName(String applicationPackageName);
 
 	/**
 	 * Set the order number so that the resolver can sort the bindings.

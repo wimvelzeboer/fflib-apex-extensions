@@ -75,6 +75,7 @@ public virtual without sharing class fflib_AppBindingsSelector extends fflib_SOb
 
 		return (List<fflib_AppBinding__mdt>) Database.query(
 				newQueryFactory()
+						.selectField('ApplicationPackage__r.DeveloperName')
 						.selectField('BindingObject__r.QualifiedApiName')
 						.toSOQL());
 						*/
@@ -84,7 +85,9 @@ public virtual without sharing class fflib_AppBindingsSelector extends fflib_SOb
 						'SELECT {0} FROM {1}',
 						new List<String>
 						{
-								getFieldListString() + ', BindingObject__r.QualifiedApiName',
+								getFieldListString()
+										+ ', BindingObject__r.QualifiedApiName'
+										+ ', ApplicationPackage__r.DeveloperName',
 								getSObjectType().getDescribe().getName()
 						}
 				)

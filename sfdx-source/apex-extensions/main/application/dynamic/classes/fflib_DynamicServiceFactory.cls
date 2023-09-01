@@ -32,59 +32,61 @@ public virtual class fflib_DynamicServiceFactory
 		extends fflib_DynamicAppFactory
 		implements fflib_IServiceFactory
 {
-	public static final fflib_AppBindingType SERVICE_BINDING_TYPE = fflib_AppBindingType.Service;
-
-	protected Map<System.Type, Object> mockServiceImplByObjectType = new Map<System.Type, Object>();
+	protected fflib_ClassicServiceFactory serviceFactory;
 
 	public fflib_DynamicServiceFactory(fflib_IAppBindingResolver resolver)
 	{
+		this(resolver, null);
+	}
+
+	public fflib_DynamicServiceFactory(fflib_IAppBindingResolver resolver, String packageName)
+	{
 		this.resolver = resolver;
+		this.packageName = packageName;
 	}
 
 	public Object newInstance(Type serviceInterfaceType)
 	{
-		if (hasMock(serviceInterfaceType)) return getMock(serviceInterfaceType);
+		if (serviceFactory == null) loadBindings();
 
-		List<fflib_IAppBinding> bindings = resolver
-				.byType(SERVICE_BINDING_TYPE)
-				.byInterfaceType(serviceInterfaceType)
-				.bySharingMode(sharingMode)
-				.resolve();
-
-		if (bindings.isEmpty())
-			throw new DeveloperException(
-					String.format(
-							'Unable to find service binding for {0} with sharing more {1}',
-							new List<String>
-							{
-									serviceInterfaceType.getName(),
-									sharingMode.name()
-							}
-					)
-			);
-
-		return bindings.get(0).newImplInstance();
+		return this.serviceFactory.newInstance(serviceInterfaceType);
 	}
 
 	public void replaceWith(Type serviceInterfaceType, Type replacementImplType)
 	{
-		resolver.byType(SERVICE_BINDING_TYPE)
-				.byInterfaceType(serviceInterfaceType)
-				.bySharingMode(sharingMode)
-				.resolve()
-				.get(0) // TODO - validate that there are any resolved bindings
-				.setImplementationType(replacementImplType);
+		if (serviceFactory == null) loadBindings();
+
+		this.serviceFactory.replaceWith(serviceInterfaceType, replacementImplType);
 	}
 
 	public void setMock(Type serviceInterfaceType, Object serviceImpl)
 	{
-		super.setMock(serviceInterfaceType, serviceImpl);
+		if (serviceFactory == null) loadBindings();
+
+		this.serviceFactory.setMock(serviceInterfaceType, serviceImpl);
 	}
 
 	public fflib_DynamicServiceFactory setSharingMode(fflib_SharingMode sharingMode)
 	{
 		this.sharingMode = sharingMode;
 		return this;
+	}
+
+	private void loadBindings()
+	{
+		fflib_IAppBindings appBindings = new fflib_AppBindings(resolver.resolve());
+
+		// If a package name is provide we should filter on package name
+		if (String.isNotBlank(this.packageName))
+		{
+			appBindings = appBindings.selectByPackageName(this.packageName);
+		}
+
+		Map<Type, Type> implementationByInterface =
+				appBindings.selectByType(fflib_AppBindingType.Service)
+						.getImplementationByInterface();
+
+		this.serviceFactory = new fflib_ClassicServiceFactory(implementationByInterface);
 	}
 
 	public class DeveloperException extends Exception {}

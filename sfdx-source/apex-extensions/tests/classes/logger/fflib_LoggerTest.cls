@@ -96,7 +96,6 @@ private class fflib_LoggerTest
 		// THEN - It should be appended to the logAppender
 		final List<String> result = APPENDER_MOCK
 				.getAppendedMessages(System.LoggingLevel.DEBUG);
-		System.debug(result);
 		System.Assert.areEqual(1, result.size(), 'Expected only one error');
 		System.Assert.isTrue(result.get(0).startsWith(ERROR_MESSAGE_FORMATTED_WITH_EXCEPTION), 'Incorrect returned error message');
 	}
