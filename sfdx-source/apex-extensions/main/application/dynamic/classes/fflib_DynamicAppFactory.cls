@@ -30,6 +30,8 @@
  */
 public abstract class fflib_DynamicAppFactory
 {
+	protected String packageName;
+
 	protected fflib_SharingMode sharingMode
 	{
 		get

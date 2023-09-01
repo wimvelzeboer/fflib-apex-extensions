@@ -63,6 +63,67 @@ public virtual class fflib_AppBindings
 		}
 	}
 
+	public List<fflib_IAppBinding> getBindings()
+	{
+		return this.bindings;
+	}
+
+	public Map<Object, Type> getImplementationByBindingObject()
+	{
+		this.bindings.sort();
+
+		Map<Object, Type> result = new Map<Object, Type>();
+		for (fflib_IAppBinding binding : bindings)
+		{
+			Object bindingObject = binding.getBindingObject();
+			if (result.containsKey(bindingObject)) continue; // Skip bindings with lower sequence
+
+			result.put(bindingObject, binding.getImplementationType());
+		}
+		return result;
+	}
+
+	public Map<Type, Type> getImplementationByInterface()
+	{
+		this.bindings.sort();
+
+		Map<Type, Type> result = new Map<Type, Type>();
+		for (fflib_IAppBinding binding : bindings)
+		{
+			Type interfaceType = binding.getInterfaceType();
+			if (result.containsKey(interfaceType)) continue; // Skip bindings with lower sequence
+
+			result.put(interfaceType, binding.getImplementationType());
+		}
+		return result;
+	}
+
+	public Map<SObjectType, Type> getImplementationBySObjectType()
+	{
+		Map<SObjectType, Type> result = new Map<SObjectType, Type>();
+		for (fflib_IAppBinding binding : bindings)
+		{
+			Object bindingObject = binding.getBindingObject();
+			if (bindingObject instanceof SObjectType && result.containsKey((SObjectType) bindingObject) == false)
+			{
+				result.put((SObjectType) bindingObject, binding.getImplementationType());
+			}
+		}
+		return result;
+	}
+
+	public List<System.Type> getImplementations()
+	{
+		List<System.Type> result = new List<System.Type>();
+		for (fflib_IAppBinding binding : bindings)
+		{
+			result.add(
+					binding.getImplementationType()
+			);
+		}
+		return result;
+	}
+
 	public fflib_IAppBindings selectByObject(Object bindingObject)
 	{
 		if (null == bindingObject) return this;
@@ -149,21 +210,18 @@ public virtual class fflib_AppBindings
 		return new fflib_AppBindings(result);
 	}
 
-	public List<fflib_IAppBinding> getBindings()
+	public fflib_IAppBindings selectByPackageName(String packageName)
 	{
-		return this.bindings;
-	}
+		if (null == packageName) return this;
 
-	public List<System.Type> getImplementations()
-	{
-		List<System.Type> result = new List<System.Type>();
+		List<fflib_IAppBinding> result = new List<fflib_IAppBinding>();
 		for (fflib_IAppBinding binding : bindings)
 		{
-			result.add(
-					binding.getImplementationType()
-			);
+			if (binding.getPackageName() != packageName) continue;
+
+			result.add(binding);
 		}
-		return result;
+		return new fflib_AppBindings(result);
 	}
 
 	public List<Object> getObjects()
