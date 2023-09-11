@@ -35,7 +35,6 @@ public interface fflib_IAppBindingResolver
 	fflib_IAppBindingResolver bySequence(Integer sequence);
 	fflib_IAppBindingResolver byType(fflib_AppBindingType bindingType);
 	fflib_IAppBindingResolver byInterfaceType(System.Type interfaceType);
-	fflib_IAppBindingResolver bySharingMode(fflib_SharingMode sharingMode);
 	fflib_IAppBindingResolver byNamespacePrefix(String namespacePrefix);
 	fflib_IAppBindingResolver byPackageName(String packageName);
 	List<fflib_IAppBinding> resolve();

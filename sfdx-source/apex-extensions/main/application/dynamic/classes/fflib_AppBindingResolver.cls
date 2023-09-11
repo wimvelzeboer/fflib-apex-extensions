@@ -160,7 +160,6 @@ public virtual class fflib_AppBindingResolver
 						.selectByType(bindingToResolve.getBindingType())
 						.selectByInterfaceType(bindingToResolve.getInterfaceType())
 						.selectByObject(bindingToResolve.getBindingObject())
-						.selectBySharingMode(bindingToResolve.getSharingMode())
 						.selectBySequence(bindingToResolve.getSequence());
 
 		this.bindingToResolve = internalBindings.newAppBinding();

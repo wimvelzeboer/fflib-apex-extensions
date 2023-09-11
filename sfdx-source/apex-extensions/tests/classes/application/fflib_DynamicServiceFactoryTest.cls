@@ -128,8 +128,7 @@ public class fflib_DynamicServiceFactoryTest
             new fflib_AppBindingResolver();
 
     private static final fflib_DynamicServiceFactory Service =
-            new fflib_DynamicServiceFactory(bindingResolver)
-                    .setSharingMode(fflib_SharingMode.WithSharing);
+            new fflib_DynamicServiceFactory(bindingResolver);
 
     public interface IMyService {}
 

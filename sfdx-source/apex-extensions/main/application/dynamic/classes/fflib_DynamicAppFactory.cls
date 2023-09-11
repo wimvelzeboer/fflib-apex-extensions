@@ -32,18 +32,6 @@ public abstract class fflib_DynamicAppFactory
 {
 	protected String packageName;
 
-	protected fflib_SharingMode sharingMode
-	{
-		get
-		{
-			if (sharingMode == null)
-			{
-				sharingMode = fflib_SharingMode.WithSharing;
-			}
-			return sharingMode;
-		}
-		set;
-	}
 	protected fflib_IAppBindingResolver resolver;
 	protected Map<System.Type, System.Type> routes;
 

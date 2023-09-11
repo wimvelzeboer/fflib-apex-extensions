@@ -106,7 +106,6 @@ public virtual class fflib_DynamicSelectorFactory
 
 		Map<SObjectType, Type> implementationBySObjectType =
 				appBindings.selectByType(fflib_AppBindingType.Selector)
-						.selectBySharingMode(this.sharingMode)
 						.getImplementationBySObjectType();
 
 		this.selectorFactory = new fflib_ClassicSelectorFactory(implementationBySObjectType);
