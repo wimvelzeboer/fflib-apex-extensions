@@ -179,8 +179,7 @@ public class fflib_DynamicDomainFactoryTest
                             Type__c = 'Domain',
                             BindingObject__c = '',
                             BindingObjectAlternate__c = ACCOUNT_OBJECT_TYPE.getDescribe().getName(),
-                            ImplementationType__c = MyDomainConstructor.class.getName(),
-                            SharingMode__c = 'None'
+                            ImplementationType__c = MyDomainConstructor.class.getName()
                     ),
                     new fflib_AppBinding__mdt(
                             ApplicationPackage__c = otherApp.Id,
@@ -188,8 +187,7 @@ public class fflib_DynamicDomainFactoryTest
                             Type__c = 'Domain',
                             BindingObject__c = '',
                             BindingObjectAlternate__c = ACCOUNT_OBJECT_TYPE.getDescribe().getName(),
-                            ImplementationType__c = OtherDomainConstructor.class.getName(),
-                            SharingMode__c = 'None'
+                            ImplementationType__c = OtherDomainConstructor.class.getName()
                     )
             };
         }

@@ -46,7 +46,6 @@ public virtual without sharing class fflib_AppBindingsSelector extends fflib_SOb
 				fflib_AppBinding__mdt.NamespacePrefix,
 				fflib_AppBinding__mdt.ImplementationType__c,
 				fflib_AppBinding__mdt.InterfaceType__c,
-				fflib_AppBinding__mdt.SharingMode__c,
 				fflib_AppBinding__mdt.Type__c
 		};
 	}

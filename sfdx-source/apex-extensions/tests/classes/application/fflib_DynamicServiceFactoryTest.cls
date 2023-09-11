@@ -112,7 +112,6 @@ public class fflib_DynamicServiceFactoryTest
         result.setBindingType(fflib_AppBindingType.Service);
         result.setInterfaceType(MY_SERVICE_TYPE);
         result.setImplementationType(MY_SERVICE_TYPE);
-        result.setSharingMode(fflib_SharingMode.WithSharing);
         result.setSequence(2);
         return result;
     }
@@ -148,14 +147,12 @@ public class fflib_DynamicServiceFactoryTest
                             Type__c = 'Service',
                             InterfaceType__c = MY_SERVICE_INTERFACE_TYPE.getName(),
                             ImplementationType__c = MY_SERVICE_TYPE.getName(),
-                            SharingMode__c = 'With Sharing',
                             BindingSequence__c = 1
                     ),
                     new fflib_AppBinding__mdt(
                             Type__c = 'Service',
                             InterfaceType__c = MY_SERVICE_INTERFACE_TYPE.getName(),
                             ImplementationType__c = MY_ALT_SERVICE_TYPE.getName(),
-                            SharingMode__c = 'With Sharing',
                             BindingSequence__c = 2
                     )
             };
@@ -172,14 +169,12 @@ public class fflib_DynamicServiceFactoryTest
                             Type__c = 'Service',
                             InterfaceType__c = MY_SERVICE_INTERFACE_TYPE.getName(),
                             ImplementationType__c = MY_SERVICE_TYPE.getName(),
-                            SharingMode__c = 'With Sharing',
                             BindingSequence__c = 2
                     ),
                     new fflib_AppBinding__mdt(
                             Type__c = 'Service',
                             InterfaceType__c = MY_SERVICE_INTERFACE_TYPE.getName(),
                             ImplementationType__c = MY_ALT_SERVICE_TYPE.getName(),
-                            SharingMode__c = 'With Sharing',
                             BindingSequence__c = 1
                     )
             };

@@ -38,7 +38,6 @@ public virtual class fflib_AppBinding
 	protected System.Type interfaceType { get; set; }
 	protected String namespacePrefix { get; set; }
 	protected String packageName { get; set; }
-	protected fflib_SharingMode sharingMode { get; set; }
 
 	public Integer compareTo(Object compareTo)
 	{
@@ -104,16 +103,6 @@ public virtual class fflib_AppBinding
 	public virtual Decimal getSequence()
 	{
 		return this.bindingSequence;
-	}
-
-	/**
-	 * @return Returns an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
-	 *
-	 * @see fflib_SharingMode
-	 */
-	public virtual fflib_SharingMode getSharingMode()
-	{
-		return this.sharingMode;
 	}
 
 	/**
@@ -222,21 +211,6 @@ public virtual class fflib_AppBinding
 	public virtual fflib_IAppBinding setSequence(Decimal sequence)
 	{
 		this.bindingSequence = sequence;
-		return this;
-	}
-
-	/**
-	 * Sets an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
-	 *
-	 * @param sharingMode A enum value of fflib_SharingMode representing the sharing mode
-	 *
-	 * @return An instance of itself to enable method chaining
-	 *
-	 * @see fflib_SharingMode
-	 */
-	public virtual fflib_IAppBinding setSharingMode(fflib_SharingMode sharingMode)
-	{
-		this.sharingMode = sharingMode;
 		return this;
 	}
 }

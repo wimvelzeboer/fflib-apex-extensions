@@ -37,8 +37,7 @@ public class fflib_DynamicSelectorFactoryTest
 
 	@TestVisible
 	private static final fflib_DynamicSelectorFactory Selector =
-			new fflib_DynamicSelectorFactory(bindingResolver)
-					.setSharingMode(fflib_SharingMode.WithSharing);
+			new fflib_DynamicSelectorFactory(bindingResolver);
 
 	private static final Type MY_SELECTOR_TYPE = fflib_DynamicSelectorFactoryTest.MySelector.class;
 
@@ -147,8 +146,7 @@ public class fflib_DynamicSelectorFactoryTest
 							Type__c = 'Selector',
 							BindingObject__c = '',
 							BindingObjectAlternate__c = Schema.Account.SObjectType.getDescribe().getName(),
-							ImplementationType__c = MY_SELECTOR_TYPE.getName(),
-							SharingMode__c = 'With Sharing'
+							ImplementationType__c = MY_SELECTOR_TYPE.getName()
 					)
 			};
 		}

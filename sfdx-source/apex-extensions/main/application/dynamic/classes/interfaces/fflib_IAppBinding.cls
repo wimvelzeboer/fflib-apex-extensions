@@ -67,13 +67,6 @@ public interface fflib_IAppBinding
 	Decimal getSequence();
 
 	/**
-	 * @return Returns an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
-	 *
-	 * @see fflib_SharingMode
-	 */
-	fflib_SharingMode getSharingMode();
-
-	/**
 	 * Creates a new instance of the implementation for this binding.
 	 *
 	 * @return The enum value fflib_SharingMode that defines the type of sharing used in the implementation class
@@ -148,15 +141,4 @@ public interface fflib_IAppBinding
 	 * @return An instance of itself to enable method chaining
 	 */
 	fflib_IAppBinding setSequence(Decimal sequence);
-
-	/**
-	 * Sets an enum value fflib_SharingMode that defines the type of sharing used in the implementation class
-	 *
-	 * @param sharingMode A enum value of fflib_SharingMode representing the sharing mode
-	 *
-	 * @return An instance of itself to enable method chaining
-	 *
-	 * @see fflib_SharingMode
-	 */
-	fflib_IAppBinding setSharingMode(fflib_SharingMode sharingMode);
 }

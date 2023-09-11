@@ -63,10 +63,6 @@
                 <behavior>Required</behavior>
                 <field>ImplementationType__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>SharingMode__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
