@@ -45,7 +45,6 @@ public with sharing class fflib_AppBindingMetaDataModule
 							.setNamespacePrefix(binding.NamespacePrefix)
 							.setPackageName(binding.ApplicationPackage__r.DeveloperName)
 							.setSequence(binding.BindingSequence__c)
-							.setSharingMode(getSharingModeFromString(binding.SharingMode__c))
 			);
 		}
 	}
@@ -92,30 +91,6 @@ public with sharing class fflib_AppBindingMetaDataModule
 			);
 
 		return bindingTypeByStrings.get(binding.Type__c.toUpperCase());
-	}
-
-	private fflib_SharingMode getSharingModeFromString(String sharingMode)
-	{
-		switch on sharingMode.toUpperCase()
-		{
-			when 'WITH SHARING'
-			{
-				return fflib_SharingMode.WithSharing;
-			}
-			when 'WITHOUT SHARING'
-			{
-				return fflib_SharingMode.WithoutSharing;
-			}
-			when 'INHERITED SHARING'
-			{
-				return fflib_SharingMode.WithoutSharing;
-			}
-			when 'NONE'
-			{
-				return null;
-			}
-		}
-		return null;
 	}
 
 	private Type getSystemType(fflib_AppBinding__mdt binding, Schema.SObjectField sObjectField)

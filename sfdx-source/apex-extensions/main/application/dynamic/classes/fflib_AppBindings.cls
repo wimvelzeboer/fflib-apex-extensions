@@ -182,20 +182,6 @@ public virtual class fflib_AppBindings
 		return new fflib_AppBindings(result);
 	}
 
-	public fflib_IAppBindings selectBySharingMode(fflib_SharingMode sharingMode)
-	{
-		if (null == sharingMode) return this;
-
-		List<fflib_IAppBinding> result = new List<fflib_IAppBinding>();
-		for (fflib_IAppBinding binding : bindings)
-		{
-			if (binding.getSharingMode() != sharingMode) continue;
-
-			result.add(binding);
-		}
-		return new fflib_AppBindings(result);
-	}
-
 	public fflib_IAppBindings selectByNamespacePrefix(String namespacePrefix)
 	{
 		if (null == namespacePrefix) return this;

@@ -44,7 +44,6 @@ public interface fflib_IAppBindings
 	fflib_IAppBindings selectBySequence(Decimal sequence);
 	fflib_IAppBindings selectByType(fflib_AppBindingType bindingType);
 	fflib_IAppBindings selectByInterfaceType(System.Type interfaceType);
-	fflib_IAppBindings selectBySharingMode(fflib_SharingMode sharingMode);
 	fflib_IAppBindings selectByNamespacePrefix(String namespacePrefix);
 	fflib_IAppBindings selectByPackageName(String packageName);
 }

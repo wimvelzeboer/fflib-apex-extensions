@@ -66,12 +66,6 @@ public virtual class fflib_DynamicServiceFactory
 		this.serviceFactory.setMock(serviceInterfaceType, serviceImpl);
 	}
 
-	public fflib_DynamicServiceFactory setSharingMode(fflib_SharingMode sharingMode)
-	{
-		this.sharingMode = sharingMode;
-		return this;
-	}
-
 	private void loadBindings()
 	{
 		fflib_IAppBindings appBindings = new fflib_AppBindings(resolver.resolve());

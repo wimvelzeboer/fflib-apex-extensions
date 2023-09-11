@@ -120,12 +120,6 @@ public virtual class fflib_AppBindingResolver
 		return this;
 	}
 
-	public fflib_IAppBindingResolver bySharingMode(fflib_SharingMode sharingMode)
-	{
-		this.bindingToResolve.setSharingMode(sharingMode);
-		return this;
-	}
-
 	public fflib_IAppBindingResolver byNamespacePrefix(String namespacePrefix)
 	{
 		this.bindingToResolve.setNamespacePrefix(namespacePrefix);
@@ -166,7 +160,6 @@ public virtual class fflib_AppBindingResolver
 						.selectByType(bindingToResolve.getBindingType())
 						.selectByInterfaceType(bindingToResolve.getInterfaceType())
 						.selectByObject(bindingToResolve.getBindingObject())
-						.selectBySharingMode(bindingToResolve.getSharingMode())
 						.selectBySequence(bindingToResolve.getSequence());
 
 		this.bindingToResolve = internalBindings.newAppBinding();

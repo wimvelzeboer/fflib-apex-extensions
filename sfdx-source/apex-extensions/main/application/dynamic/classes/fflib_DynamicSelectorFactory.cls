@@ -94,12 +94,6 @@ public virtual class fflib_DynamicSelectorFactory
 		this.selectorFactory.setMock(sObjectType, selectorInstance);
 	}
 
-	public fflib_DynamicSelectorFactory setSharingMode(fflib_SharingMode sharingMode)
-	{
-		this.sharingMode = sharingMode;
-		return this;
-	}
-
 	private void loadBindings()
 	{
 		fflib_IAppBindings appBindings = new fflib_AppBindings(resolver.resolve());
@@ -112,7 +106,6 @@ public virtual class fflib_DynamicSelectorFactory
 
 		Map<SObjectType, Type> implementationBySObjectType =
 				appBindings.selectByType(fflib_AppBindingType.Selector)
-						.selectBySharingMode(this.sharingMode)
 						.getImplementationBySObjectType();
 
 		this.selectorFactory = new fflib_ClassicSelectorFactory(implementationBySObjectType);

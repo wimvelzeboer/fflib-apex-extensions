@@ -59,7 +59,8 @@ public virtual class fflib_ClassicSelectorFactory
 	 * @param sObjectType The SObjectType of the Ids
 	 *
 	 * @return The queried records
-	 * @exception fflib_Application.DeveloperException is thrown if the Ids set is empty
+	 *
+	 * @throws fflib_Application.DeveloperException is thrown if the Ids set is empty
 	 */
 	public virtual List<SObject> selectById(Set<Id> recordIds, SObjectType sObjectType)
 	{
