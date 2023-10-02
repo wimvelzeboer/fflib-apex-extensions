@@ -88,7 +88,7 @@ private class fflib_LogEventStoreListenerTest
 	{
 		Profile profile = [SELECT Id FROM Profile WHERE Name = :TEST_USER_PROFILE];
 		return new User(
-				Alias = 'jnjfflib',
+				Alias = 'Testfflib',
 				Email = 'TestUser@example.com',
 				EmailEncodingKey = 'UTF-8',
 				FirstName = 'Test',
@@ -97,7 +97,7 @@ private class fflib_LogEventStoreListenerTest
 				LocaleSidKey = 'en_US',
 				ProfileId = profile.Id,
 				TimeZoneSidKey = 'America/Los_Angeles',
-				Username = 'TestUser@example.com.jnjfflib'
+				Username = 'TestUser@example.com.fflib.extensions'
 		);
 	}
 }
