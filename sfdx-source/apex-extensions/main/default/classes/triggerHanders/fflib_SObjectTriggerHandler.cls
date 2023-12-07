@@ -42,9 +42,9 @@ public virtual with sharing class fflib_SObjectTriggerHandler
 		super(records, sObjectType);
 	}
 
-	public List<SObject> getChangedRecords(String fileName)
+	public List<SObject> getChangedRecords(String fieldName)
 	{
-		return getChangedRecords(new Set<String>{ fileName });
+		return getChangedRecords(new Set<String>{ fieldName });
 	}
 
 	public List<SObject> getChangedRecords(Schema.SObjectField fieldToken)

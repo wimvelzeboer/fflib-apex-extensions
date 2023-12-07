@@ -44,6 +44,11 @@ public class fflib_DynamicDomainFactoryTest
                     fflib_DynamicSelectorFactoryTest.Selector,
                     PACKAGE_FORCE_APP);
 
+    private static final fflib_DynamicDomainFactory NonDomain =
+            new fflib_DynamicDomainFactory(
+                    bindingResolver,
+                    fflib_DynamicSelectorFactoryTest.Selector);
+
     private static final fflib_DynamicDomainFactory OtherDomain =
             new fflib_DynamicDomainFactory(
                     bindingResolver,
