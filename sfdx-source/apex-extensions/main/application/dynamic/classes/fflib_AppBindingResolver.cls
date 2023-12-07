@@ -96,42 +96,6 @@ public virtual class fflib_AppBindingResolver
 		return this;
 	}
 
-	public fflib_IAppBindingResolver byObject(Object bindingObject)
-	{
-		this.bindingToResolve.setBindingObject(bindingObject);
-		return this;
-	}
-
-	public fflib_IAppBindingResolver bySequence(Integer sequence)
-	{
-		this.bindingToResolve.setSequence(sequence);
-		return this;
-	}
-
-	public fflib_IAppBindingResolver byType(fflib_AppBindingType bindingType)
-	{
-		this.bindingToResolve.setBindingType(bindingType);
-		return this;
-	}
-
-	public fflib_IAppBindingResolver byInterfaceType(Type interfaceType)
-	{
-		this.bindingToResolve.setInterfaceType(interfaceType);
-		return this;
-	}
-
-	public fflib_IAppBindingResolver byNamespacePrefix(String namespacePrefix)
-	{
-		this.bindingToResolve.setNamespacePrefix(namespacePrefix);
-		return this;
-	}
-
-	public fflib_IAppBindingResolver byPackageName(String packageName)
-	{
-		this.bindingToResolve.setPackageName(packageName);
-		return this;
-	}
-
 	/**
 	 * Handles lazy loading of modules, if no custom module is configured (via addModule) the default module is returned
 	 *

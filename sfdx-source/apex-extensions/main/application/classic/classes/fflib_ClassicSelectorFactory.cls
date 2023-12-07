@@ -33,11 +33,6 @@ public virtual class fflib_ClassicSelectorFactory
 		implements fflib_ISelectorFactory
 {
 	/**
-	 * Constructs a simple Selector Factory
-	 **/
-	public fflib_ClassicSelectorFactory() {}
-
-	/**
 	 * Constructs a Selector Factory linking SObjectType's with Apex Classes implement the fflib_ISObjectSelector interface
 	 *   Note that the factory does not check the given Apex Classes implement the interface
 	 *     currently this is not possible in Apex.

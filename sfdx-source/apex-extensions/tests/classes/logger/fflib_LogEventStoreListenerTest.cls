@@ -88,7 +88,7 @@ private class fflib_LogEventStoreListenerTest
 	{
 		Profile profile = [SELECT Id FROM Profile WHERE Name = :TEST_USER_PROFILE];
 		return new User(
-				Alias = 'Testfflib',
+				Alias = 'TestUser',
 				Email = 'TestUser@example.com',
 				EmailEncodingKey = 'UTF-8',
 				FirstName = 'Test',

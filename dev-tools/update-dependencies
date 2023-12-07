@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir ./temp
+mkdir ./temp || true
 cd ./temp
 rm -Rf fflib-apex-mocks/
 rm -Rf fflib-apex-common/
