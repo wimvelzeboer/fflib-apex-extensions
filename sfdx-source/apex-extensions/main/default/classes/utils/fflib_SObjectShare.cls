@@ -46,7 +46,7 @@ public with sharing class fflib_SObjectShare
 			Id parentId,
 			Id userOrGroupId)
 	{
-		return createShares(sObjectType, new Set<Id>{ parentId }, new Set<Id>{ userOrGroupId }, ACCESS_LEVEL_EDIT)
+		return createEditShares(sObjectType, parentId, new Set<Id>{ userOrGroupId })
 				.get(0);
 	}
 
@@ -64,7 +64,7 @@ public with sharing class fflib_SObjectShare
 			Id parentId,
 			Set<Id> userOrGroupIds)
 	{
-		return createShares(sObjectType, new Set<Id>{ parentId }, userOrGroupIds, ACCESS_LEVEL_EDIT);
+		return createEditShares(sObjectType, new Set<Id>{ parentId }, userOrGroupIds);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public with sharing class fflib_SObjectShare
 			Id parentId,
 			Id userOrGroupId)
 	{
-		return createShares(sObjectType, new Set<Id>{ parentId }, new Set<Id>{ userOrGroupId }, ACCESS_LEVEL_READ)
+		return createReadShares(sObjectType, parentId, new Set<Id>{ userOrGroupId })
 				.get(0);
 	}
 
@@ -116,7 +116,7 @@ public with sharing class fflib_SObjectShare
 			Id parentId,
 			Set<Id> userOrGroupIds)
 	{
-		return createShares(sObjectType, new Set<Id>{ parentId }, userOrGroupIds, ACCESS_LEVEL_READ);
+		return createReadShares(sObjectType, new Set<Id>{ parentId }, userOrGroupIds);
 	}
 
 	/**
@@ -172,17 +172,6 @@ public with sharing class fflib_SObjectShare
 		return results;
 	}
 
-	/**
-	 * Gets the SObjectField for the Id field of the given SObjectType
-	 *
-	 * @param sObjectType The SObjectType to get its Id field
-	 *
-	 * @return Returns the Id.SObjectField
-	 */
-	public static SObjectField getIdField(SObjectType sObjectType)
-	{
-		return getsObjectField(fflib_SObjectDescribe.getDescribe(sObjectType).getFields(), 'Id');
-	}
 
 	/**
 	 * Gets the name of the AccessLevel field of the given SObjectType

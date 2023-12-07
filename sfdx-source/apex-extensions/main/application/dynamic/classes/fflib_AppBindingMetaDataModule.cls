@@ -49,6 +49,7 @@ public with sharing class fflib_AppBindingMetaDataModule
 		}
 	}
 
+	@TestVisible
 	private Object getBindingObject(fflib_AppBinding__mdt binding)
 	{
 		if (String.isBlank(binding.BindingObject__c) && String.isBlank(binding.BindingObjectAlternate__c)) return null;
@@ -58,12 +59,12 @@ public with sharing class fflib_AppBindingMetaDataModule
 				: binding.BindingObjectAlternate__c.toLowerCase().trim();
 
 		// Assume its an SObjectType
-		List<Schema.DescribeSObjectResult> schemaDescribes = Schema.describeSObjects(new List<String> {bindingObjectApiName});
-		if (schemaDescribes.size() == 1)
+		try
 		{
+			List<Schema.DescribeSObjectResult> schemaDescribes = Schema.describeSObjects(new List<String> {bindingObjectApiName});
 			return schemaDescribes.get(0).getSObjectType();
 		}
-		else
+		catch (InvalidParameterValueException e)
 		{
 			// check if its an Object (class)
 			Type objectType = System.Type.forName(bindingObjectApiName);
@@ -93,6 +94,7 @@ public with sharing class fflib_AppBindingMetaDataModule
 		return bindingTypeByStrings.get(binding.Type__c.toUpperCase());
 	}
 
+	@TestVisible
 	private Type getSystemType(fflib_AppBinding__mdt binding, Schema.SObjectField sObjectField)
 	{
 		String systemTypeName = String.valueOf(binding.get(sObjectField));

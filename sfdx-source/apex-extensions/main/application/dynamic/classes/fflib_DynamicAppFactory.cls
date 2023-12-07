@@ -33,25 +33,4 @@ public abstract class fflib_DynamicAppFactory
 	protected String packageName;
 
 	protected fflib_IAppBindingResolver resolver;
-	protected Map<System.Type, System.Type> routes;
-
-	protected Map<Object, Object> mockImplByObjectType = new Map<Object, Object>();
-
-	protected void setMock(Object objectType, Object mock)
-	{
-		this.mockImplByObjectType.put(
-				objectType,
-				mock
-		);
-	}
-
-	protected Object getMock(Object objectType)
-	{
-		return this.mockImplByObjectType.get(objectType);
-	}
-
-	protected Boolean hasMock(Object objectType)
-	{
-		return this.mockImplByObjectType.containsKey(objectType);
-	}
 }
