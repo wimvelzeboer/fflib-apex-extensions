@@ -287,6 +287,26 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * @return Trip the records from fields that the user doesn't have access to
+	 */
+	public virtual List<SObject> stripInaccessibleFields()
+	{
+		return stripInaccessibleFields(AccessType.READABLE);
+	}
+
+	/**
+	 * @param accessType
+	 *
+	 * @return Trip the records from fields that the user doesn't have access to
+	 */
+	public virtual List<SObject> stripInaccessibleFields(
+			System.AccessType accessType
+	)
+	{
+		return Security.stripInaccessible(accessType, getRecords()).getRecords();
+	}
+
+	/**
 	 * @param sObjectField The Schema.SObjectField to get their Id values
 	 *
 	 * @return The Date values of the given sObjectField, null values are omitted
