@@ -38,13 +38,10 @@ public with sharing class fflib_AppBindingMetaDataModule
 		{
 			addBinding(
 					new fflib_AppBinding()
-							.setBindingObject(getBindingObject(binding))
-							.setBindingType(getBindingType(binding))
-							.setImplementationType(getSystemType(binding, fflib_AppBinding__mdt.ImplementationType__c))
-							.setInterfaceType(getSystemType(binding, fflib_AppBinding__mdt.InterfaceType__c))
-							.setNamespacePrefix(binding.NamespacePrefix)
 							.setPackageName(binding.ApplicationPackage__r.DeveloperName)
-							.setSequence(binding.BindingSequence__c)
+							.setBindingType(getBindingType(binding)) // Concern: e.g. Domain, Selector
+							.setInterfaceType(getSystemType(binding, fflib_AppBinding__mdt.InterfaceType__c))
+							.setImplementationType(getSystemType(binding, fflib_AppBinding__mdt.ImplementationType__c))
 			);
 		}
 	}

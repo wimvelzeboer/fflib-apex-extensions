@@ -30,5 +30,5 @@
  */
 public enum fflib_AppBindingType
 {
-	Domain, Service, Selector, Controller, Module, Misc
+	Domain, Service, Selector, Controller
 }

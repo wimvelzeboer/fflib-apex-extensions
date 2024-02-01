@@ -31,6 +31,82 @@
 public virtual class fflib_AppBindingResolver
 		implements fflib_IAppBindingResolver
 {
+	//          Package Name - Concern - <Account.SObjectype -> Accounts.constructor.class>
+	//          Package Name - Concern - Object (SObjectType, DataTransferObject.Class) -> Type (Implementation class)
+	//          Package Name - Concern - Interface.class -> Implementation.class>
+	protected Map<String, Map<fflib_AppBindingType, IBindingMap>> bindingRegistry;
+
+	protected fflib_IAppBinding bindingToResolve = new fflib_AppBinding();
+
+	public fflib_IAppBindingResolver byPackageName(String packageName)
+	{
+		this.bindingToResolve.setPackageName(packageName);
+		return this;
+	}
+
+	public fflib_IAppBindingResolver byBindingType(fflib_AppBindingType bindingType)
+	{
+		this.bindingToResolve.setBindingType(bindingType);
+		return this;
+	}
+
+	public fflib_IAppBinding resolve(Object bindingObject)
+	{
+		if (!hasBindingsLoaded()) loadBindings();
+
+		return this.bindingRegistry
+				.get(this.bindingToResolve.getPackageName())
+				.get(this.bindingToResolve.getBindingType())
+				.getObject(bindingObject);
+	}
+
+	public fflib_IAppBinding resolve(Type interfaceType)
+	{
+		if (!hasBindingsLoaded()) loadBindings();
+
+		return this.bindingRegistry
+				.get(this.bindingToResolve.getPackageName())
+				.get(this.bindingToResolve.getBindingType())
+				.getInterfaceType(interfaceType);
+	}
+
+	private interface IBindingMap {
+		BindingMapType getType();
+	}
+
+	private enum BindingMapType {
+		OBJECT_TO_TYPE, TYPE_TO_TYPE
+	}
+
+	private class ObjectToTypeBindings implements IBindingMap
+	{
+		public BindingMapType getType()
+		{
+			return BindingMapType.OBJECT_TO_TYPE;
+		}
+
+		Map<Object, fflib_IAppBinding> bindings = Map<Object, fflib_IAppBinding>();
+
+		public fflib_IAppBinding getObject(Object bindingObject)
+		{
+			return null;
+		}
+
+		public fflib_IAppBinding getInterfaceType(Type interfaceType)
+		{
+			return null;
+		}
+	}
+
+	private class TypeToTypeBindings implements IBindingMap
+	{
+		public BindingMapType getType()
+		{
+			return BindingMapType.TYPE_TO_TYPE;
+		}
+	}
+
+
 	// allow for dependency injection inside the resolver
 	protected InternalBindings internalBindings
 	{

@@ -44,24 +44,8 @@ public virtual class fflib_DynamicDomainFactory
 	 */
 	public fflib_DynamicDomainFactory(fflib_IAppBindingResolver resolver, fflib_ISelectorFactory selectorFactory)
 	{
-		this(resolver, selectorFactory, null);
-	}
-
-	/**
-	 * Class constructor
-	 *
-	 * @param resolver A reference to the resolve instance
-	 * @param selectorFactory A reference to the selector factory instance
-	 * @param packageName The package name
-	 */
-	public fflib_DynamicDomainFactory(
-			fflib_IAppBindingResolver resolver,
-			fflib_ISelectorFactory selectorFactory,
-			String packageName)
-	{
 		this.resolver = resolver;
 		this.selectorFactory = selectorFactory;
-		this.packageName = packageName;
 	}
 
 	public fflib_IDomain newInstance(Set<Id> recordIds)
@@ -76,6 +60,14 @@ public virtual class fflib_DynamicDomainFactory
 
 	public fflib_IDomain newInstance(List<SObject> records)
 	{
+		if (domainFactory == null) loadBindings();
+
+		return this.domainFactory.newInstance(records);
+	}
+
+	public fflib_IDomain newInstance(String packageName, List<SObject> records)
+	{
+		this.resolver.setPackageName(packageName)
 		if (domainFactory == null) loadBindings();
 
 		return this.domainFactory.newInstance(records);
