@@ -154,7 +154,10 @@ public virtual with sharing class fflib_TriggerHandler
 	{
 		if (configs.isEmpty() == false) return;
 
-		for (fflib_TriggerAction__mdt action : new fflib_TriggerActionConfigSelector().selectAllActive())
+		fflib_TriggerActionConfigSelector selector = new fflib_TriggerActionConfigSelector();
+		selector.setDataAccess(fflib_SObjectSelector.DataAccess.SYSTEM_MODE);
+
+		for (fflib_TriggerAction__mdt action : selector.selectAllActive())
 		{
 			configs.add( new fflib_TriggerActionConfig(action));
 		}
