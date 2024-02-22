@@ -1,5 +1,5 @@
 /**
- * File Name: fflib_AppBindingsSelector 
+ * File Name: fflib_AppBindingsSelector
  * @description Selector for fflib_AppBinding__mdt records
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -28,41 +28,35 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public virtual without sharing class fflib_AppBindingsSelector extends fflib_SObjectSelector
-{
-	// Used for mocking
-	@TestVisible
-	private static System.Type SELECTOR_IMPL_TYPE = fflib_AppBindingsSelector.class;
+public virtual without sharing class fflib_AppBindingsSelector extends fflib_SObjectSelector {
+  // Used for mocking
+  @TestVisible
+  private static System.Type SELECTOR_IMPL_TYPE = fflib_AppBindingsSelector.class;
 
-	public List<Schema.SObjectField> getSObjectFieldList()
-	{
-		return new List<Schema.SObjectField>
-		{
-				fflib_AppBinding__mdt.Id,
-				fflib_AppBinding__mdt.BindingObject__c,
-				fflib_AppBinding__mdt.BindingObjectAlternate__c,
-				fflib_AppBinding__mdt.BindingSequence__c,
-				fflib_AppBinding__mdt.DeveloperName,
-				fflib_AppBinding__mdt.NamespacePrefix,
-				fflib_AppBinding__mdt.ImplementationType__c,
-				fflib_AppBinding__mdt.InterfaceType__c,
-				fflib_AppBinding__mdt.Type__c
-		};
-	}
+  public List<Schema.SObjectField> getSObjectFieldList() {
+    return new List<Schema.SObjectField>{
+      fflib_AppBinding__mdt.Id,
+      fflib_AppBinding__mdt.BindingObject__c,
+      fflib_AppBinding__mdt.BindingObjectAlternate__c,
+      fflib_AppBinding__mdt.BindingSequence__c,
+      fflib_AppBinding__mdt.DeveloperName,
+      fflib_AppBinding__mdt.NamespacePrefix,
+      fflib_AppBinding__mdt.ImplementationType__c,
+      fflib_AppBinding__mdt.InterfaceType__c,
+      fflib_AppBinding__mdt.Type__c
+    };
+  }
 
-	public static fflib_AppBindingsSelector newInstance()
-	{
-		return (fflib_AppBindingsSelector) SELECTOR_IMPL_TYPE.newInstance();
-	}
+  public static fflib_AppBindingsSelector newInstance() {
+    return (fflib_AppBindingsSelector) SELECTOR_IMPL_TYPE.newInstance();
+  }
 
-	public Schema.SObjectType getSObjectType()
-	{
-		return fflib_AppBinding__mdt.SObjectType;
-	}
+  public Schema.SObjectType getSObjectType() {
+    return fflib_AppBinding__mdt.SObjectType;
+  }
 
-	public virtual List<fflib_AppBinding__mdt> selectAll()
-	{
-		/**
+  public virtual List<fflib_AppBinding__mdt> selectAll() {
+    /**
 		Todo - Waiting to uncomment the following section
 		        until fflib-apex-common fixes the getFieldPath issue
 		        Currently failing on the BindingObject__r field,
@@ -79,17 +73,16 @@ public virtual without sharing class fflib_AppBindingsSelector extends fflib_SOb
 						.toSOQL());
 						*/
 
-		return (List<fflib_AppBinding__mdt>) Database.query(
-				String.format(
-						'SELECT {0} FROM {1}',
-						new List<String>
-						{
-								getFieldListString()
-										+ ', BindingObject__r.QualifiedApiName'
-										+ ', ApplicationPackage__r.DeveloperName',
-								getSObjectType().getDescribe().getName()
-						}
-				)
-		);
-	}
+    return (List<fflib_AppBinding__mdt>) Database.query(
+      String.format(
+        'SELECT {0} FROM {1} WITH SYSTEM_MODE',
+        new List<String>{
+          getFieldListString() +
+          ', BindingObject__r.QualifiedApiName' +
+          ', ApplicationPackage__r.DeveloperName',
+          getSObjectType().getDescribe().getName()
+        }
+      )
+    );
+  }
 }
