@@ -48,7 +48,8 @@ public virtual without sharing class fflib_AppBindingsSelector extends fflib_SOb
   }
 
   public static fflib_AppBindingsSelector newInstance() {
-    return (fflib_AppBindingsSelector) SELECTOR_IMPL_TYPE.newInstance();
+    return (fflib_AppBindingsSelector) ((fflib_AppBindingsSelector) SELECTOR_IMPL_TYPE.newInstance())
+      .setDataAccess(fflib_SObjectSelector.DataAccess.SYSTEM_MODE);
   }
 
   public Schema.SObjectType getSObjectType() {
