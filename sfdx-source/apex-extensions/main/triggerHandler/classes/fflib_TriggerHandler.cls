@@ -83,7 +83,7 @@ public virtual with sharing class fflib_TriggerHandler
 		execute(ctx);
 	}
 
-	public static void disableTrigger()
+	public static void disableAllTriggers()
 	{
 		fflib_TriggerHandler.disabled = true;
 	}
