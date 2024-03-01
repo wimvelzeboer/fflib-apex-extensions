@@ -36,6 +36,7 @@ public virtual with sharing class fflib_TriggerHandler
 	 * Retains the trigger tracking configuration used for each domain
      **/
 	private static Map<Type, fflib_SObjectDomain.TriggerEvent> triggerEventByClass;
+	private static Boolean disabled = false;
 
 	/**
 	 * Retain instance of Trigger Action classes implementing stateful
@@ -75,9 +76,16 @@ public virtual with sharing class fflib_TriggerHandler
 	 */
 	public void run()
 	{
+		if (fflib_TriggerHandler.disabled) return;
+
 		loadConfiguration();
 		fflib_ITriggerContext ctx = getTriggerContext();
 		execute(ctx);
+	}
+
+	public static void disableAllTriggers()
+	{
+		fflib_TriggerHandler.disabled = true;
 	}
 
 	public static fflib_SObjectDomain.TriggerEvent getTriggerEvent(Type triggerActionClass)
