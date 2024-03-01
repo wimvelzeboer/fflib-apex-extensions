@@ -32,6 +32,22 @@ public virtual with sharing class fflib_TriggerHandler
 {
 	public static final System.Type DEFAUT_TRIGGERCONTEXT_TYPE = fflib_TriggerContext.class;
 
+	/**
+	 * Retains the trigger tracking configuration used for each domain
+     **/
+	private static Map<Type, fflib_SObjectDomain.TriggerEvent> triggerEventByClass;
+
+	/**
+	 * Retain instance of Trigger Action classes implementing stateful
+	 */
+	@TestVisible
+	private static Map<Type, fflib_ITriggerAction> triggerActionStateByClass;
+
+	static
+	{
+		triggerEventByClass = new Map<Type, fflib_SObjectDomain.TriggerEvent>();
+	}
+
 	@TestVisible
 	protected System.Type triggerContextType
 	{
@@ -49,12 +65,6 @@ public virtual with sharing class fflib_TriggerHandler
 	protected fflib_ITriggerContext triggerContext;
 
 	/**
-	 * Retain instance of Trigger Action classes implementing stateful
-	 */
-	@TestVisible
-	private static Map<Type, fflib_ITriggerAction> triggerActionStateByClass;
-
-	/**
 	 * Provides access to the trigger action configurations and allowing it to be mocked in unit-tests
 	 */
 	@TestVisible
@@ -68,6 +78,16 @@ public virtual with sharing class fflib_TriggerHandler
 		loadConfiguration();
 		fflib_ITriggerContext ctx = getTriggerContext();
 		execute(ctx);
+	}
+
+	public static fflib_SObjectDomain.TriggerEvent getTriggerEvent(Type triggerActionClass)
+	{
+		if(!triggerEventByClass.containsKey(triggerActionClass))
+		{
+			triggerEventByClass.put(triggerActionClass, new fflib_SObjectDomain.TriggerEvent());
+		}
+
+		return triggerEventByClass.get(triggerActionClass);
 	}
 
 	/**
@@ -109,7 +129,11 @@ public virtual with sharing class fflib_TriggerHandler
 		{
 			if (isValidExecutionContext(ctx, triggerActionConfig) == false
 					||
-					isValidSObjectType(triggerActionConfig, ctx) == false) continue;
+					isValidSObjectType(triggerActionConfig, ctx) == false
+					||
+					!getTriggerEvent(triggerActionConfig.getImplementationType())
+							.isEnabled(ctx.isBefore(), ctx.isAfter(), ctx.isInsert(), ctx.isUpdate(), ctx.isDelete(), ctx.isUndelete()))
+				continue;
 
 			fflib_ITriggerAction triggerAction = getTriggerActionInstance(triggerActionConfig);
 
