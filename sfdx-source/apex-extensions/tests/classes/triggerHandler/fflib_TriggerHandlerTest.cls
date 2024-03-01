@@ -256,7 +256,6 @@ private class fflib_TriggerHandlerTest
 	private static void itShouldUseTheStatefulTriggerActionClass()
 	{
 		fflib_LogEntry__c record = new fflib_LogEntry__c(LogLevel__c = 'INFO', Message__c = 'Unit Test');
-		List<fflib_LogEntry__c> records = new List<fflib_LogEntry__c> {record};
 
 		fflib_ApexMocks mocks = new fflib_ApexMocks();
 		fflib_ITriggerAction triggerActionMock = (fflib_ITriggerAction) mocks.mock(fflib_ITriggerAction.class);
@@ -296,6 +295,42 @@ private class fflib_TriggerHandlerTest
 		((fflib_ITriggerAction)	mocks.verify(triggerActionMock)).doWork();
 	}
 
+	@IsTest
+	private static void itShouldNotExecuteBeforeDelete()
+	{
+		fflib_LogEntry__c record = new fflib_LogEntry__c(LogLevel__c = 'INFO', Message__c = 'Unit Test');
+
+		fflib_TriggerHandler.triggerActionStateByClass =
+				new Map<Type, fflib_ITriggerAction>{ MyTriggerBypassedAction.class => new MyTriggerBypassedAction() };
+
+		fflib_TriggerAction__mdt triggerAction = new fflib_TriggerAction__mdt(
+				ObjectType__c = null,
+				ObjectTypeAlternate__c = Schema.fflib_LogEntry__c.SObjectType.getDescribe().getName(),
+				BeforeDelete__c = true,
+				ImplementationType__c = 'fflib_TriggerHandlerTest.MyTriggerBypassedAction',
+				ExecutionContext__c = 'Realtime',
+				Stateful__c = true
+		);
+
+		fflib_TriggerHandler triggerHandler = new fflib_TriggerHandler();
+		String ctxClassName = triggerHandler.triggerContextType.getName() + '.Constructor';
+		fflib_TriggerContext ctx =
+				(fflib_TriggerContext)
+						((fflib_IDomainConstructor) Type.forName(ctxClassName).newInstance())
+								.construct(new List<fflib_LogEntry__c> {record});
+		ctx.triggerOperation = System.TriggerOperation.BEFORE_DELETE;
+
+		// WHEN a record is inserted
+		System.Test.startTest();
+		triggerHandler.addTriggerActionConfig(triggerAction);
+
+		// Setting bypass & run trigger
+		fflib_TriggerHandler.getTriggerEvent(MyTriggerBypassedAction.class).disableAll();
+		triggerHandler.setTriggerContext(ctx).run();
+
+		System.Test.stopTest();
+	}
+
 	public class MyTriggerAction extends fflib_TriggerAction // Todo - rename handler to action
 	{
 		public override void onBeforeInsert()
@@ -303,6 +338,14 @@ private class fflib_TriggerHandlerTest
 			fflib_TriggerHandlerTest.handlerGotInvoked = true;
 
 			List<SObject> records = triggerContext.getRecords();
+		}
+	}
+
+	public class MyTriggerBypassedAction extends fflib_TriggerAction
+	{
+		public override void onBeforeDelete()
+		{
+			System.Assert.fail('It should not have reach this point');
 		}
 	}
 }
