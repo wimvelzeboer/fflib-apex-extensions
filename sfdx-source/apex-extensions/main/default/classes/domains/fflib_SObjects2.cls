@@ -627,6 +627,37 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Get a map with the values of an Id field by a String field with a one to many relation
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Id field to use as the Value of the Map
+	 * @param keyField The String field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Accounts accounts = Accounts.newInstance(records);
+	 * Map<String, Set<Id>> accountIdsByCountry = accounts.getIdFieldsByStringField(Account.BillingCountry, Account.Id);
+	 */
+	@TestVisible
+	protected virtual Map<String, Set<Id>> getIdFieldsByStringField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<String, Set<Id>> result = new Map<String, Set<Id>>();
+		for (SObject record : getRecords())
+		{
+			String keyFieldString = String.valueOf(record.get(keyField));
+			if (keyFieldString == null) continue;
+
+			if (!result.containsKey(keyFieldString))
+			{
+				result.put(keyFieldString, new Set<Id>());
+			}
+			result.get(keyFieldString).add((Id) record.get(valueField));
+		}
+		return result;
+	}
+
+	/**
 	 * @param sObjectField The Schema.SObjectField to get their Id values
 	 * @param criteria The criteria condition that must be met to include the value in the return
 	 *

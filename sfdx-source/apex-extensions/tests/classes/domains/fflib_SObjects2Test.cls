@@ -105,6 +105,7 @@ private class fflib_SObjects2Test
 		domain.getFieldsByField(Account.Id, Account.AnnualRevenue);
 		domain.getFieldByField(Account.Id, Account.Id);
 		domain.getIdFieldsByIdField(Account.Id, Account.Id);
+		domain.getIdFieldsByStringField(Account.Name, Account.Id);
 		domain.getIdFieldValues(Account.Id);
 		domain.getIdFieldValues(Account.Id, criteria);
 		domain.getDecimalFieldValues(Account.BillingLatitude, criteria);
@@ -116,6 +117,7 @@ private class fflib_SObjects2Test
 		domain.getSObjectsByStringField(Account.Name);
 		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
 		domain.getStringFieldValues(Account.Name, criteria);
+		domain.stri
 
 		// todo - add assertions
 	}
