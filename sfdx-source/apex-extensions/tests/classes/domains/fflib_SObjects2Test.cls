@@ -105,7 +105,7 @@ private class fflib_SObjects2Test
 		domain.getFieldsByField(Account.Id, Account.AnnualRevenue);
 		domain.getFieldByField(Account.Id, Account.Id);
 		domain.getIdFieldsByIdField(Account.Id, Account.Id);
-		domain.getIdFieldsByStringField(Account.Name, Account.Id);
+		domain.getIdFieldsByStringField(Account.Id, Account.Name);
 		domain.getIdFieldValues(Account.Id);
 		domain.getIdFieldValues(Account.Id, criteria);
 		domain.getDecimalFieldValues(Account.BillingLatitude, criteria);
@@ -117,8 +117,16 @@ private class fflib_SObjects2Test
 		domain.getSObjectsByStringField(Account.Name);
 		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
 		domain.getStringFieldValues(Account.Name, criteria);
-		domain.stri
-
+		domain.stripInaccessibleFields();
+		domain.getDateFieldValues(Account.CreatedDate);
+		domain.getDateFieldValues(Account.CreatedDate, criteria);
+		domain.getIdFieldValues(Account.Id, criteria);
+		domain.getRecords(Account.Id, domain.getFirstSObject().Id);
+		domain.getRecords(Account.Name, 'A');
+		domain.getRecordsIsNot(Account.Name, 'A');
+		domain.getRecordsIsNot(Account.Id, domain.getFirstSObject().Id);
+		domain.getSObjectByIdField(Account.Id);
+		domain.getIdFieldValues(Account.Id, true);
 		// todo - add assertions
 	}
 
@@ -461,7 +469,6 @@ private class fflib_SObjects2Test
 				'The domain should return all the record Ids'
 		);
 	}
-
 
 	@IsTest
 	static void itShouldReturnRecordsIds()
