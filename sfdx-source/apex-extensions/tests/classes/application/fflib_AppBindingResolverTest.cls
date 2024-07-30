@@ -5,14 +5,14 @@ private class fflib_AppBindingResolverTest
 	static void testWithEmptyRouter()
 	{
 		fflib_IAppBindingResolver resolver = fflib_AppBindingResolver.newInstance();
-		System.Assert.areEqual(0, resolver.resolve().size());
+		System.Assert.areEqual([SELECT COUNT() FROM fflib_AppBinding__mdt], resolver.resolve().size());
 	}
 
 
 	@IsTest
 	static void testWithCustomRouter(){
 		fflib_IAppBindingResolver resolver = new fflib_AppBindingResolver(new CustomRouter());
-		System.Assert.areEqual(0, resolver.resolve().size());
+		System.Assert.areEqual([SELECT COUNT() FROM fflib_AppBinding__mdt], resolver.resolve().size());
 	}
 
 	private class CustomRouter implements fflib_IAppBindingRouter
