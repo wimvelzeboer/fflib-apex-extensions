@@ -15,17 +15,27 @@ public virtual class fflib_Tokenizer
 
 			//--------------------------------------------------------------
 			// Symbols, delimiters:
+			Pattern.compile('^\\.') => fflib_TokenKind.DOT,
 			Pattern.compile('^,') => fflib_TokenKind.COMMA,
 			Pattern.compile('^;') => fflib_TokenKind.SEMICOLON,
+			Pattern.compile('^\\{') => fflib_TokenKind.CURLY_BRACKET_OPEN,
+			Pattern.compile('^\\}') => fflib_TokenKind.CURLY_BRACKET_CLOSE,
 			Pattern.compile('^\\(') => fflib_TokenKind.PARENTHESES_OPEN,
 			Pattern.compile('^\\)') => fflib_TokenKind.PARENTHESES_CLOSE,
 
 			//--------------------------------------------------------------
 			// Keywords
-			Pattern.compile('^\\blet\\b') => fflib_TokenKind.VARIABLE,
-			Pattern.compile('^\\btrue\\b') => fflib_TokenKind.TRUEx,
-			Pattern.compile('^\\bfalse\\b') => fflib_TokenKind.FALSEx,
-			Pattern.compile('^\\bnull\\b') => fflib_TokenKind.NULLx,
+			Pattern.compile('^(?i)\\belse\\b') => fflib_TokenKind.ELSEx,
+			Pattern.compile('^(?i)\\bif\\b') => fflib_TokenKind.IFx,
+			Pattern.compile('^(?i)\\bfalse\\b') => fflib_TokenKind.FALSEx,
+			Pattern.compile('^(?i)\\blet\\b') => fflib_TokenKind.VARIABLE,
+			Pattern.compile('^(?i)\\bnull\\b') => fflib_TokenKind.NULLx,
+			Pattern.compile('^(?i)\\btrue\\b') => fflib_TokenKind.TRUEx,
+			Pattern.compile('^(?i)\\band\\b') => fflib_TokenKind.LOGICAL_AND,
+			Pattern.compile('^(?i)\\bor\\b') => fflib_TokenKind.LOGICAL_OR,
+			Pattern.compile('^(?i)\\bdo\\b') => fflib_TokenKind.DOx,
+			Pattern.compile('^(?i)\\bfor\\b') => fflib_TokenKind.FORx,
+			Pattern.compile('^(?i)\\bwhile\\b') => fflib_TokenKind.WHILEx,
 
 			//--------------------------------------------------------------
 			// Numbers:
@@ -37,7 +47,11 @@ public virtual class fflib_Tokenizer
 
 			//--------------------------------------------------------------
 			// Identifiers:
-			Pattern.compile('^\\w+(\\.\\w+)*') => fflib_TokenKind.IDENTIFIER,
+//			Pattern.compile('^\\w+(\\.\\w+)*') => fflib_TokenKind.IDENTIFIER,
+
+			//--------------------------------------------------------------
+			// Equality operators: ==. !=
+			Pattern.compile('^[=!]=') => fflib_TokenKind.EQUALITY_OPERATOR,
 
 			//--------------------------------------------------------------
 			// Assignment operator: =, *=, /=, +=, -=
@@ -46,9 +60,18 @@ public virtual class fflib_Tokenizer
 
 			//--------------------------------------------------------------
 			// Math operators: +, -, *, /
-
 			Pattern.compile('^[+\\-]') => fflib_TokenKind.ADDITIVE_OPERATOR,
 			Pattern.compile('^[*\\/]') => fflib_TokenKind.MULTIPLICATIVE_OPERATOR,
+
+			//--------------------------------------------------------------
+			// Relational operators: >, >=, <, <=
+			Pattern.compile('^[><]=?') => fflib_TokenKind.RELATIONAL_OPERATOR,
+
+			//--------------------------------------------------------------
+			// Logical operators: &&, ||
+			Pattern.compile('^&&') => fflib_TokenKind.LOGICAL_AND,
+			Pattern.compile('^\\|\\|') => fflib_TokenKind.LOGICAL_OR,
+			Pattern.compile('^!') => fflib_TokenKind.LOGICAL_NOT,
 
 			//--------------------------------------------------------------
 			// Strings:

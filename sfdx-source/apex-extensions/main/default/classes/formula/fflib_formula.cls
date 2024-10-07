@@ -29,22 +29,22 @@
  */
 public virtual class fflib_formula
 {
-	protected List<SObject> records;
 	protected String formula;
 	protected Object result;
+	protected Map<String, Object> vars;
 
 
 //	Pattern.compile('^SUM');
 
 	public fflib_formula(String formula)
 	{
-		this.records = new List<SObject>();
+		this.vars = new Map<String, Object>();
 		this.formula = formula;
 	}
 
-	public fflib_formula(List<SObject> records, String formula)
+	public fflib_formula(String formula, Map<String, Object> vars)
 	{
-		this.records = records;
+		this.vars = vars;
 		this.formula = formula;
 	}
 
@@ -61,8 +61,7 @@ public virtual class fflib_formula
 				.run();
 		System.debug(JSON.serializePretty(ast));
 
-		this.result = new fflib_Compiler(
-				ast)
+		this.result = new fflib_Compiler(ast, this.vars)
 				.run();
 
 		return this;
@@ -98,6 +97,9 @@ public virtual class fflib_formula
 		return String.valueOf(this.result);
 	}
 
+	public interface IObject {
+		Map<String,Object> getPopulatedFieldsAsMap();
+	}
 
 	public class SyntaxException extends Exception
 	{

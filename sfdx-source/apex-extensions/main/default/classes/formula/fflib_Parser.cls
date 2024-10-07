@@ -19,6 +19,12 @@ public virtual class fflib_Parser
 			fflib_TokenKind.SIMPLE_ASSIGNMENT
 	};
 
+	private static Set<fflib_TokenKind> UNARY_OPERATORS = new Set<fflib_TokenKind>
+	{
+			fflib_TokenKind.ADDITIVE_OPERATOR,
+			fflib_TokenKind.LOGICAL_NOT
+	};
+
 	public fflib_Parser(String codeBlock)
 	{
 		this.codeBlock = codeBlock;
@@ -40,6 +46,7 @@ public virtual class fflib_Parser
 
 	protected fflib_Tokenizer.Token eat(fflib_TokenKind tokenKind)
 	{
+		System.debug(' eating ' + tokenKind);
 		if (this.lookahead == null)
 			throw new SyntaxException('Unexpected end of input, expected: "' + tokenKind.name() + '"');
 
@@ -118,7 +125,7 @@ public virtual class fflib_Parser
 	 */
 	protected AST parseAssignmentExpression()
 	{
-		AST left = parseAdditiveExpression();
+		AST left = parseLogicalOrExpression();
 
 		if (ASSIGNMENT_OPERATORS.contains(this.lookahead.tokenKind) == false) return left;
 
@@ -140,10 +147,50 @@ public virtual class fflib_Parser
 				return eat(fflib_TokenKind.COMPLEX_ASSIGNMENT);
 	}
 
+	protected AST parseBlockStatement()
+	{
+		eat(fflib_TokenKind.CURLY_BRACKET_OPEN);
+		List<AST> body =
+				this.lookahead.tokenKind == fflib_TokenKind.CURLY_BRACKET_CLOSE
+				?
+						new List<AST>()
+						:
+						parseStatementList(fflib_TokenKind.CURLY_BRACKET_CLOSE);
+		eat(fflib_TokenKind.CURLY_BRACKET_CLOSE);
+
+		return new BlockStatement(body);
+	}
+
 	protected AST parseBoolean(Boolean value)
 	{
 		fflib_Tokenizer.Token token = eat(value ? fflib_TokenKind.TRUEx : fflib_TokenKind.FALSEx);
 		return new BooleanLiteral(token, value);
+	}
+
+	protected AST parseDoWhileStatement()
+	{
+		eat(fflib_TokenKind.DOx);
+		AST body = parseStatement();
+		eat(fflib_TokenKind.WHILEx);
+
+		eat(fflib_TokenKind.PARENTHESES_OPEN);
+		AST condition = parseExpression();
+		eat(fflib_TokenKind.PARENTHESES_CLOSE);
+
+		return new WhileStatement(condition, body, false);
+	}
+	protected AST parseEqualityExpression()
+	{
+		AST left = parseRelationalExpression();
+		while (this.lookahead != null && this.lookahead.tokenKind == fflib_TokenKind.EQUALITY_OPERATOR)
+		{
+			fflib_Tokenizer.Token operator = eat(fflib_TokenKind.EQUALITY_OPERATOR);
+
+			AST right = parseRelationalExpression();
+
+			left = new BinaryExpression(operator, left, right);
+		}
+		return left;
 	}
 
 	protected AST parseExpression()
@@ -160,22 +207,115 @@ public virtual class fflib_Parser
 
 	protected AST parseIdentifier()
 	{
-		return new IdentifierX(eat(fflib_TokenKind.IDENTIFIER).value);
+		fflib_Tokenizer.Token identifier = eat(fflib_TokenKind.IDENTIFIER);
+		IdentifierX relatedIdentifier;
+		if (this.lookahead.tokenKind == fflib_TokenKind.DOT)
+		{
+			eat(fflib_TokenKind.DOT);
+			relatedIdentifier = (IdentifierX) parseIdentifier();
+		}
+		return new IdentifierX(identifier.value, relatedIdentifier);
+	}
+
+	protected AST parseIfStatement()
+	{
+		eat(fflib_TokenKind.IFx);
+		eat(fflib_TokenKind.PARENTHESES_OPEN);
+		AST condition = parseLogicalOrExpression();
+		eat(fflib_TokenKind.PARENTHESES_CLOSE);
+		AST consequent = parseStatement();
+
+		AST alternate;
+		if (this.lookahead != null && this.lookahead.tokenKind == fflib_TokenKind.ELSEx)
+		{
+			eat(fflib_TokenKind.ELSEx);
+			alternate = parseStatement();
+		}
+
+		return new IfStatement(condition, consequent, alternate);
+	}
+
+	protected AST parseIterationStatement()
+	{
+		switch on this.lookahead.tokenKind
+		{
+			when WHILEx {
+				return parseWhileStatement();
+			}
+			when DOx {
+				return parseDoWhileStatement();
+			}
+			when FORx {
+				return parseForStatement();
+			}
+			when else {
+				throw new SyntaxException('Unknown Iteration statement');
+			}
+		}
+	}
+
+	protected AST parseForStatement()
+	{
+		eat(fflib_TokenKind.FORx);
+		eat(fflib_TokenKind.PARENTHESES_OPEN);
+
+		if (this.lookahead.tokenKind == fflib_TokenKind.VARIABLE) // for i interaction
+		{
+			AST init = parseVariableStatement();
+			AST condition = parseExpression();
+			eat(fflib_TokenKind.SEMICOLON);
+			AST updater = parseExpression();
+			eat(fflib_TokenKind.PARENTHESES_CLOSE);
+			AST body = parseStatement();
+
+			return new ForStatement(init, condition, updater, body);
+		}
+		else if (this.lookahead.tokenKind == fflib_TokenKind.IDENTIFIER) // for object iteration
+		{
+			return null;
+		}
+		else throw new SyntaxException('Invalid for loop');
 	}
 
 	protected AST parseLeftHandSideExpression()
 	{
-		return parseIdentifier();
+		return parsePrimaryExpression();
+	}
+
+	protected AST parseLogicalAndExpression()
+	{
+		AST left = parseEqualityExpression();
+
+		while (this.lookahead.tokenKind == fflib_TokenKind.LOGICAL_AND)
+		{
+			eat(fflib_TokenKind.LOGICAL_AND);
+			AST right = parseEqualityExpression();
+			left = new LogicalExpression(fflib_TokenKind.LOGICAL_AND, left, right);
+		}
+		return left;
+	}
+
+	protected AST parseLogicalOrExpression()
+	{
+		AST left = parseLogicalAndExpression();
+
+		while (this.lookahead.tokenKind == fflib_TokenKind.LOGICAL_OR)
+		{
+			eat(fflib_TokenKind.LOGICAL_OR);
+			AST right = parseLogicalAndExpression();
+			left = new LogicalExpression(fflib_TokenKind.LOGICAL_OR, left, right);
+		}
+		return left;
 	}
 
 	protected AST parseMultiplicativeExpression()
 	{
-		AST left = parsePrimaryExpression();
+		AST left = parseUnaryExpression();
 		while (this.lookahead != null && this.lookahead.tokenKind == fflib_TokenKind.MULTIPLICATIVE_OPERATOR)
 		{
 			fflib_Tokenizer.Token operator = eat(fflib_TokenKind.MULTIPLICATIVE_OPERATOR);
 
-			AST right = parsePrimaryExpression();
+			AST right = parseUnaryExpression();
 
 			left = new BinaryExpression(operator, left, right);
 		}
@@ -222,6 +362,10 @@ public virtual class fflib_Parser
 			{
 				return parseParenthesizedExpression();
 			}
+			when IDENTIFIER
+			{
+				return parseIdentifier();
+			}
 			when else
 			{
 				return parseLeftHandSideExpression();
@@ -245,6 +389,20 @@ public virtual class fflib_Parser
 		);
 	}
 
+	protected AST parseRelationalExpression()
+	{
+		AST left = parseAdditiveExpression();
+		while (this.lookahead != null && this.lookahead.tokenKind == fflib_TokenKind.RELATIONAL_OPERATOR)
+		{
+			fflib_Tokenizer.Token operator = eat(fflib_TokenKind.RELATIONAL_OPERATOR);
+
+			AST right = parseAdditiveExpression();
+
+			left = new BinaryExpression(operator, left, right);
+		}
+		return left;
+	}
+
 	/**
 	 * Statement
 	 *  : ExpressionStatement
@@ -252,6 +410,7 @@ public virtual class fflib_Parser
 	 *  | EmptyStatement
 	 *  | VariableStatement
 	 *  | IfStatement
+	 *  | IterationStatement
 	 *  ;
 	 *
 	 * @return
@@ -260,6 +419,14 @@ public virtual class fflib_Parser
 	{
 		switch on this.lookahead.tokenKind
 		{
+			when CURLY_BRACKET_OPEN
+			{
+				return parseBlockStatement();
+			}
+			when IFx
+			{
+				return parseIfStatement();
+			}
 			when SEMICOLON
 			{
 				return new EmptyStatement();
@@ -267,7 +434,10 @@ public virtual class fflib_Parser
 			when VARIABLE
 			{
 				return parseVariableStatement();
-
+			}
+			when DOx, FORx, WHILEx
+			{
+				return parseIterationStatement();
 			}
 			when else
 			{
@@ -304,6 +474,17 @@ public virtual class fflib_Parser
 	{
 		fflib_Tokenizer.Token token = eat(fflib_TokenKind.STRINGx);
 		return new StringLiteral(token);
+	}
+
+	protected AST parseUnaryExpression()
+	{
+		if (UNARY_OPERATORS.contains(this.lookahead.tokenKind))
+		{
+			fflib_Tokenizer.Token operator = eat(this.lookahead.tokenKind);
+			return new UnaryExpression(operator, parseUnaryExpression());
+		}
+
+		return parseLeftHandSideExpression();
 	}
 
 	protected AST parseVariableStatement()
@@ -347,6 +528,17 @@ public virtual class fflib_Parser
 		return result;
 	}
 
+	protected AST parseWhileStatement()
+	{
+		eat(fflib_TokenKind.WHILEx);
+		eat(fflib_TokenKind.PARENTHESES_OPEN);
+		AST condition = parseExpression();
+		eat(fflib_TokenKind.PARENTHESES_CLOSE);
+
+		AST body = parseStatement();
+		return new WhileStatement(condition, body, true);
+	}
+
 
 	public abstract class AST
 	{
@@ -388,6 +580,17 @@ public virtual class fflib_Parser
 		}
 	}
 
+	public class BlockStatement extends AST
+	{
+		public List<AST> body;
+
+		public BlockStatement(List<AST> body)
+		{
+			this.tokenKind = fflib_TokenKind.BLOCK_STATEMENT;
+			this.body = body;
+		}
+	}
+
 	public class BooleanLiteral extends AST
 	{
 		public Boolean value;
@@ -421,11 +624,61 @@ public virtual class fflib_Parser
 	public class IdentifierX extends AST
 	{
 		public String name;
+		public IdentifierX relatedIdentifier;
 
-		public IdentifierX(String name)
+		public IdentifierX(String name, IdentifierX relatedIdentifier)
 		{
 			this.tokenKind = fflib_TokenKind.IDENTIFIER;
+			this.relatedIdentifier = relatedIdentifier;
 			this.name = name;
+		}
+	}
+
+	public class IfStatement extends AST
+	{
+		public AST alternate;
+		public AST condition;
+		public AST consequent;
+
+		public IfStatement(AST condition, AST consequent, AST alternate)
+		{
+			this.tokenKind = fflib_TokenKind.IF_STATEMENT;
+			this.alternate = alternate;
+			this.condition = condition;
+			this.consequent = consequent;
+		}
+	}
+
+	public class ForStatement extends AST
+	{
+		public AST init;
+		public AST condition;
+		public AST updater;
+		public AST body;
+
+		public ForStatement(AST init, AST condition, AST updater, AST body)
+		{
+			this.tokenKind = fflib_TokenKind.FOR_STATEMENT;
+			this.condition = condition;
+			this.init = init;
+			this.updater = updater;
+			this.body = body;
+		}
+	}
+
+	public class LogicalExpression extends AST
+	{
+		public AST left;
+		public AST right;
+		public fflib_TokenKind operator;
+
+		public LogicalExpression(fflib_TokenKind operator, AST left, AST right)
+		{
+			this.tokenKind = fflib_TokenKind.LOGICAL_EXPRESSION;
+			this.operator = operator;
+			this.left = left;
+			this.right = right;
+
 		}
 	}
 
@@ -482,6 +735,21 @@ public virtual class fflib_Parser
 		}
 	}
 
+	public class UnaryExpression extends AST
+	{
+		public String operator;
+		public fflib_TokenKind operatorKind;
+		public AST argument;
+
+		public UnaryExpression(fflib_Tokenizer.Token operator, AST argument)
+		{
+			this.tokenKind = fflib_TokenKind.UNARY_EXPRESSION;
+			this.operator = operator.value;
+			this.operatorKind = operator.tokenKind;
+			this.argument = argument;
+		}
+	}
+
 	public class VariableDeclaration extends AST
 	{
 		public IdentifierX identifier;
@@ -504,7 +772,21 @@ public virtual class fflib_Parser
 		}
 	}
 
-	public class SyntaxException extends Exception
+	public class WhileStatement extends AST
 	{
+		public Boolean testConditionFirst; // TRUE for while and FALSE for do-while loops
+		public AST condition;
+		public AST body;
+
+		public WhileStatement(AST condition, AST body, Boolean testConditionFirst)
+		{
+			this.tokenKind = fflib_TokenKind.WHILE_STATEMENT;
+			this.condition = condition;
+			this.body = body;
+			this.testConditionFirst = testConditionFirst;
+		}
+	}
+
+	public class SyntaxException extends Exception {
 	}
 }
