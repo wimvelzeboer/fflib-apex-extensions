@@ -53,7 +53,7 @@ private class fflib_FormulaTest
 	static void testAssignmentExpression()
 	{
 		System.Test.startTest();
-		Double result = new fflib_formula('let x, y = 42;\nx;')
+		Double result = new fflib_formula('//Simple assignment\nlet x, y = 42;\nx;')
 				.evaluate()
 				.toInteger();
 		System.Test.stopTest();
@@ -65,7 +65,7 @@ private class fflib_FormulaTest
 	static void testAssignmentExpression_additive()
 	{
 		System.Test.startTest();
-		Integer result = new fflib_formula('let x = 1; x += 1;')
+		Integer result = new fflib_formula('/*Additive\nTest\n*/\nlet x = 1; x += 1;')
 				.evaluate()
 				.toInteger();
 		System.Test.stopTest();
@@ -394,13 +394,49 @@ private class fflib_FormulaTest
 	@IsTest
 	static void testForObjectLoop()
 	{
+		// GIVEN an account with related contact records
+		Contact contactA = new Contact(LastName = 'Smith', HasOptedOutOfEmail = true);
+		Contact contactB = new Contact(LastName = 'Jane',  HasOptedOutOfEmail = true);
+		Contact contactC = new Contact(LastName = 'John', HasOptedOutOfEmail = false);
+		Account account = new Account(
+				Id = fflib_IDGenerator.generate(Schema.Account.SObjectType));
+
+		List<Account> accountsWithContacts = (List<Account>) fflib_ApexMocksUtils.makeRelationship(
+				List<Account>.class,
+				new List<Account> {account},
+				Contact.AccountId,
+				new List<List<Contact>>
+				{
+						new List<Contact> {
+								contactA, contactB, contactC,
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false),
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false),
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false),
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false),
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false),
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false),
+								new Contact(LastName = 'John', HasOptedOutOfEmail = false)
+						}
+				}
+		);
+
+		// WHEN we run the formula
 		System.Test.startTest();
-		Integer result = new fflib_formula('let x = 0; for (let i =0; i < 10; i++) { x += i; }')
+		Integer result = new fflib_formula(
+				'let x = 0;' +
+						'for (contact : Account.Contacts) {' +
+						'   if (contact.HasOptedOutOfEmail) { x += 1; }' +
+						'}' +
+						'x;',
+				new Map<String, Object>
+				{
+						'Account' => accountsWithContacts.get(0)
+				})
 		    .evaluate()
 		    .toInteger();
 		System.Test.stopTest();
 
-		System.Assert.areEqual(10, result);
+		System.Assert.areEqual(2, result);
 	}
 
 	@IsTest

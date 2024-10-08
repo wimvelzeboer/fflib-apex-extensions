@@ -18,6 +18,7 @@ public virtual class fflib_Tokenizer
 			Pattern.compile('^\\.') => fflib_TokenKind.DOT,
 			Pattern.compile('^,') => fflib_TokenKind.COMMA,
 			Pattern.compile('^;') => fflib_TokenKind.SEMICOLON,
+			Pattern.compile('^:') => fflib_TokenKind.COLON,
 			Pattern.compile('^\\{') => fflib_TokenKind.CURLY_BRACKET_OPEN,
 			Pattern.compile('^\\}') => fflib_TokenKind.CURLY_BRACKET_CLOSE,
 			Pattern.compile('^\\(') => fflib_TokenKind.PARENTHESES_OPEN,
@@ -81,16 +82,15 @@ public virtual class fflib_Tokenizer
 
 	protected String input;
 	protected Integer pointer;
+	protected Integer line;
+	protected Integer position;
 
 	public fflib_Tokenizer(String input)
 	{
 		this.input = input;
 		this.pointer = 0;
-	}
-
-	public Boolean isEOF()
-	{
-		return this.pointer == this.input.length();
+		this.line = 1;
+		this.position = 0;
 	}
 
 	public Boolean hasMoreTokens()
@@ -114,15 +114,33 @@ public virtual class fflib_Tokenizer
 
 			fflib_TokenKind tokenKind = specifications.get(pattern);
 
+
 			// Should skip token, e.g. whitespaces or comments
 			if (tokenKind == null) {
+				advancePosition(tokenValue);
 				return getNextToken();
 			}
 
-			return new Token(tokenKind, tokenValue);
+			Token result = new Token(tokenKind, tokenValue, this.line, this.position);
+			advancePosition(tokenValue);
+			return result;
 		}
 
-		throw new SyntaxException('Unexpected token at: "' + codeBlock.left(10) + '"');
+		throw newSyntaxException('Unexpected token at: "' + codeBlock.left(10) + '"');
+	}
+
+	private void advancePosition(String tokenValue)
+	{
+		Integer newLineCharacters = tokenValue.countMatches('\n');
+		if (newLineCharacters > 0)
+		{
+			this.line += newLineCharacters;
+			this.position = 0;
+		}
+		else
+		{
+			this.position += tokenValue.length();
+		}
 	}
 
 	protected String match(Pattern pattern, String codeBlock)
@@ -137,18 +155,35 @@ public virtual class fflib_Tokenizer
 		return null;
 	}
 
+	protected SyntaxException newSyntaxException(String message)
+	{
+		return new SyntaxException(
+		String.format(
+				'{2} ({0}:{1})',
+				new List<String>
+				{
+						String.valueOf(this.line),
+						String.valueOf(this.position),
+						message
+				}));
+	}
+
 	public class Token
 	{
 		public fflib_TokenKind tokenKind;
 		public String value;
+		public Integer line;
+		public Integer position;
 
-		public Token(fflib_TokenKind tokenKind, String value)
+		public Token(fflib_TokenKind tokenKind, String value, Integer line, Integer position)
 		{
-			System.debug('New Token: ' + tokenKind + ' ' + value);
+			System.debug('New Token: ' + line + ':' + position + ' ' + tokenKind + ' ' + value);
 			this.tokenKind = tokenKind;
 			this.value = value;
+			this.line = line;
+			this.position = position;
 		}
 	}
 
-    public class SyntaxException extends Exception {}
+    public class SyntaxException extends Exception{ }
 }

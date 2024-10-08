@@ -76,7 +76,10 @@ public virtual class fflib_Compiler
 			{
 				return compileForStatement((fflib_Parser.ForStatement) ast);
 			}
-
+			when FOR_OBJECT_STATEMENT
+			{
+				return compileForObjectStatement((fflib_Parser.ForObjectStatement) ast);
+			}
 			when LOGICAL_EXPRESSION
 			{
 				return compileLogicalExpression((fflib_Parser.LogicalExpression) ast);
@@ -123,6 +126,32 @@ public virtual class fflib_Compiler
 		}
 
 		throw new SyntaxException('Unexpected token: "' + ast.getTokenKind().name() + '"');
+	}
+
+	protected Object compileForObjectStatement(fflib_Parser.ForObjectStatement statement)
+	{
+		addScopeDepth();
+		compile(statement.variable);
+		String variableName = statement.variable.identifier.name;
+
+		Object variableValue = fetchVariable(variableName);
+
+		if ((variableValue instanceof List<SObject>) == false)
+			throw new SyntaxException('Require an iterable value for a FOR loop');
+
+		Object result;
+		for (SObject record : (List<SObject>) variableValue)
+		{
+			addScopeDepth(new Map<String, Object>
+			{
+					variableName => record.getPopulatedFieldsAsMap()
+			});
+			result = compile(statement.body);
+
+			dropScope();
+		}
+		dropScope();
+		return result;
 	}
 
 	protected Object compileForStatement(fflib_Parser.ForStatement statement)
@@ -422,8 +451,17 @@ public virtual class fflib_Compiler
 
 		Map<String, Object> fieldsMap;
 
-		if (obj instanceof fflib_formula.IObject) fieldsMap = ((fflib_formula.IObject) obj).getPopulatedFieldsAsMap();
-		else if (obj instanceof SObject) fieldsMap = ((SObject) obj).getPopulatedFieldsAsMap();
+		if (obj instanceof fflib_formula.IObject)
+		{
+			fieldsMap = ((fflib_formula.IObject) obj).getPopulatedFieldsAsMap();
+		}
+		else if (obj instanceof SObject)
+		{
+			fieldsMap = ((SObject) obj).getPopulatedFieldsAsMap();
+		}
+		else if (obj instanceof Map<String,Object>) {
+			fieldsMap = (Map<String, Object>) obj;
+		}
 		else throw new SyntaxException('Identifier related fields can only use SObjects or instance of fflib_formula.IObject');
 
 		addScopeDepth(fieldsMap);
