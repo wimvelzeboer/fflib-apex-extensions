@@ -7,5 +7,5 @@ rm -Rf fflib-apex-common/
 git clone https://github.com/apex-enterprise-patterns/fflib-apex-mocks.git
 git clone https://github.com/apex-enterprise-patterns/fflib-apex-common.git
 
-sfdx force:source:deploy -p ./fflib-apex-mocks/sfdx-source
-sfdx force:source:deploy -p ./fflib-apex-common/sfdx-source
+sfdx project deploy start -c --source-dir ./fflib-apex-mocks/sfdx-source
+sfdx project deploy start -c --source-dir ./fflib-apex-common/sfdx-source
