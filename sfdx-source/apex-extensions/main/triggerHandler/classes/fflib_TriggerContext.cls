@@ -95,6 +95,41 @@ public virtual inherited sharing class fflib_TriggerContext
 		return triggerOperation;
 	}
 
+	public Set<String> getChangedFields()
+	{
+		Set<String> result = new Set<String>();
+		for (SObject newRecord : getRecords())
+		{
+			Id recordId = (Id) newRecord.get('Id');
+			if (getExistingRecords() == null || !getExistingRecords().containsKey(recordId)) continue;
+
+			SObject oldRecord = getExistingRecords().get(recordId);
+			Map<String, Object> oldValuesByFieldName = oldRecord.getPopulatedFieldsAsMap();
+			Map<String, Object> newValuesByFieldName = newRecord.getPopulatedFieldsAsMap();
+			Set<String> fieldNames = new Set<String>();
+			fieldNames.addAll(oldValuesByFieldName.keySet());
+			fieldNames.addAll(newValuesByFieldName.keySet());
+			for (String fieldName : fieldNames)
+			{
+				if (oldValuesByFieldName.containsKey(fieldName) == false
+						&& newValuesByFieldName.containsKey(fieldName) == false) continue;
+
+				if ((oldValuesByFieldName.containsKey(fieldName) == false
+						&& newValuesByFieldName.containsKey(fieldName))
+						||
+						(oldValuesByFieldName.containsKey(fieldName)
+								&& newValuesByFieldName.containsKey(fieldName) == false)
+						||
+						(oldValuesByFieldName.get(fieldName) != newValuesByFieldName.get(fieldName))
+				)
+				{
+					result.add(fieldName);
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
      * Detects whether any values in context records have changed for given field as string
      * Returns list of SObject records that have changes in the specified fields

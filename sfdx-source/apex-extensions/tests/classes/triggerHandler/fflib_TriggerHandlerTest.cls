@@ -137,7 +137,40 @@ private class fflib_TriggerHandlerTest
 		// THEN it should only return the changed records
 		Map<Id, SObject> resultMap = new Map<Id, SObject>(result);
 		System.Assert.areEqual(1, result.size());
-		System.Assert.istrue(resultMap.containsKey(idLuke));
+		System.Assert.isTrue(resultMap.containsKey(idLuke));
+	}
+
+	@IsTest
+	private static void itShouldReturnTheChangedFields()
+	{
+		// GIVEN a domain with old and changed records
+
+		Id idLuke = fflib_IDGenerator.generate(Account.SObjectType);
+		Id idHan = fflib_IDGenerator.generate(Account.SObjectType);
+		Id idLeia = fflib_IDGenerator.generate(Account.SObjectType);
+		List<Account> oldRecords = new List<Account>
+		{
+				new Account(Id = idLuke, Name = 'Luke', Description = 'Jedi'),
+				new Account(Id = idHan, Name = 'Han', Description = 'Pilot'),
+				new Account(Id = idLeia, Name = 'Leia')
+		};
+
+		List<Account> newRecords = oldRecords.deepClone(true, true, true);
+		newRecords.get(0).Name = 'Luke SkyWalker';
+		newRecords.get(0).Description = 'Jedi Master';
+		newRecords.get(1).Name = 'Han Solo';
+		newRecords.get(1).Description = null;
+
+		fflib_TriggerContext ctx = new fflib_TriggerContext(newRecords);
+		ctx.existingRecords = new Map<Id, SObject>(oldRecords);
+
+		// WHEN we create a domain with ExistingRecords and request the changed records
+		Set<String> result = ctx.getChangedFields();
+
+		// THEN it should only return the changed records
+		System.Assert.areEqual(2, result.size());
+		System.Assert.isTrue(result.contains('Name'));
+		System.Assert.isTrue(result.contains('Description'));
 	}
 
 	@IsTest
