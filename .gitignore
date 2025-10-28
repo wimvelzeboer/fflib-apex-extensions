@@ -53,3 +53,10 @@ temp/
 sfdx-source/apex-mocks
 sfdx-source/apex-common
 sfdx-source/apex-extensions-examples
+
+# Added by Illuminated Cloud
+/out/
+target/
+/.illuminatedCloud/
+**/tsconfig*.json
+**/*.tsbuildinfo
