@@ -793,6 +793,31 @@ public virtual class fflib_SObjects2
 		return result;
 	}
 
+	/**
+	 * Returns a list of records where the given field contains the provided value (String.contains)
+	 *
+	 * @param sObjectField The field to check
+	 * @param value The value the field must contain
+	 *
+	 * @return Returns a list of `SObjects` where the field contains the value
+	 */
+	@TestVisible
+	protected virtual List<SObject> getRecordsContaining(Schema.SObjectField sObjectField, String value)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			String fieldValue = (String) record.get(sObjectField);
+			if ((fieldValue == null && value == null)
+					||
+					(fieldValue != null && fieldValue.contains(value))
+			) {
+				result.add(record);
+			}
+		}
+		return result;
+	}
+
 	@TestVisible
 	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, String value)
 	{
