@@ -612,7 +612,7 @@ private class fflib_SObjects2Test
 	{
 		DomainAccounts domain = generateDomain();
 
-		System.Assert.istrue(
+		System.Assert.isTrue(
 				domain.getStringFieldValues(Schema.Account.ShippingCountry)
 						.containsAll(
 						new Set<String>
@@ -624,6 +624,16 @@ private class fflib_SObjects2Test
 						}
 				)
 		);
+	}
+
+	@IsTest
+	static void itShouldReturnRecordsContainingValue()
+	{
+		DomainAccounts domain = generateDomain();
+
+		List<SObject> records = domain.getRecordsContaining(Schema.Account.ShippingCountry, 'Ire');
+		System.Assert.areEqual(1, records.size());
+		System.Assert.areEqual('B', records.get(0).get('Name'));
 	}
 
 	@IsTest
