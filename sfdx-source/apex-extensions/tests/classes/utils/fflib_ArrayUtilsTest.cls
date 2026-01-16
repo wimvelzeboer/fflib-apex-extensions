@@ -267,6 +267,62 @@ private class fflib_ArrayUtilsTest
     }
 
     @IsTest
+    static void itShouldReplaceValueInTheMap_decimal()
+    {
+        Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+        Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+        Map<Id, Id> source = new Map<Id, Id>
+        {
+                accountIdA => contactIdA,
+                accountIdB => contactIdB,
+                accountIdC => fflib_IDGenerator.generate(Schema.Contact.SObjectType)
+        };
+        Map<Id, Decimal> replacement = new Map<Id, Decimal>
+        {
+                contactIdA => 10,
+                contactIdB => 20
+        };
+
+        Map<Id, Decimal> result = fflib_ArrayUtils.replaceValue(source, replacement);
+
+        System.Assert.areEqual(3, result.size());
+        System.Assert.areEqual(accountIdB, 10);
+        System.Assert.areEqual(accountIdA, 20);
+        System.Assert.isNull(result.get(accountIdC));
+    }
+
+    @IsTest
+    static void itShouldReplaceValueInTheMap_string()
+    {
+        Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+        Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+        Map<Id, Id> source = new Map<Id, Id>
+        {
+                accountIdA => contactIdA,
+                accountIdB => contactIdB,
+                accountIdC => fflib_IDGenerator.generate(Schema.Contact.SObjectType)
+        };
+        Map<Id, String> replacement = new Map<Id, String>
+        {
+                contactIdA => 'First',
+                contactIdB => 'Second'
+        };
+
+        Map<Id, String> result = fflib_ArrayUtils.replaceValue(source, replacement);
+
+        System.Assert.areEqual(3, result.size());
+        System.Assert.areEqual(accountIdB, 'First');
+        System.Assert.areEqual(accountIdA, 'Second');
+        System.Assert.isNull(result.get(accountIdC));
+    }
+
+    @IsTest
     static void itShouldReturnAllValuesForTheGivenIds()
     {
         // GIVEN a map with String by Ids
