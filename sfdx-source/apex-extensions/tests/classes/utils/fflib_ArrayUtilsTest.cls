@@ -282,15 +282,15 @@ private class fflib_ArrayUtilsTest
         };
         Map<Id, Decimal> replacement = new Map<Id, Decimal>
         {
-                contactIdA => 10,
-                contactIdB => 20
+                contactIdA => 10.0,
+                contactIdB => 20.0
         };
 
         Map<Id, Decimal> result = fflib_ArrayUtils.replaceValue(source, replacement);
 
         System.Assert.areEqual(3, result.size());
-        System.Assert.areEqual(accountIdB, 10);
-        System.Assert.areEqual(accountIdA, 20);
+        System.Assert.areEqual(10.0, result.get(accountIdA));
+        System.Assert.areEqual(20.0, result.get(accountIdB));
         System.Assert.isNull(result.get(accountIdC));
     }
 
@@ -317,8 +317,8 @@ private class fflib_ArrayUtilsTest
         Map<Id, String> result = fflib_ArrayUtils.replaceValue(source, replacement);
 
         System.Assert.areEqual(3, result.size());
-        System.Assert.areEqual(accountIdB, 'First');
-        System.Assert.areEqual(accountIdA, 'Second');
+        System.Assert.areEqual('First', result.get(accountIdA));
+        System.Assert.areEqual('Second', result.get(accountIdB));
         System.Assert.isNull(result.get(accountIdC));
     }
 
