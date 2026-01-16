@@ -75,15 +75,15 @@ private class fflib_SObjectFactoryTest
 	{
 		public List<Contact> generateById(Set<Id> ContactIds)
 		{
-			return (List<Contact>) generateSObjectById(ContactIds);
+			return generateSObjectById(ContactIds);
 		}
 
 		public List<Contact> generateByAccountId(Set<Id> ContactIds)
 		{
-			return (List<Contact>) generateSObjectByIdField(Schema.Contact.AccountId, ContactIds);
+			return generateSObjectByIdField(Schema.Contact.AccountId, ContactIds);
 		}
 
-		public SObjectType getSObjectType()
+		public override SObjectType getSObjectType()
 		{
 			return Schema.Contact.SObjectType;
 		}

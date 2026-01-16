@@ -53,5 +53,5 @@ public abstract inherited sharing class fflib_SObjectFactory implements fflib_IS
 		return result;
 	}
 
-	abstract Schema.SObjectType getSObjectType();
+	public abstract Schema.SObjectType getSObjectType();
 }

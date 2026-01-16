@@ -49,24 +49,22 @@ You can also have a look at the open items in the [project(s)](./projects), feel
 # Change Log
 Some of the changes that have major impact are listed here;
 
+### Updates 2026
+- **fflib_ArrayUtils**
+  _replaceValue_, Adds two method overloads for merging a source map of idById and replacement map of idByString or idByDecimal
+- **API Upgrades** 
+  Upgraded to API 65.0 
+
 ### Several updates during 2022
 
-
 - **fflib_MockSObjectUtil** 
-- 
-- 
-  - _SetFieldvalue_ method overload added to fflib_MockSObjectUtil. With this you can set mul
-- 
-- 
-- 
-  - tiple readonly fields. 
+  _SetFieldvalue_ method overload added to fflib_MockSObjectUtil. With this you can set multiple readonly fields. 
 - **fflib_Ids**
-  - _Join_ method added to simply join all Id values into a string, using a provided separator
+  _Join_ method added to simply join all Id values into a string, using a provided separator
 - **fflib_ArrayUtils**
-  - _replaceValue_, Takes two maps and replaces the value of the source with the value of the replacement, where the source value matches the replacement key.
-  
+  _replaceValue_, Takes two maps and replaces the value of the source with the value of the replacement, where the source value matches the replacement key.
 - **Minor bug fixes**
-  -  fflib_ClassicDomainFactory: Avoid unexpected exceptions when the recordIds contains incorrect data
+   fflib_ClassicDomainFactory: Avoid unexpected exceptions when the recordIds contains incorrect data
 
 ### October 2021
 - **Logger functionality** <br/>A replacement of System.Debug that is using Platform events to store log messages in a Custom Object for you to monitor
