@@ -231,6 +231,39 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Merge the given two maps, without modifying the source.
+	 * When duplicate values found, only TRUE values will be merged.
+	 * e.g.
+	 * 	mapA: 1 => true
+	 *  mapB: 1 => false
+	 *  result: 1 => true
+	 *
+	 * @param mapA Map<Id, Boolean>
+	 * @param mapB Map<Id, Boolean>
+	 *
+	 * @return Returns the merged map
+	 */
+	public static Map<Id, Boolean> mergeMaps(Map<Id, Boolean> mapA, Map<Id, Boolean> mapB)
+	{
+		Map<Id, Boolean> result = mapA.clone();
+		for (Id idValue : mapB.keySet())
+		{
+			if (result.containsKey(idValue))
+			{
+				if (mapB.get(idValue))
+				{
+					result.put(idValue, true);
+				}
+			}
+			else
+			{
+				result.put(idValue, mapB.get(idValue));
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Sorts the list with Datetime values and return the oldest value in the list
 	 *
 	 * @param input List of Datetime values
