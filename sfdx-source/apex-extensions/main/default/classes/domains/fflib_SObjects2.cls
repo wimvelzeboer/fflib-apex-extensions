@@ -68,6 +68,31 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Get a map with the given Boolean field value mapped to the given Id field
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The Boolean field to use as value for the map
+	 * @param keyField The Id field to use as key for the map
+	 *
+	 * @return a map with the given Boolean field value mapped to the given Id field
+	 *
+	 * @example
+	 * Account account = Account.newInstance(records);
+	 * Map<Id, Boolean> isDeletedById = account.getBooleanFieldByIdField(Account.IsDeleted, Account.Id);
+	 */
+	@TestVisible
+	protected virtual Map<Id, Boolean> getBooleanFieldByIdField(Schema.SObjectField valueField, Schema.SObjectField keyField)
+	{
+		Map<Id, Boolean> result = new Map<Id, Boolean>();
+		Map<Object, Object> fieldByField = getFieldByField(valueField, keyField);
+		for (Object obj : fieldByField.keySet())
+		{
+			result.put((Id) obj, (Boolean) fieldByField.get(obj));
+		}
+		return result;
+	}
+
+	/**
 	 * @param id Domain containing primary key (Id field) values
 	 *
 	 * @return Returns only the SObjects from the domain matching the given Ids.
