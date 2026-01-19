@@ -50,8 +50,9 @@ You can also have a look at the open items in the [project(s)](./projects), feel
 Some of the changes that have major impact are listed here;
 
 ### Updates 2026
-- **fflib_ArrayUtils**
-  _replaceValue_, Adds two method overloads for merging a source map of idById and replacement map of idByString or idByDecimal
+- **fflib_ArrayUtils** <br/>
+  _replaceValue_,<br/>Add three method overloads for merging a source map of idById and replacement map of idByString, idByDecimal or idByBoolean.</br>
+  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean,
 - **API Upgrades** 
   Upgraded to API 65.0 
 

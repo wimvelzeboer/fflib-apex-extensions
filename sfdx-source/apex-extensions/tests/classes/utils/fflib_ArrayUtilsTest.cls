@@ -147,28 +147,28 @@ private class fflib_ArrayUtilsTest
     static void testIsEmpty()
     {
         List<String> aNull = null;
-        System.Assert.istrue(fflib_ArrayUtils.isEmpty(aNull));
-        System.Assert.istrue(fflib_ArrayUtils.isEmpty(new List<String> {}));
-        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<String> {'a'}));
-        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<String> {'a', 'b'}));
-        System.Assert.istrue(fflib_ArrayUtils.isEmpty(new List<Integer> {}));
-        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<Integer> {1}));
-        System.Assert.isfalse(fflib_ArrayUtils.isEmpty(new List<Integer> {1, 2}));
+        System.Assert.isTrue(fflib_ArrayUtils.isEmpty(aNull));
+        System.Assert.isTrue(fflib_ArrayUtils.isEmpty(new List<String> {}));
+        System.Assert.isFalse(fflib_ArrayUtils.isEmpty(new List<String> {'a'}));
+        System.Assert.isFalse(fflib_ArrayUtils.isEmpty(new List<String> {'a', 'b'}));
+        System.Assert.isTrue(fflib_ArrayUtils.isEmpty(new List<Integer> {}));
+        System.Assert.isFalse(fflib_ArrayUtils.isEmpty(new List<Integer> {1}));
+        System.Assert.isFalse(fflib_ArrayUtils.isEmpty(new List<Integer> {1, 2}));
     }
 
     @IsTest
     static void testIsNotEmpty()
     {
         List<String> aNull = null;
-        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(aNull));
-        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(new List<String> {}));
-        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<String> {'a'}));
-        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<String> {'a', 'b'}));
-        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(new List<Integer> {}));
-        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<Integer> {1}));
-        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<Integer> {1, 2}));
-        System.Assert.isfalse(fflib_ArrayUtils.isNotEmpty(new List<Account> {}));
-        System.Assert.istrue(fflib_ArrayUtils.isNotEmpty(new List<Account> {new Account(Name = 'test')}));
+        System.Assert.isFalse(fflib_ArrayUtils.isNotEmpty(aNull));
+        System.Assert.isFalse(fflib_ArrayUtils.isNotEmpty(new List<String> {}));
+        System.Assert.isTrue(fflib_ArrayUtils.isNotEmpty(new List<String> {'a'}));
+        System.Assert.isTrue(fflib_ArrayUtils.isNotEmpty(new List<String> {'a', 'b'}));
+        System.Assert.isFalse(fflib_ArrayUtils.isNotEmpty(new List<Integer> {}));
+        System.Assert.isTrue(fflib_ArrayUtils.isNotEmpty(new List<Integer> {1}));
+        System.Assert.isTrue(fflib_ArrayUtils.isNotEmpty(new List<Integer> {1, 2}));
+        System.Assert.isFalse(fflib_ArrayUtils.isNotEmpty(new List<Account> {}));
+        System.Assert.isTrue(fflib_ArrayUtils.isNotEmpty(new List<Account> {new Account(Name = 'test')}));
     }
 
     @IsTest
@@ -368,7 +368,7 @@ private class fflib_ArrayUtilsTest
         Set<String> result = fflib_ArrayUtils.getAllValues(stringsByIds, new Set<Id> {accountIdA, accountIdB});
 
         // THEN we get the values of the provide sub-set Ids
-        System.Assert.istrue(result.containsAll(new Set<String> {'Account A', 'Account B'}));
+        System.Assert.isTrue(result.containsAll(new Set<String> {'Account A', 'Account B'}));
     }
 
     @IsTest
@@ -392,13 +392,44 @@ private class fflib_ArrayUtilsTest
 
         Map<Id, Set<String>> result = fflib_ArrayUtils.mergeMaps(stringsByIdsA, stringsByIdsB);
 
-        System.Assert.istrue(result.keySet().containsAll(ids));
-        System.Assert.istrue(result.get(accountIdA).containsAll(new Set<String>{'A1', 'A2', 'A3'}));
+        System.Assert.isTrue(result.keySet().containsAll(ids));
+        System.Assert.isTrue(result.get(accountIdA).containsAll(new Set<String>{'A1', 'A2', 'A3'}));
         System.Assert.areEqual(3, result.get(accountIdA).size());
-        System.Assert.istrue(result.get(accountIdB).contains('B1'));
+        System.Assert.isTrue(result.get(accountIdB).contains('B1'));
         System.Assert.areEqual(1, result.get(accountIdB).size());
-        System.Assert.istrue(result.get(accountIdC).contains('C1'));
+        System.Assert.isTrue(result.get(accountIdC).contains('C1'));
         System.Assert.areEqual(1, result.get(accountIdC).size());
+    }
+
+    @IsTest
+    static void itShouldReturnMergedMap_Boolean()
+    {
+        final Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Id accountIdD = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        final Set<Id> ids = new Set<Id> {accountIdA, accountIdB, accountIdC, accountIdD};
+
+        final Map<Id, Boolean> booleanByIdA = new Map<Id, Boolean>
+        {
+                accountIdA => true,
+                accountIdB => false,
+                accountIdD=> false
+        };
+        final Map<Id, Boolean> booleanByIdB = new Map<Id, Boolean>
+        {
+                accountIdA => false,
+                accountIdB => true,
+                accountIdC => true
+        };
+
+        Map<Id, Boolean> result = fflib_ArrayUtils.mergeMaps(booleanByIdA, booleanByIdB);
+
+        System.Assert.isTrue(result.keySet().containsAll(ids));
+        System.Assert.isTrue(result.get(accountIdA));
+        System.Assert.isTrue(result.get(accountIdB));
+        System.Assert.isTrue(result.get(accountIdC));
+        System.Assert.isFalse(result.get(accountIdD));
     }
 
     private static List<Datetime> generateDateTimes()
