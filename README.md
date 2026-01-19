@@ -53,6 +53,9 @@ Some of the changes that have major impact are listed here;
 - **fflib_ArrayUtils** <br/>
   _replaceValue_,<br/>Add three method overloads for merging a source map of idById and replacement map of idByString, idByDecimal or idByBoolean.</br>
   _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean,
+- **fflib_SObjects2**<br/>
+  The following methods have been added to the SObjects2 class:<br/>
+  _getBooleanFieldByIdField_
 - **API Upgrades** 
   Upgraded to API 65.0 
 

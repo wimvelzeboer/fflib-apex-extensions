@@ -115,6 +115,7 @@ private class fflib_SObjects2Test
 		domain.getSObjectsByIdField(Account.Id);
 		domain.getSObjectByStringField(Account.Name);
 		domain.getSObjectsByStringField(Account.Name);
+		domain.getBooleanFieldByIdField(Account.IsDeleted, Account.Id);
 		domain.getStringFieldByStringField(Account.Name, Account.AccountNumber);
 		domain.getStringFieldValues(Account.Name, criteria);
 		domain.stripInaccessibleFields();
@@ -308,7 +309,7 @@ private class fflib_SObjects2Test
 		final Account record = new Account(Id = accountId, AnnualRevenue = 123.45);
 		fflib_SObjects2 domain = new fflib_SObjects2(new List<Account>{ record });
 		System.Test.startTest();
-		Map<Id, Decimal> result = domain.getDecimalById(Schema.Account.AnnualRevenue, Schema.Account.Id);
+		domain.getDecimalById(Schema.Account.AnnualRevenue, Schema.Account.Id);
 		System.Test.stopTest();
 	}
 
@@ -366,7 +367,7 @@ private class fflib_SObjects2Test
 		System.Test.stopTest();
 
 		System.Assert.areEqual(1, result.size(), 'Incorrect returned amount of results');
-		System.Assert.istrue(result.keySet().contains(accountId), 'The accountId is missing from the results');
+		System.Assert.isTrue(result.keySet().contains(accountId), 'The accountId is missing from the results');
 		System.Assert.areEqual(today, result.get(accountId), 'Incorrect returned date');
 	}
 
@@ -394,11 +395,11 @@ private class fflib_SObjects2Test
 		System.Test.stopTest();
 
 		System.Assert.areEqual(2, result.size(), 'Incorrect amount of results');
-		System.Assert.istrue(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
-		System.Assert.istrue(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.isTrue(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
+		System.Assert.isTrue(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 
 		System.Assert.areEqual(1, result2.size(), 'Incorrect amount of results');
-		System.Assert.istrue(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.isTrue(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 	}
 
 	@IsTest
@@ -425,11 +426,11 @@ private class fflib_SObjects2Test
 		System.Test.stopTest();
 
 		System.Assert.areEqual(2, result.size(), 'Incorrect amount of results');
-		System.Assert.istrue(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
-		System.Assert.istrue(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.isTrue(result.contains(numberOfEmployees), 'The expected numberOfEmployees was not returned');
+		System.Assert.isTrue(result.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 
 		System.Assert.areEqual(1, result2.size(), 'Incorrect amount of results');
-		System.Assert.istrue(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
+		System.Assert.isTrue(result2.contains(numberOfEmployees * 2), 'The expected numberOfEmployees was not returned');
 	}
 
 	@IsTest
@@ -442,7 +443,7 @@ private class fflib_SObjects2Test
 		System.Test.startTest();
 		Map<Id, Id> accountIdByContactId = domain.getIdFieldByIdField(Schema.Contact.AccountId, Schema.Contact.Id);
 		System.Test.stopTest();
-		System.Assert.istrue(accountIdByContactId.containsKey(contactId));
+		System.Assert.isTrue(accountIdByContactId.containsKey(contactId));
 		System.Assert.areEqual(accountId, accountIdByContactId.get(contactId));
 	}
 
@@ -464,7 +465,7 @@ private class fflib_SObjects2Test
 		);
 
 		Set<Id> recordIds = new Set<Id> {idA, idB, idC};
-		System.Assert.istrue(
+		System.Assert.isTrue(
 				domain.getSObjectById().keySet().containsAll(recordIds),
 				'The domain should return all the record Ids'
 		);
@@ -488,7 +489,7 @@ private class fflib_SObjects2Test
 		);
 
 		Set<Id> recordIds = new Set<Id> {idA, idB, idC};
-		System.Assert.istrue(
+		System.Assert.isTrue(
 				domain.getRecordIds().containsAll(recordIds),
 				'The domain should return all the record Ids'
 		);
@@ -742,7 +743,7 @@ private class fflib_SObjects2Test
 
 		public List<Account> selectByShippingCountry(String country)
 		{
-			return (List<Account>) getRecordsByFieldValues(
+			return getRecordsByFieldValues(
 					Schema.Account.ShippingCountry,
 					new Set<Object> {country}
 			);
@@ -750,7 +751,7 @@ private class fflib_SObjects2Test
 
 		public List<Account> selectByRating(String rating)
 		{
-			return (List<Account>) getRecordsByFieldValue(
+			return getRecordsByFieldValue(
 					Schema.Account.Rating,
 					rating
 			);
@@ -758,21 +759,21 @@ private class fflib_SObjects2Test
 
 		public List<Account> selectWithoutShippingCountry()
 		{
-			return (List<Account>) getRecordsWithBlankFieldValues(
+			return getRecordsWithBlankFieldValues(
 					Schema.Account.ShippingCountry
 			);
 		}
 
 		public List<Account> selectWithShippingCountry()
 		{
-			return (List<Account>) getRecordsWithNotBlankFieldValues(
+			return getRecordsWithNotBlankFieldValues(
 					Schema.Account.ShippingCountry
 			);
 		}
 
 		public List<Account> selectWithEmptyRecord()
 		{
-			return (List<Account>) getRecordsWithAllBlankFieldValues(
+			return getRecordsWithAllBlankFieldValues(
 					new Set<Schema.SObjectField>
 					{
 							Schema.Account.Name,
@@ -783,7 +784,7 @@ private class fflib_SObjects2Test
 
 		public List<Account> selectPopulatedRecords()
 		{
-			return (List<Account>) getRecordsWithAllNotBlankFieldValues(
+			return getRecordsWithAllNotBlankFieldValues(
 					new Set<Schema.SObjectField>
 					{
 							Schema.Account.Name,
@@ -803,11 +804,6 @@ private class fflib_SObjects2Test
 					Schema.Account.ShippingCountry,
 					Schema.Account.Rating,
 					ratingByCountry);
-		}
-
-		public void addNameError(String message)
-		{
-			addError(Schema.Account.Name, message);
 		}
 
 		public void clearShippingCountry()
