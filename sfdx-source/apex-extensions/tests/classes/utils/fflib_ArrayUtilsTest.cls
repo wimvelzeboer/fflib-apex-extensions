@@ -323,6 +323,34 @@ private class fflib_ArrayUtilsTest
     }
 
     @IsTest
+    static void itShouldReplaceValueInTheMap_boolean()
+    {
+        Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id accountIdC = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+        Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+        Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+        Map<Id, Id> source = new Map<Id, Id>
+        {
+                accountIdA => contactIdA,
+                accountIdB => contactIdB,
+                accountIdC => fflib_IDGenerator.generate(Schema.Contact.SObjectType)
+        };
+        Map<Id, Boolean> replacement = new Map<Id, Boolean>
+        {
+                contactIdA => true,
+                contactIdB => false
+        };
+
+        Map<Id, Boolean> result = fflib_ArrayUtils.replaceValue(source, replacement);
+
+        System.Assert.areEqual(3, result.size());
+        System.Assert.isTrue(result.get(accountIdA));
+        System.Assert.isFalse(result.get(accountIdB));
+        System.Assert.isNull(result.get(accountIdC));
+    }
+
+    @IsTest
     static void itShouldReturnAllValuesForTheGivenIds()
     {
         // GIVEN a map with String by Ids
