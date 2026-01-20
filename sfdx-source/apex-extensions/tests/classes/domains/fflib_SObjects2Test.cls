@@ -257,6 +257,83 @@ private class fflib_SObjects2Test
 		System.Assert.isNull(result.get(caseIdC), 'Case Id B should have no related Account Id');
 	}
 
+	@IsTest
+	static void itShouldReturnTheRelatedParentStringById()
+	{
+		// GIVEN a case related to contact related to Account ,
+		//   a case record related to contact but not to Account,
+		//   and a case record related to nothing.
+		//   All encapsulated in domains.
+		Id caseIdA = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdB = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id caseIdC = fflib_IDGenerator.generate(Schema.Case.SObjectType);
+		Id contactIdA = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id contactIdB = fflib_IDGenerator.generate(Schema.Contact.SObjectType);
+		Id accountId = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		Account accountRecord = new Account(Id = accountId, Name = 'Account Name', AnnualRevenue = 100.1);
+		Contact contactRecordA = new Contact(Id = contactIdA, AccountId = accountId, DoNotCall = true);
+		Contact contactRecordB = new Contact(Id = contactIdB);
+		Case caseRecordA = new Case(Id = caseIdA, ContactId = contactIdA);
+		Case caseRecordB = new Case(Id = caseIdB, ContactId = contactIdB);
+		Case caseRecordC = new Case(Id = caseIdC);
+
+		DomainAccounts accountDomain = new DomainAccounts(new List<Account> {accountRecord});
+		DomainContacts contactDomain = new DomainContacts(new List<Contact> {contactRecordA, contactRecordB});
+		DomainCases caseDomain = new DomainCases(new List<Case> {caseRecordA, caseRecordB, caseRecordC});
+
+		// WHEN we request the relation between Case and Account
+		System.Test.startTest();
+		Map<Id, String> stringResult = caseDomain.getParentStringFieldById(
+				Schema.Account.Name,
+				new Map<Schema.SObjectField, fflib_SObjects2>
+				{
+						Schema.Case.ContactId => contactDomain,
+						Schema.Contact.AccountId => accountDomain
+				}
+		);
+		Map<Id, Decimal> decimalResult = caseDomain.getParentDecimalFieldById(
+				Schema.Account.AnnualRevenue,
+				new Map<Schema.SObjectField, fflib_SObjects2>
+				{
+						Schema.Case.ContactId => contactDomain,
+						Schema.Contact.AccountId => accountDomain
+				}
+		);
+		Map<Id, Boolean> booleanResult = caseDomain.getParentBooleanFieldById(
+				Schema.Contact.DoNotCall,
+				new Map<Schema.SObjectField, fflib_SObjects2>
+				{
+						Schema.Case.ContactId => contactDomain
+				}
+		);
+		System.Test.stopTest();
+
+		// THEN it should return the AccountId By CaseId
+		System.Assert.areEqual(3, stringResult.size(), 'Expected one related account to the case');
+		System.Assert.isTrue(stringResult.containsKey(caseIdA));
+		System.Assert.isTrue(stringResult.containsKey(caseIdB));
+		System.Assert.isTrue(stringResult.containsKey(caseIdC));
+		System.Assert.areEqual('Account Name', stringResult.get(caseIdA), 'Account Name should be related to the Case Id A');
+		System.Assert.isNull(stringResult.get(caseIdB), 'Case Id B should have no related Account');
+		System.Assert.isNull(stringResult.get(caseIdC), 'Case Id B should have no related Account');
+
+		System.Assert.areEqual(3, decimalResult.size(), 'Expected one related account to the case');
+		System.Assert.isTrue(decimalResult.containsKey(caseIdA));
+		System.Assert.isTrue(decimalResult.containsKey(caseIdB));
+		System.Assert.isTrue(decimalResult.containsKey(caseIdC));
+		System.Assert.areEqual(100.1, decimalResult.get(caseIdA), 'Account Name should be related to the Case Id A');
+		System.Assert.isNull(decimalResult.get(caseIdB), 'Case Id B should have no related Account');
+		System.Assert.isNull(decimalResult.get(caseIdC), 'Case Id B should have no related Account');
+
+		System.Assert.areEqual(3, booleanResult.size(), 'Expected one related account to the case');
+		System.Assert.isTrue(booleanResult.containsKey(caseIdA));
+		System.Assert.isTrue(booleanResult.containsKey(caseIdB));
+		System.Assert.isTrue(booleanResult.containsKey(caseIdC));
+		System.Assert.isTrue(booleanResult.get(caseIdA), 'Contact DoNotCall should be related to the Case Id A');
+		System.Assert.isNull(booleanResult.get(caseIdB), 'Case Id B should have no related Contact');
+		System.Assert.isNull(booleanResult.get(caseIdC), 'Case Id B should have no related Contact');
+	}
+
 	/** Unit test for the deprecated method **/
 	@IsTest
 	static void itShouldReturnTheRelatedParentDomainId_deprecated()
