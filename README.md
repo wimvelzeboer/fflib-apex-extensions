@@ -55,7 +55,10 @@ Some of the changes that have major impact are listed here;
   _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean,
 - **fflib_SObjects2**<br/>
   The following methods have been added to the SObjects2 class:<br/>
-  _getBooleanFieldByIdField_
+  _getBooleanFieldByIdField_<br/>
+  _getParentBooleanFieldById_<br/> 
+  _getParentDecimalFieldById_<br/> 
+  _getParentStringFieldById_<br/> 
 - **API Upgrades** 
   Upgraded to API 65.0 
 

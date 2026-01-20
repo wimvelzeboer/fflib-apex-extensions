@@ -381,6 +381,36 @@ public class fflib_ArrayUtils
 	 * @param source The map to replace its value
 	 * @param replacement The map to use its value for replacement
 	 *
+	 * @return Returns a Map<{Source} Id, {Replacement} Id>
+	 */
+	public static Map<Id, Object> replaceValue(Map<Id, Id> source, Map<Id, Object> replacement)
+	{
+		Map<Id, Object> result = new Map<Id, Object>();
+		for (Id keyId : source.keySet())
+		{
+			Id sourceValue = source.get(keyId);
+
+			if (replacement.containsKey(sourceValue))
+			{
+				result.put(keyId, replacement.get(sourceValue));
+			}
+			else
+			{
+				// There is no replacement value for this keyId
+				result.put(keyId, null);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Takes two maps and replaces the value of the source with the value of the replacement,
+	 * where the source value matches the replacement key.
+	 * The value will become null if the source value does not exists as key in replacement map
+	 *
+	 * @param source The map to replace its value
+	 * @param replacement The map to use its value for replacement
+	 *
 	 * @return Returns a Map<{Source-key} Id, {Replacement-value} Id>
 	 */
 	public static Map<Id, Decimal> replaceValue(Map<Id, Id> source, Map<Id, Decimal> replacement)

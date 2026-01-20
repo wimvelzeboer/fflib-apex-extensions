@@ -105,6 +105,129 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
+	 * Gets the field value from the last given grandparent domain by the record Id
+	 *
+	 * @param valueField The field use return as value for the map
+	 * @param domainsByRelationshipField A Map of domains and the in hierarchical order from first parent to grandparent
+	 *
+	 * @return Returns a map with KEY: The Ids of the records in this domain,
+	 *   to the VALUE: The value of the given valueField of the last grandparent record listed in the relatedDomains,
+	 *   null if no grandparent exists.
+	 *
+	 * @example
+	 * ICases casesDomain = Cases.newInstance(caseRecords);
+	 * IContacts contactsDomain = Contacts.newInstance(contactRecords);
+	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
+	 *
+	 * // A map with key - Case.Id to value - Account.Id
+	 * Map<Id, String> accountNameByCaseId =
+	 *         casesDomain.getParentStringFieldById(
+	 *                 Schema.Account.Name,
+	 *                 new Map<Schema.SObjectField, fflib_SObjects2>
+	 *                 {
+	 *                         Schema.Case.ContactId => contactDomain,
+	 *                         Schema.Contact.AccountId => accountDomain
+	 *                 });
+	 */
+	public virtual Map<Id, String> getParentStringFieldById(
+			Schema.SObjectField valueField,
+			Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+	{
+		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
+
+		List<fflib_SObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = domains.get(domains.size() - 1);
+
+		return fflib_ArrayUtils.replaceValue(
+				parentIdByChildId,
+				lastGrandParentDomain.getStringFieldByIdField(
+						valueField,
+						lastGrandParentDomain.getSObjectType().getDescribe().fields.getMap().get('Id')));
+	}
+
+	/**
+	 * Gets the field value from the last given grandparent domain by the record Id
+	 *
+	 * @param valueField The field use return as value for the map
+	 * @param domainsByRelationshipField A Map of domains and the in hierarchical order from first parent to grandparent
+	 *
+	 * @return Returns a map with KEY: The Ids of the records in this domain,
+	 *   to the VALUE: The value of the given valueField of the last grandparent record listed in the relatedDomains,
+	 *   null if no grandparent exists.
+	 *
+	 * @example
+	 * ICases casesDomain = Cases.newInstance(caseRecords);
+	 * IContacts contactsDomain = Contacts.newInstance(contactRecords);
+	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
+	 *
+	 * // A map with key - Case.Id to value - Account.Id
+	 * Map<Id, Object> accountNameByCaseId =
+	 *         casesDomain.getParentDecimalFieldById(
+	 *                 Schema.Account.Name,
+	 *                 new Map<Schema.SObjectField, fflib_SObjects2>
+	 *                 {
+	 *                         Schema.Case.ContactId => contactDomain,
+	 *                         Schema.Contact.AccountId => accountDomain
+	 *                 });
+	 */
+	public virtual Map<Id, Decimal> getParentDecimalFieldById(
+			Schema.SObjectField valueField,
+			Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+	{
+		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
+
+		List<fflib_SObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = domains.get(domains.size() - 1);
+
+		return fflib_ArrayUtils.replaceValue(
+				parentIdByChildId,
+				lastGrandParentDomain.getDecimalById(
+						valueField,
+						lastGrandParentDomain.getSObjectType().getDescribe().fields.getMap().get('Id')));
+	}
+
+	/**
+	 * Gets the field value from the last given grandparent domain by the record Id
+	 *
+	 * @param valueField The field use return as value for the map
+	 * @param domainsByRelationshipField A Map of domains and the in hierarchical order from first parent to grandparent
+	 *
+	 * @return Returns a map with KEY: The Ids of the records in this domain,
+	 *   to the VALUE: The value of the given valueField of the last grandparent record listed in the relatedDomains,
+	 *   null if no grandparent exists.
+	 *
+	 * @example
+	 * ICases casesDomain = Cases.newInstance(caseRecords);
+	 * IContacts contactsDomain = Contacts.newInstance(contactRecords);
+	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
+	 *
+	 * // A map with key - Case.Id to value - Account.Id
+	 * Map<Id, Object> accountNameByCaseId =
+	 *         casesDomain.getParentBooleanFieldById(
+	 *                 Schema.Account.Name,
+	 *                 new Map<Schema.SObjectField, fflib_SObjects2>
+	 *                 {
+	 *                         Schema.Case.ContactId => contactDomain,
+	 *                         Schema.Contact.AccountId => accountDomain
+	 *                 });
+	 */
+	public virtual Map<Id, Boolean> getParentBooleanFieldById(
+			Schema.SObjectField valueField,
+			Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+	{
+		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
+
+		List<fflib_SObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = domains.get(domains.size() - 1);
+
+		return fflib_ArrayUtils.replaceValue(
+				parentIdByChildId,
+				lastGrandParentDomain.getBooleanFieldByIdField(
+						valueField,
+						lastGrandParentDomain.getSObjectType().getDescribe().fields.getMap().get('Id')));
+	}
+
+	/**
 	 * Creates a map between the record Ids of this domain to the last given grandparent domain.
 	 *
 	 * @param domainsByRelationshipField A Map of domains and the in hierarchical order from first parent to grandparent
@@ -129,11 +252,14 @@ public virtual class fflib_SObjects2
 	 */
 	public virtual Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
 	{
-		// Takes the highest related domain from the domainsByRelationshipField
+		// Clone the domain map as we are about to modify it within this method
+		Map<SObjectField, fflib_SObjects2> domains = domainsByRelationshipField.clone();
+
+		// Takes the highest related domain from the domains
 		Schema.SObjectField relationshipField =
-				new List<Schema.SObjectField>(domainsByRelationshipField.keySet())
+				new List<Schema.SObjectField>(domains.keySet())
 				.get(0);
-		fflib_SObjects2 relatedDomain = domainsByRelationshipField.remove(relationshipField);
+		fflib_SObjects2 relatedDomain = domains.remove(relationshipField);
 
 		// Extract the Id values of the related SObjectType
 		Map<Id, Id> result = getIdFieldByIdField(
@@ -141,10 +267,10 @@ public virtual class fflib_SObjects2
 				getSObjectType().getDescribe().fields.getMap().get('Id'));
 
 		// Check if we need to resolve another parent relation, if not return the results
-		if (domainsByRelationshipField.isEmpty()) return result;
+		if (domains.isEmpty()) return result;
 
 		// Fetch the Ids of the related SObjectType
-		Map<Id, Id> parentIdByChildId = relatedDomain.getParentIdById(domainsByRelationshipField);
+		Map<Id, Id> parentIdByChildId = relatedDomain.getParentIdById(domains);
 
 		// Replace the maps value (ParentId) with the grand parent Id
 		return fflib_ArrayUtils.replaceValue(result, parentIdByChildId);
@@ -207,7 +333,7 @@ public virtual class fflib_SObjects2
 	 */
 	public virtual Map<Id, Set<Id>> getChildIdsById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
 	{
-		// Takes the highest related domain from the domainsByRelationshipField
+		// Takes the highest related domain from the domains
 		Schema.SObjectField relationshipField =
 				new List<Schema.SObjectField>(domainsByRelationshipField.keySet())
 						.get(0);
@@ -548,6 +674,34 @@ public virtual class fflib_SObjects2
 				result.put(keyFieldValue, new Set<Object>());
 			}
 			result.get(keyFieldValue).add(record.get(valueField));
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the values of two fields.
+	 * Key fields containing null values are omitted
+	 *
+	 * @param valueField The field to use as the Value of the Map
+	 * @param keyField The Id field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Accounts accounts = Accounts.newInstance(records);
+	 * Map<Id, Object> accountNameById = accounts.getFieldValueByIdField(Account.Name, Account.Id);
+	 */
+	@TestVisible
+	protected virtual Map<Id, Object> getFieldValueByIdField(SObjectField valueField, SObjectField keyField) {
+		Map<Id, Object> result = new Map<Id, Object>();
+		for (SObject record : getRecords())
+		{
+			if (record.get(keyField) == null) continue;
+
+			result.put(
+					(Id) record.get(keyField),
+					record.get(valueField)
+			);
 		}
 		return result;
 	}
