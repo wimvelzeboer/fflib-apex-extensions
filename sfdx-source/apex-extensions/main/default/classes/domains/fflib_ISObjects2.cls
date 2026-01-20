@@ -30,7 +30,11 @@
 public interface fflib_ISObjects2 extends fflib_ISObjects
 {
 	Map<Id, Set<Id>> getChildIdsById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField);
-	Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField);
+	Map<Id, Boolean> getParentBooleanFieldById(Schema.SObjectField valueField, Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField);
+	Map<Id, Decimal> getParentDecimalFieldById(Schema.SObjectField valueField, Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField);
+	Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField);
+	Map<Id, Id> getParentIdFieldById(Schema.SObjectField valueField, Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField);
+	Map<Id, String> getParentStringFieldById(Schema.SObjectField valueField, Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField);
 
 	// DEPRECATED METHODS
 	Map<Id, Id> getGrandParentIdById(List<fflib_ISObjects2> relatedDomains);
