@@ -131,12 +131,12 @@ public virtual class fflib_SObjects2
 	 */
 	public virtual Map<Id, String> getParentStringFieldById(
 			Schema.SObjectField valueField,
-			Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+			Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField)
 	{
 		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
 
-		List<fflib_SObjects2> domains = domainsByRelationshipField.values();
-		fflib_SObjects2 lastGrandParentDomain = domains.get(domains.size() - 1);
+		List<fflib_ISObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = (fflib_SObjects2) domains.get(domains.size() - 1);
 
 		return fflib_ArrayUtils.replaceValue(
 				parentIdByChildId,
@@ -172,12 +172,12 @@ public virtual class fflib_SObjects2
 	 */
 	public virtual Map<Id, Decimal> getParentDecimalFieldById(
 			Schema.SObjectField valueField,
-			Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+			Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField)
 	{
 		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
 
-		List<fflib_SObjects2> domains = domainsByRelationshipField.values();
-		fflib_SObjects2 lastGrandParentDomain = domains.get(domains.size() - 1);
+		List<fflib_ISObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = (fflib_SObjects2) domains.get(domains.size() - 1);
 
 		return fflib_ArrayUtils.replaceValue(
 				parentIdByChildId,
@@ -213,16 +213,57 @@ public virtual class fflib_SObjects2
 	 */
 	public virtual Map<Id, Boolean> getParentBooleanFieldById(
 			Schema.SObjectField valueField,
-			Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+			Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField)
 	{
 		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
 
-		List<fflib_SObjects2> domains = domainsByRelationshipField.values();
-		fflib_SObjects2 lastGrandParentDomain = domains.get(domains.size() - 1);
+		List<fflib_ISObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = (fflib_SObjects2) domains.get(domains.size() - 1);
 
 		return fflib_ArrayUtils.replaceValue(
 				parentIdByChildId,
 				lastGrandParentDomain.getBooleanFieldByIdField(
+						valueField,
+						lastGrandParentDomain.getSObjectType().getDescribe().fields.getMap().get('Id')));
+	}
+
+	/**
+	 * Gets the field value from the last given grandparent domain by the record Id
+	 *
+	 * @param valueField The field use return as value for the map
+	 * @param domainsByRelationshipField A Map of domains and the in hierarchical order from first parent to grandparent
+	 *
+	 * @return Returns a map with KEY: The Ids of the records in this domain,
+	 *   to the VALUE: The value of the given valueField of the last grandparent record listed in the relatedDomains,
+	 *   null if no grandparent exists.
+	 *
+	 * @example
+	 * ICases casesDomain = Cases.newInstance(caseRecords);
+	 * IContacts contactsDomain = Contacts.newInstance(contactRecords);
+	 * IAccount accountDomain = Accounts.newInstance(accountRecords);
+	 *
+	 * // A map with key - Case.Id to value - Account.Id
+	 * Map<Id, Object> accountNameByCaseId =
+	 *         casesDomain.getParentBooleanFieldById(
+	 *                 Schema.Account.Name,
+	 *                 new Map<Schema.SObjectField, fflib_SObjects2>
+	 *                 {
+	 *                         Schema.Case.ContactId => contactDomain,
+	 *                         Schema.Contact.AccountId => accountDomain
+	 *                 });
+	 */
+	public virtual Map<Id, Id> getParentIdFieldById(
+			Schema.SObjectField valueField,
+			Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField)
+	{
+		Map<Id, Id> parentIdByChildId = getParentIdById(domainsByRelationshipField);
+
+		List<fflib_ISObjects2> domains = domainsByRelationshipField.values();
+		fflib_SObjects2 lastGrandParentDomain = (fflib_SObjects2) domains.get(domains.size() - 1);
+
+		return fflib_ArrayUtils.replaceValue(
+				parentIdByChildId,
+				lastGrandParentDomain.getIdFieldByIdField(
 						valueField,
 						lastGrandParentDomain.getSObjectType().getDescribe().fields.getMap().get('Id')));
 	}
@@ -250,16 +291,16 @@ public virtual class fflib_SObjects2
 	 *                         Schema.Contact.AccountId => accountDomain
 	 *                 });
 	 */
-	public virtual Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_SObjects2> domainsByRelationshipField)
+	public virtual Map<Id, Id> getParentIdById(Map<Schema.SObjectField, fflib_ISObjects2> domainsByRelationshipField)
 	{
 		// Clone the domain map as we are about to modify it within this method
-		Map<SObjectField, fflib_SObjects2> domains = domainsByRelationshipField.clone();
+		Map<SObjectField, fflib_ISObjects2> domains = domainsByRelationshipField.clone();
 
 		// Takes the highest related domain from the domains
 		Schema.SObjectField relationshipField =
 				new List<Schema.SObjectField>(domains.keySet())
 				.get(0);
-		fflib_SObjects2 relatedDomain = domains.remove(relationshipField);
+		fflib_ISObjects2 relatedDomain = domains.remove(relationshipField);
 
 		// Extract the Id values of the related SObjectType
 		Map<Id, Id> result = getIdFieldByIdField(
