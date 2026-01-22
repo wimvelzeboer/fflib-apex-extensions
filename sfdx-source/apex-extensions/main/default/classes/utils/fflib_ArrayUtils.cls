@@ -344,6 +344,26 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Takes two maps and replaces the key of the source with the value of the replacement,
+	 * where the source key matches the replacement key.
+	 * The key will be removed if it does not exists as key in replacement map
+	 *
+	 * @param source The map to replace its key
+	 * @param replacement The map to use its value for replacement
+	 *
+	 * @return Returns a Map<{Replacement-value} Id, {Source-value} Id>
+	 */
+	public static Map<Id, Id> replaceKey(Map<Id, Id> source, Map<Id, Id> replacement) {
+		Map<Id, Id> result = new Map<Id, Id>();
+		for (Id keyId : replacement.keySet()) {
+			if (source.containsKey(keyId) == false) continue;
+
+			result.put(replacement.get(keyId), source.get(keyId));
+		}
+		return result;
+	}
+
+	/**
 	 * Takes two maps and replaces the value of the source with the value of the replacement,
 	 * where the source value matches the replacement key.
 	 * The value will become null if the source value does not exists as key in replacement map
@@ -456,6 +476,31 @@ public class fflib_ArrayUtils
 			}
 			else
 			{
+				// There is no replacement value for this keyId
+				result.put(keyId, null);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Takes two maps and replaces the value of the source with the value of the replacement,
+	 * where the source value matches the replacement key.
+	 * The value will become null if the source value does not exists as key in replacement map
+	 *
+	 * @param source The map to replace its value
+	 * @param replacement The map to use its value for replacement
+	 *
+	 * @return Returns a Map<{Source-key} Id, {Replacement-value} Id>
+	 */
+	public static Map<Id, Id> replaceValue(Map<Id, String> source, Map<String, Id> replacement) {
+		Map<Id, Id> result = new Map<Id, Id>();
+		for (Id keyId : source.keySet()) {
+			String sourceValue = source.get(keyId);
+
+			if (replacement.containsKey(sourceValue)) {
+				result.put(keyId, replacement.get(sourceValue));
+			} else {
 				// There is no replacement value for this keyId
 				result.put(keyId, null);
 			}
