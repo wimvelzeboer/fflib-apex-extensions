@@ -49,16 +49,19 @@ You can also have a look at the open items in the [project(s)](./projects), feel
 # Change Log
 Some of the changes that have major impact are listed here;
 
-### Updates 2026
+### Updates January 2026
 - **fflib_ArrayUtils** <br/>
+  _replaceKey_,<br/>Add method to replace the key of a given map.</br>
   _replaceValue_,<br/>Add three method overloads for merging a source map of idById and replacement map of idByString, idByDecimal or idByBoolean.</br>
-  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean,
+  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean<br/><br/>
 - **fflib_SObjects2**<br/>
   The following methods have been added to the SObjects2 class:<br/>
   _getBooleanFieldByIdField_<br/>
   _getParentBooleanFieldById_<br/> 
   _getParentDecimalFieldById_<br/> 
-  _getParentStringFieldById_<br/> 
+  _getParentStringFieldById_<br/> <br/>
+  Add new method overloads for Decimal values to `getRecords`, `getRecordsNotIn` and `getRecordsIsNot`<br/><br/>
+  Add compatibility for multiselect picklists for the `getRecords` method, by adding a new method overload: `getRecords(Schema.SObjectField sObjectField, Set<String> values, Boolean containsAll)`, and a multi-select picklist check in the method `getRecords(Schema.SObjectField sObjectField, String value)`<br/><br/>
 - **API Upgrades** 
   Upgraded to API 65.0 
 

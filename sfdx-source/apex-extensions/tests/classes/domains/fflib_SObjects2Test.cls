@@ -124,7 +124,9 @@ private class fflib_SObjects2Test
 		domain.getIdFieldValues(Account.Id, criteria);
 		domain.getRecords(Account.Id, domain.getFirstSObject().Id);
 		domain.getRecords(Account.Name, 'A');
+		domain.getRecords(Account.AnnualRevenue, 1.0);
 		domain.getRecordsIsNot(Account.Name, 'A');
+		domain.getRecordsIsNot(Account.AnnualRevenue, 1.0);
 		domain.getRecordsIsNot(Account.Id, domain.getFirstSObject().Id);
 		domain.getSObjectByIdField(Account.Id);
 		domain.getIdFieldValues(Account.Id, true);

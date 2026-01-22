@@ -996,6 +996,9 @@ public virtual class fflib_SObjects2
 	@TestVisible
 	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, String value)
 	{
+		if (sObjectField.getDescribe().getType() == DisplayType.MULTIPICKLIST)
+			return getRecords(sObjectField, new Set<String>{value}, true);
+
 		return getRecords(sObjectField, new Set<String>{ value });
 	}
 
@@ -1008,6 +1011,47 @@ public virtual class fflib_SObjects2
 			if (values?.contains((String) record.get(sObjectField)))
 			{
 				result.add(record);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the records from the domain matching values in the given multi-select picklist field
+	 *
+	 * @param sObjectField The SObjectType of the multi-select picklist
+	 * @param values The values to filter by
+	 * @param containsAll If TRUE the returned records have all the given values, otherwise a record with just one value is also returned
+	 *
+	 * @return Returns a list of matching SObjects
+	 */
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Set<String> values, Boolean containsAll)
+	{
+		if (sObjectField.getDescribe().getType() != DisplayType.MULTIPICKLIST) return getRecords(sObjectField, values);
+
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			String value = (String) record.get(sObjectField);
+
+			if ((value == null && (values == null || values.isEmpty() || values.contains(null))) // if values is empty and the field is empty = match!
+					|| (value != null && containsAll && new Set<String>(value.split(';')).containsAll(values))
+			)
+			{
+				result.add(record);
+			}
+			else if (value != null && containsAll == false)
+			{
+				Set<String> fieldValues = new Set<String>(value.split(';'));
+				for (String fieldValue : fieldValues)
+				{
+					if (values.contains(fieldValue))
+					{
+						result.add(record);
+						break;
+					}
+				}
 			}
 		}
 		return result;
@@ -1057,6 +1101,24 @@ public virtual class fflib_SObjects2
 	}
 
 	@TestVisible
+	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, Decimal value)
+	{
+		return getRecordsNotIn(sObjectField, new Set<Decimal>{ value });
+	}
+
+	@TestVisible
+	protected virtual List<SObject> getRecordsNotIn(Schema.SObjectField sObjectField, Set<Decimal> values)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (values?.contains((Decimal) record.get(sObjectField))) continue;
+			result.add(record);
+		}
+		return result;
+	}
+
+	@TestVisible
 	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, Id idValue)
 	{
 		return getRecordsNotIn(sObjectField, new Set<Id>{ idValue });
@@ -1086,6 +1148,19 @@ public virtual class fflib_SObjects2
 			{
 				result.add(record);
 			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Decimal value)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if ((Decimal) record.get(sObjectField) != value) continue;
+
+			result.add(record);
 		}
 		return result;
 	}
