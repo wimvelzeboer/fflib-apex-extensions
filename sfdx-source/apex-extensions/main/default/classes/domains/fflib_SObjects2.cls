@@ -1057,6 +1057,24 @@ public virtual class fflib_SObjects2
 	}
 
 	@TestVisible
+	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, Decimal value)
+	{
+		return getRecordsNotIn(sObjectField, new Set<Decimal>{ value });
+	}
+
+	@TestVisible
+	protected virtual List<SObject> getRecordsNotIn(Schema.SObjectField sObjectField, Set<Decimal> values)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if (values?.contains((Decimal) record.get(sObjectField))) continue;
+			result.add(record);
+		}
+		return result;
+	}
+
+	@TestVisible
 	protected virtual List<SObject> getRecordsIsNot(Schema.SObjectField sObjectField, Id idValue)
 	{
 		return getRecordsNotIn(sObjectField, new Set<Id>{ idValue });
@@ -1086,6 +1104,19 @@ public virtual class fflib_SObjects2
 			{
 				result.add(record);
 			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	protected virtual List<SObject> getRecords(Schema.SObjectField sObjectField, Decimal value)
+	{
+		List<SObject> result = new List<SObject>();
+		for (SObject record : getRecords())
+		{
+			if ((Decimal) record.get(sObjectField) != value) continue;
+
+			result.add(record);
 		}
 		return result;
 	}
