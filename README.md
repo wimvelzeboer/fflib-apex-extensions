@@ -51,14 +51,16 @@ Some of the changes that have major impact are listed here;
 
 ### Updates 2026
 - **fflib_ArrayUtils** <br/>
+  _replaceKey_,<br/>Add method to replace the key of a given map.</br>
   _replaceValue_,<br/>Add three method overloads for merging a source map of idById and replacement map of idByString, idByDecimal or idByBoolean.</br>
-  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean,
+  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean<br/><br/>
 - **fflib_SObjects2**<br/>
   The following methods have been added to the SObjects2 class:<br/>
   _getBooleanFieldByIdField_<br/>
   _getParentBooleanFieldById_<br/> 
   _getParentDecimalFieldById_<br/> 
-  _getParentStringFieldById_<br/> 
+  _getParentStringFieldById_<br/> <br/>
+  Added new method overloads for Decimal values to `getRecords`, `getRecordsNotIn` and `getRecordsIsNot`<br/><br/>
 - **API Upgrades** 
   Upgraded to API 65.0 
 
