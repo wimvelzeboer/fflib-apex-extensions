@@ -31,6 +31,40 @@ private class fflib_ArrayUtilsTest
     }
 
     @IsTest
+    static void itShouldCopyFields() {
+        final String city = 'New York';
+        final String country = 'United States';
+
+        Account accountRecord = new Account(
+                Id = fflib_IDGenerator.generate(Account.SObjectType),
+                BillingCity = city,
+                BillingCountry = country);
+        Accounts accounts = new Accounts(new List<Account>{
+                accountRecord
+        });
+
+        Contact contactRecord = new Contact(
+                Id = fflib_IDGenerator.generate(Contact.SObjectType),
+                AccountId = accountRecord.Id
+        );
+        Contacts contacts = new Contacts(new List<Contact>{
+                contactRecord
+        });
+
+        System.Test.startTest();
+        fflib_ArrayUtils.copyFields(accounts, contacts, Contact.AccountId,
+                new Map<SObjectField, SObjectField>{
+                        Account.BillingCity => Contact.MailingCity,
+                        Account.BillingCountry => Contact.MailingCountry
+                }
+        );
+        System.Test.stopTest();
+
+        System.Assert.areEqual(city, contactRecord.MailingCity, 'Mailing City not Copied');
+        System.Assert.areEqual(country, contactRecord.MailingCountry, 'Mailing Country not Copied');
+    }
+
+    @IsTest
     static void itShouldReturnEmptyListOnEmptyObjectToString()
     {
         System.Assert.areEqual(
@@ -498,5 +532,25 @@ private class fflib_ArrayUtilsTest
                 Datetime.newInstance(2019, 02, 01, 07, 59, 7),
                 Datetime.newInstance(2018, 07, 07, 07, 7, 7)
         };
+    }
+
+    private class Accounts extends fflib_SObjects2 {
+        public Accounts(List<SObject> records) {
+            super(records, Account.SObjectType);
+        }
+
+        public override SObjectType getSObjectType() {
+            return Account.SObjectType;
+        }
+    }
+
+    private class Contacts extends fflib_SObjects2 {
+        public Contacts(List<SObject> records) {
+            super(records, Account.SObjectType);
+        }
+
+        public override SObjectType getSObjectType() {
+            return Contact.SObjectType;
+        }
     }
 }

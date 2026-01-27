@@ -734,17 +734,7 @@ public virtual class fflib_SObjects2
 	 */
 	@TestVisible
 	protected virtual Map<Id, Object> getFieldValueByIdField(SObjectField valueField, SObjectField keyField) {
-		Map<Id, Object> result = new Map<Id, Object>();
-		for (SObject record : getRecords())
-		{
-			if (record.get(keyField) == null) continue;
-
-			result.put(
-					(Id) record.get(keyField),
-					record.get(valueField)
-			);
-		}
-		return result;
+		return fflib_ArrayUtils.getValueById(this, valueField, keyField);
 	}
 
 	/**
@@ -1437,14 +1427,7 @@ public virtual class fflib_SObjects2
 			Schema.SObjectField sObjectFieldToUpdate,
 			Map<Id, Object> values)
 	{
-		for (SObject record : getRecords())
-		{
-			Id keyValue = (Id) record.get(sObjectIdFieldToCheck);
-			if (values?.containsKey(keyValue))
-			{
-				record.put(sObjectFieldToUpdate, values.get(keyValue));
-			}
-		}
+		fflib_ArrayUtils.setFieldValue(this, sObjectIdFieldToCheck, sObjectFieldToUpdate, values);
 	}
 
 	/**
