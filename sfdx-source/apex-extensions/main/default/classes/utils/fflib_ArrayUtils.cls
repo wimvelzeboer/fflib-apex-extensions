@@ -60,6 +60,62 @@ public class fflib_ArrayUtils
 	}
 
 	/**
+	 * Copies the given fields from the a domain to another domain
+	 *
+	 * @param source The domain holding the values that need to be copied over to the target
+	 * @param target The target domain that should be updated
+	 * @param targetRelationShipField The relationship field on the target linking to the source record
+	 * @param targetBySourceField The target SObjectField by the source SObjectField
+	 *
+	 * @example
+	 * Accounts accounts = Accounts.newInstance(accountRecords);
+	 * Contacts contact = Contact.newInstance(contactRecords
+	 * Map<Id, Object> accountNameById =
+	 *     fflib_ArrayUtils.copyFields(
+	 *         accounts,
+	 *         contacts,
+	 *         Contact.AccountId,
+	 *         new Map<SObjectField, SObjectField>{
+	 *             Account.BillingCity => Contact.MailingCity,
+	 *             Account.BillingCountry => Contact.MailingCountry
+	 *         });
+	 */
+	public static void copyFields(
+			fflib_ISObjects2 source,
+			fflib_ISObjects2 target,
+			SObjectField targetRelationShipField,
+			Map<SObjectField, SObjectField> targetBySourceField)
+	{
+		SObjectField sourceIdField = fflib_SObjectDescribe.getDescribe(source.getSObjectType()).getField('Id');
+
+		// Retrieve values
+		Map<Id, Map<SObjectField, Object>> sourceFieldValueById = new Map<Id, Map<SObjectField, Object>>();
+		for (SObject record : source.getRecords()) {
+
+			Map<SObjectField, Object> valueByField = new Map<SObjectField, Object>();
+			for (SObjectField sourceField : targetBySourceField.keySet()) {
+				valueByField.put(sourceField, record.get(sourceField));
+			}
+			sourceFieldValueById.put((Id) record.get(sourceIdField), valueByField);
+		}
+
+		// Set values
+		for (SObject record : target.getRecords()) {
+			Id recordId = (Id) record.get(targetRelationShipField);
+			if (sourceFieldValueById.containsKey(recordId) == false) continue;
+
+			Map<SObjectField, Object> valueByField = sourceFieldValueById.get(recordId);
+			for (SObjectField sourceField : valueByField.keySet()) {
+				if (targetBySourceField.containsKey(sourceField) == false) continue;
+
+				SObjectField targetField = targetBySourceField.get(sourceField);
+
+				record.put(targetField, valueByField.get(sourceField));
+			}
+		}
+	}
+
+	/**
 	 * Gets the first value of the list
 	 *
 	 * @param objects List of objects
@@ -89,6 +145,35 @@ public class fflib_ArrayUtils
 			if (stringsByIds.containsKey(id) == false) continue;
 
 			result.add(stringsByIds.get(id));
+		}
+		return result;
+	}
+
+	/**
+	 * Get a map with the values of two fields.
+	 * Key fields containing null values are omitted
+	 *
+	 * @param domain The domain holding the records
+	 * @param valueField The field to use as the Value of the Map
+	 * @param keyField The Id field to use as the Key of the map
+	 *
+	 * @return Returns a map with the values of two fields
+	 *
+	 * @example
+	 * Accounts accounts = Accounts.newInstance(records);
+	 * Map<Id, Object> accountNameById = fflib_ArrayUtils.getValueById(accounts, Account.Name, Account.Id);
+	 */
+	public static Map<Id, Object> getValueById(fflib_ISObjects2 domain, SObjectField valueField, SObjectField keyField)
+	{
+		Map<Id, Object> result = new Map<Id, Object>();
+		for (SObject record : domain.getRecords())
+		{
+			if (record.get(keyField) == null) continue;
+
+			result.put(
+					(Id) record.get(keyField),
+					record.get(valueField)
+			);
 		}
 		return result;
 	}
@@ -623,6 +708,30 @@ public class fflib_ArrayUtils
 			i++;
 		}
 		return sObjects;
+	}
+
+	/**
+	 * Sets a value to the given field only when key field Id value is provided in the given map
+	 *
+	 * @param domain The domain containing the records to update
+	 * @param sObjectIdFieldToCheck The SObject Id Field to match the key against in the provided map
+	 * @param sObjectFieldToUpdate The SObjectField to store the mapped value when the key matches the value in the sObjectFieldToUpdate field
+	 * @param values Map of values to store by the sObjectIdFieldToCheck fields value
+	 */
+	public static void setFieldValue(
+			fflib_ISObjects2 domain,
+			Schema.SObjectField sObjectIdFieldToCheck,
+			Schema.SObjectField sObjectFieldToUpdate,
+			Map<Id, Object> values)
+	{
+		for (SObject record : domain.getRecords())
+		{
+			Id keyValue = (Id) record.get(sObjectIdFieldToCheck);
+			if (values.containsKey(keyValue))
+			{
+				record.put(sObjectFieldToUpdate, values.get(keyValue));
+			}
+		}
 	}
 
 	/**
