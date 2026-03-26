@@ -1,4 +1,4 @@
-name: Create a Scratch Org, Push Source, Run Apex Tests, create beta package version
+name: Builds and tests the proposed change and creates a beta package version
 
 on:
   pull_request:
