@@ -90,12 +90,7 @@ jobs:
 
       - name: Appending to Package version Log
         run: |
-#          DATA=`sf package version report --package "fflibApexExtensions" --target-dev-hub SFDX-ENV`
-#          VERSION=`echo "$DATA" | grep 'Name' | tail -n1 | cut -d" " -f2- | cut -d" " -f2- | tr -s '[:space:]'`
-#          ID=`echo "$DATA" | grep 'Subscriber Package Version Id' | awk '{print $5}'`
           DT=$(date '+%d/%m/%Y %H:%M:%S');
-          
-#          echo "|$VERSION (BETA) | $ID | Created on $DT" >> README.md
           echo "|$VERSION (BETA) | $VERSION_ID | Created on $DT" >> README.md
           git add README.md
           git commit -am "Update Package Version Log"
