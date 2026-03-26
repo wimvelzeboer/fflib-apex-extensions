@@ -1,12 +1,20 @@
 {
   "packageDirectories": [
     {
-      "path": "sfdx-source/apex-extensions",
-      "default": true
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
+      "path": "sfdx-source",
+      "default": true,
+      "package": "fflibApexExtensions",
+      "versionDescription": "Extension Package for the fflib-apex-common Library with many advanced features"
     }
   ],
   "name": "fflib-apex-extensions",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "65.0"
+  "sourceApiVersion": "65.0",
+  "packageAliases": {
+    "fflibApexExtensions": "0HoJ8000000KyjfKAC",
+    "fflibApexExtensions@0.1.0-1-feature/UnlockedManagedPackage": "04tJ8000000kaKQIAY"
+  }
 }
