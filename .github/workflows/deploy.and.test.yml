@@ -1,9 +1,10 @@
 name: Builds and tests the proposed change and creates a beta package version
 
 on:
-  pull_request:
-    branches:
-      - main
+  pull_request_target:
+#  pull_request:
+#    branches:
+#      - main
 
 jobs:
   build:
@@ -33,7 +34,7 @@ jobs:
           git config --global user.email 'wim@velzeboer.nl'        
 
       - name: Create the scratch org
-        run: sfdx force:org:create --definition-file config/project-scratch-def.json --set-default --setdefaultusername --duration-days 1 --no-track-source --alias fflibapexextensions
+        run:  sf org create scratch --definition-file config/project-scratch-def.json --set-default --setdefaultusername --duration-days 1 --no-track-source --alias fflibapexextensions
 
       - name: Install required dependency framework fflib-apex-mocks
         run: |
