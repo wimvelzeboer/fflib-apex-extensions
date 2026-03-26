@@ -34,7 +34,9 @@ jobs:
           git config --global user.email 'wim@velzeboer.nl'        
 
       - name: Create the scratch org
-        run:  sf org create scratch --definition-file config/project-scratch-def.json --set-default --duration-days 1 --no-track-source --alias fflibapexextensions
+        run:  |
+          SFDX_USE_PROGRESS_BAR=false
+          sf org create scratch --definition-file config/project-scratch-def.json --set-default --duration-days 1 --no-track-source --alias fflibapexextensions
 
       - name: Install required dependency framework fflib-apex-mocks
         run: |
@@ -49,8 +51,7 @@ jobs:
           cd ./temp
           git clone https://github.com/apex-enterprise-patterns/fflib-apex-common.git
           cd ..
-          cp -R ./temp/fflib-apex-mocks/sfdx-source/apex-common ./sfdx-source/
-          
+          cp -R ./temp/fflib-apex-common/sfdx-source/apex-common ./sfdx-source/
 
       - name: Pushing source
         run: sfdx force:source:push --forceoverwrite
