@@ -36,7 +36,7 @@ jobs:
       - name: Create the scratch org
         run:  |
           SF_USE_PROGRESS_BAR=false
-          sf org create scratch --definition-file config/project-scratch-def.json --set-default --duration-days 1 --no-track-source --alias fflibapexextensions
+          sf org create scratch --definition-file config/project-scratch-def.json --set-default --duration-days 1 --alias fflibapexextensions
 
       - name: Install required dependency framework fflib-apex-mocks
         run: |
@@ -54,10 +54,10 @@ jobs:
           cp -R ./temp/fflib-apex-common/sfdx-source/apex-common ./sfdx-source/
 
       - name: Pushing source
-        run: sfdx force:source:push --forceoverwrite
+        run: sf project deploy start --wait 30 --ignore-conflicts
 
       - name: Running Apex Tests
-        run: sfdx force:apex:test:run --codecoverage --resultformat human --wait 5
+        run: sf apex run test --code-coverage --result-format human --wait 15
 
       - name: Get branch name
         id: get-branch-name
@@ -101,5 +101,5 @@ jobs:
           git push
 
       - name: Destroy scratch org
-        run: sfdx force:org:delete -p
+        run: sf org delete --target-org fflibapexextensions --no-prompt
         if: always()
