@@ -1,0 +1,91 @@
+name: Publish a new package version
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+
+      - name: Install SFDX CLI and authorize DevHub
+        uses: sfdx-actions/setup-sfdx@v1
+        with:
+          sfdx-auth-url: ${{ secrets.SFDX_AUTH_URL }}
+
+      - name: Setup the config parameters needed
+        run: sf config set target-dev-hub SFDX-ENV --global
+
+      - name: List SFDX Connections
+        run: echo y | sfdx force:org:list
+
+      - name: Listing Package Details
+        run: sf package version report --package "fflibApexExtensions"  --target-dev-hub SFDX-ENV --verbose
+
+      - name: Fetching Package Version Id
+        run: |
+          DATA=`sf package version report --package "fflibApexExtensions" --target-dev-hub SFDX-ENV`
+          VERSION=`echo "$DATA" | grep 'Name' | tail -n1 | cut -d" " -f2- | cut -d" " -f2- | tr -s '[:space:]'`
+          VERSION_ID=`echo "$DATA" | grep 'Subscriber Package Version Id' | awk '{print $5}'`
+
+      - name: Promoting BETA Package Version
+        run: |         
+          sf package version promote --package $VERSION_ID --target-dev-hub SFDX-ENV --no-prompt
+
+      - name: Update package version
+        run: |
+          echo "Increasing package version"
+          OLD_VERSION_NAME=`grep "versionName" sfdx-project.json | cut -d ":" -f2`
+          OLD_VERSION_NO=`echo "$OLD_VERSION_NAME" | cut -d "." -f2 | cut -d "\"" -f1`
+          NEW_VERSION_NO=`expr $OLD_VERSION_NO + 1`
+          VERSION_PREFIX=`echo "$OLD_VERSION_NAME" | cut -d "." -f1`
+          NEW_VERSION_NAME="$VERSION_PREFIX.$NEW_VERSION_NO\","
+          sed -i -e 's/'"$OLD_VERSION_NAME"'/'"$NEW_VERSION_NAME"'/g' sfdx-project.json
+          echo "Changed version from: $OLD_VERSION_NAME into $NEW_VERSION_NAME"
+          
+          OLD_VERSION_NUMBER=`grep "versionNumber" sfdx-project.json | head -1 | cut -d ":" -f2`
+          VERSION_PREFIX=`echo "$OLD_VERSION_NUMBER" | cut -d "." -f1`
+          NEW_VERSION_NUMBER="$VERSION_PREFIX.$NEW_VERSION_NO.0.NEXT\","
+          sed -i -e 's/'"$OLD_VERSION_NUMBER"'/'"$NEW_VERSION_NUMBER"'/g' sfdx-project.json
+          echo "Changed version name from: $OLD_VERSION_NUMBER into $NEW_VERSION_NUMBER"
+          
+          echo "NEW_VERSION_NAME=$NEW_VERSION_NAME" >> "$GITHUB_ENV"
+
+      - name: Updating Package Version Log
+        run: |
+          sed -i "s/ (BETA) | $$VERSION_ID/| $VERSION_ID/g" README.md
+
+      - name: Committing can pushing changes
+        run: |
+          git config --global user.name 'WimVelzeboer'
+          git config --global user.email 'wim@velzeboer.nl'
+          git add sfdx-project.json
+          git add README.md
+          git commit -am "Update package version to $NEW_VERSION_NAME"
+          git tag -a v$VERSION -m "Version $VERSION release\n\nPackage Version Id: $VERSION_ID"   
+          git push --tags
+
+      - name: Destroy scratch org
+        run: sfdx force:org:delete -p
+        if: always()
+
+      - name: Generate Github Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ github.ref_name }}"
+          gh release create "v$VERSION" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${tag#v}" \
+            --generate-notes \
+            --draft=false

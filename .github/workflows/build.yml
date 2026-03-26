@@ -57,10 +57,19 @@ jobs:
       - name: Running Apex Tests
         run: sfdx force:apex:test:run --codecoverage --resultformat human --wait 5
 
+      - name: Get branch name
+        id: get-branch-name
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_OUTPUT
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Generate Package
         run: |
           echo "Creating new BETA package version"
-          OUTPUT=`sf package version create --installation-key-bypass --package "fflibApexExtensions" --code-coverage -w 30 --definition-file config/project-scratch-def.json`
+          OUTPUT=`sf package version create --installation-key-bypass --package "fflibApexExtensions" --code-coverage -w 30 --definition-file config/project-scratch-def.json --branch ${{ steps.get-branch-name.outputs.BRANCH_NAME }}`
           echo "$OUTPUT"
           [ $? -eq 0 ] && echo "successful" || exit 1
           
@@ -72,6 +81,7 @@ jobs:
           git commit -am "New package version created"
           
           echo "PACKAGE_ID=$VERSION_ID" >> "$GITHUB_ENV"
+          echo "PACKAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Listing Package Details
         run: |
@@ -79,12 +89,13 @@ jobs:
 
       - name: Appending to Package version Log
         run: |
-          DATA=`sf package version report --package $PACKAGE_ID --target-dev-hub SFDX-ENV`
-          VERSION=`echo "$DATA" | grep 'Name' | tail -n1 | cut -d" " -f2- | cut -d" " -f2- | tr -s '[:space:]'`
-          ID=`echo "$DATA" | grep 'Subscriber Package Version Id' | awk '{print $5}'`
+#          DATA=`sf package version report --package "fflibApexExtensions" --target-dev-hub SFDX-ENV`
+#          VERSION=`echo "$DATA" | grep 'Name' | tail -n1 | cut -d" " -f2- | cut -d" " -f2- | tr -s '[:space:]'`
+#          ID=`echo "$DATA" | grep 'Subscriber Package Version Id' | awk '{print $5}'`
           DT=$(date '+%d/%m/%Y %H:%M:%S');
           
-          echo "|$VERSION (BETA) | $ID | Created on $DT" >> README.md
+#          echo "|$VERSION (BETA) | $ID | Created on $DT" >> README.md
+          echo "|$VERSION (BETA) | $VERSION_ID | Created on $DT" >> README.md
           git add README.md
           git commit -am "Update Package Version Log"
 
