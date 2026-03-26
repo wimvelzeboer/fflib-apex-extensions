@@ -51,9 +51,11 @@ Some of the changes that have major impact are listed here;
 
 ### Updates January 2026
 - **fflib_ArrayUtils** <br/>
-  _replaceKey_,<br/>Add method to replace the key of a given map.</br>
-  _replaceValue_,<br/>Add three method overloads for merging a source map of idById and replacement map of idByString, idByDecimal or idByBoolean.</br>
-  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean<br/><br/>
+  _copyFields_,<br/>Add method that copies field values in bulk from one domain to another related domain<br/>
+  _mergeMaps_,<br/>Add method overload to merge two maps of idByBoolean<br/>
+  _replaceKey_,<br/>Add method to replace the key of a given map.<br/>
+  _replaceValue_,<br/>Add three method overloads for merging a source map of idById and replacement map of idByString, idByDecimal or idByBoolean.<br/><br/>
+
 - **fflib_SObjects2**<br/>
   The following methods have been added to the SObjects2 class:<br/>
   _getBooleanFieldByIdField_<br/>
@@ -105,3 +107,8 @@ We are pleased to announce that the fflib-apex-extensions Project is accepting d
 > 8BMsQrdLiBvKaP87GFMPE9Wa1US79ygcp3b9kwoDq1iBW9JEYbcgpDS3hMp2p7ePWiCEKg2fdTucUbpNTtGbnvCCQZTMSu1
 
 Thank you for your donations!
+
+## Package version log
+
+| Package version | Package ID         | Description              |
+|-----------------|--------------------|--------------------------|
