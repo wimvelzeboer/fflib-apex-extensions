@@ -110,5 +110,5 @@ jobs:
           git push
 
       - name: Destroy scratch org
-        run: sf org delete --target-org fflibapexextensions --no-prompt
+        run: sf org delete scratch --target-org fflibapexextensions --no-prompt
         if: always()
