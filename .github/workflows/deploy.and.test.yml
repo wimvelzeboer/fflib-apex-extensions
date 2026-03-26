@@ -17,15 +17,20 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
 
-      - name: Install SFDX CLI and authorize DevHub
-        uses: sfdx-actions/setup-sfdx@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          sfdx-auth-url: ${{ secrets.SFDX_AUTH_URL }}
+          node-version: 20
+
+      - name: Install Salesforce CLI with NPM
+        run: npm install @salesforce/cli --global
+
+      - name: Authorize with the dev hub
+        run: echo "${{ secrets.SFDX_AUTH_URL }}" | sf org login sfdx-url --alias SFDX-ENV --set-default-dev-hub --sfdx-url-stdin
 
       - name: Setup the config parameters needed
         run: |
           sf config set target-dev-hub SFDX-ENV --global
-          sf update
 
       - name: List SFDX Connections
         run: echo y | sfdx force:org:list
