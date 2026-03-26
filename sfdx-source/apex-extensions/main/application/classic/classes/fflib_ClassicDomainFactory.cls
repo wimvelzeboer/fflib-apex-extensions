@@ -138,7 +138,7 @@ public virtual class fflib_ClassicDomainFactory
 	 *                    avoids the need to stub the mock to return its SObjectType
 	 * @param mockDomain The instance of the Domain mock
 	 */
-	public virtual void setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)
+	public virtual override void setMock(Schema.SObjectType sObjectType, fflib_ISObjectDomain mockDomain)
 	{
 		mockDomainByObject.put((Object) sObjectType, mockDomain);
 	}

@@ -90,7 +90,7 @@ public virtual class fflib_ClassicSelectorFactory
 	 *                    avoids the need to stub the mock to return its SObjectType
 	 * @param selectorInstance The instance of the mocked selector
 	 */
-	public virtual void setMock(SObjectType sObjectType, fflib_ISObjectSelector selectorInstance)
+	public virtual override void setMock(SObjectType sObjectType, fflib_ISObjectSelector selectorInstance)
 	{
 		this.m_sObjectByMockSelector.put(sObjectType, selectorInstance);
 	}
