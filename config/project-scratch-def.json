@@ -1,6 +1,8 @@
 {
   "orgName": "fflib-apex-extensions",
   "edition": "Developer",
+  "country": "US",
+  "language": "en_US",
   "features": ["EnableSetPasswordInApi"],
   "settings": {
     "lightningExperienceSettings": {
