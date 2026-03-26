@@ -23,7 +23,9 @@ jobs:
           sfdx-auth-url: ${{ secrets.SFDX_AUTH_URL }}
 
       - name: Setup the config parameters needed
-        run: sf config set target-dev-hub SFDX-ENV --global
+        run: |
+          sf config set target-dev-hub SFDX-ENV --global
+          sf update
 
       - name: List SFDX Connections
         run: echo y | sfdx force:org:list
