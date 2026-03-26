@@ -1,4 +1,4 @@
-name: Builds and tests the proposed change and creates a beta package version
+name: Build and Test
 
 on:
   pull_request:
@@ -45,6 +45,7 @@ jobs:
           git clone https://github.com/apex-enterprise-patterns/fflib-apex-mocks.git
           cd ..
           cp -R ./temp/fflib-apex-mocks/sfdx-source/apex-mocks ./sfdx-source/
+          sf project deploy start --source-dir sfdx-source/apex-mocks --wait 30 --ignore-conflicts
 
       - name: Install required dependency framework fflib-apex-common
         run: |
@@ -52,9 +53,10 @@ jobs:
           git clone https://github.com/apex-enterprise-patterns/fflib-apex-common.git
           cd ..
           cp -R ./temp/fflib-apex-common/sfdx-source/apex-common ./sfdx-source/
+          sf project deploy start --source-dir sfdx-source/apex-common --wait 30 --ignore-conflicts
 
       - name: Pushing source
-        run: sf project deploy start --wait 30 --ignore-conflicts
+        run: sf project deploy start --source-dir sfdx-source/apex-extensions --wait 30 --ignore-conflicts
 
       - name: Running Apex Tests
         run: sf apex run test --code-coverage --result-format human --wait 15
