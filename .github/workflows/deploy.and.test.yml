@@ -39,7 +39,7 @@ jobs:
         run: |
           mkdir ./temp
           cd ./temp
-          git clone https://github.com/sforce18/fflib-apex-mocks.git
+          git clone https://github.com/apex-enterprise-patterns/fflib-apex-mocks.git
           cd ..
           cp -R ./temp/fflib-apex-mocks/sfdx-source/apex-mocks ./sfdx-source/
 
@@ -47,10 +47,9 @@ jobs:
         run: |
           mkdir ./temp
           cd ./temp
-          git clone https://github.com/sforce18/fflib-apex-common.git
+          git clone https://github.com/apex-enterprise-patterns/fflib-apex-common.git
           cd ..
           cp -R ./temp/fflib-apex-mocks/sfdx-source/apex-common ./sfdx-source/
-          
 
       - name: Pushing source
         run: sfdx force:source:push --forceoverwrite
