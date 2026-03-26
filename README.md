@@ -111,4 +111,5 @@ Thank you for your donations!
 ## Package version log
 
 | Package version | Package ID         | Description              |
-|-----------------|--------------------|--------------------------||0.1.0-1-feature/UnlockedManagedPackage (BETA) | 04tJ8000000kaKQIAY | Created on 26/03/2026 18:14:51 |
+|-----------------|--------------------|--------------------------|
+|0.1.0-1-feature/UnlockedManagedPackage (BETA) | 04tJ8000000kaKQIAY | Created on 26/03/2026 18:14:51 |
