@@ -84,7 +84,7 @@ jobs:
         run: |
           sed -i "s/ (BETA) | $$PACKAGE_VERSION_ID/| $PACKAGE_VERSION_ID/g" README.md
 
-      - name: Committing can pushing changes
+      - name: Committing and pushing changes
         run: |
           git config --global user.name 'WimVelzeboer'
           git config --global user.email 'wim@velzeboer.nl'
