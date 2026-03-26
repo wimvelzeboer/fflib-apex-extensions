@@ -45,11 +45,11 @@ jobs:
 
       - name: Install required dependency framework fflib-apex-common
         run: |
-          mkdir ./temp
           cd ./temp
           git clone https://github.com/apex-enterprise-patterns/fflib-apex-common.git
           cd ..
           cp -R ./temp/fflib-apex-mocks/sfdx-source/apex-common ./sfdx-source/
+          
 
       - name: Pushing source
         run: sfdx force:source:push --forceoverwrite
@@ -88,9 +88,10 @@ jobs:
           git add README.md
           git commit -am "Update Package Version Log"
 
-      - name: Push changes
+      - name: Push changes to GIT
         run: |
           git push
+
       - name: Destroy scratch org
         run: sfdx force:org:delete -p
         if: always()
