@@ -35,7 +35,7 @@ jobs:
 
       - name: Create the scratch org
         run:  |
-          SFDX_USE_PROGRESS_BAR=false
+          SF_USE_PROGRESS_BAR=false
           sf org create scratch --definition-file config/project-scratch-def.json --set-default --duration-days 1 --no-track-source --alias fflibapexextensions
 
       - name: Install required dependency framework fflib-apex-mocks
