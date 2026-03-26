@@ -46,7 +46,7 @@ jobs:
 
       - name: Fetching Latest Package Version Id
         run: |
-          DATA=`sf package version list --packages "fflibApexExtensions" --target-dev-hub HarrierDevHub --branch $BRANCH_NAME --json`
+          DATA=`sf package version list --packages "fflibApexExtensions" --target-dev-hub SFDX-ENV --branch $BRANCH_NAME --json`
           LATEST_VERSION=`echo "$DATA" | jq '.result[-1]'`
          
           VERSION=`echo "$LATEST_VERSION" | jq -r '.Version'`
