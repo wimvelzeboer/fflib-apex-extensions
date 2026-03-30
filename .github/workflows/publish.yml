@@ -82,8 +82,6 @@ jobs:
           REPLACEMENT="sf package install --package $PACKAGE_VERSION_I0--wait=10 --target-org YOUR_ORG_ALIAS"
           sed -i 's|^sf package install.*|sf package install --package '$PACKAGE_VERSION_ID' --wait=10 --target-org $YOUR_ORG_ALIAS|' README.md 
           sed -i 's|^Either clone the repository.*|Either clone the repository and import the package manually, use the [Package Installation URL](https://login.salesforce.com/packaging/installPackage.apexp?p0='$PACKAGE_VERSION_ID')|' README.md 
-          git add README.md
-          git commit -am "Update Package Version Log with $PACKAGE_VERSION"
 
       - name: Committing and pushing changes
         run: |
