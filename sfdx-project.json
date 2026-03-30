@@ -17,6 +17,7 @@
     "fflibApexExtensions": "0HoJ8000000KyjfKAC",
     "fflibApexExtensions@0.1.0-1-feature/UnlockedManagedPackage": "04tJ8000000kaKQIAY",
     "fflibApexExtensions@0.1.0-2-feature/UnlockedManagedPackage": "04tJ8000000kaKVIAY",
-    "fflibApexExtensions@0.2.0-1-bugfix/pipelineBug": "04tJ8000000kaKaIAI"
+    "fflibApexExtensions@0.2.0-1-bugfix/pipelineBug": "04tJ8000000kaKaIAI",
+    "fflibApexExtensions@0.3.0-1-bugfix/pipelineFix2": "04tJ8000000kaKfIAI"
   }
 }
