@@ -22,9 +22,10 @@ jobs:
           fetch-depth: 0
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: '24'
+          cache: 'npm'
 
       - name: Install Salesforce CLI with NPM
         run: npm install @salesforce/cli --global
@@ -56,8 +57,7 @@ jobs:
 
       - name: Promoting BETA Package Version
         run: |
-          echo "Promoting package version"
-          #sf package version promote --package $PACKAGE_VERSION_ID --target-dev-hub SFDX-ENV --no-prompt
+          sf package version promote --package $PACKAGE_VERSION_ID --target-dev-hub SFDX-ENV --no-prompt
 
       - name: Update package version
         run: |
