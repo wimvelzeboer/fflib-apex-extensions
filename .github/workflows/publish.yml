@@ -56,7 +56,8 @@ jobs:
 
       - name: Promoting BETA Package Version
         run: |
-          sf package version promote --package $PACKAGE_VERSION_ID --target-dev-hub SFDX-ENV --no-prompt
+          echo "Promoting package version"
+          #sf package version promote --package $PACKAGE_VERSION_ID --target-dev-hub SFDX-ENV --no-prompt
 
       - name: Update package version
         run: |
