@@ -6,6 +6,17 @@ This extension package is dependent on the following packages:
 - [fflib-apex-mocks](https://github.com/apex-enterprise-patterns/fflib-apex-mocks)
 - [fflib-apex-common](https://github.com/apex-enterprise-patterns/fflib-apex-common)
 
+## Installation
+
+The package is available as an Unlocked Managed Package (2GP) with package ID `0HoJ8000000KyjfKAC`.
+
+Either clone the repository and import the package manually, use the [Package Installation URL](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tJ8000000kaKVIAY),
+or execute the following SFDX CLI command in your terminal:
+```bash
+sf package install --package 04tJ8000000kaKVIAY --wait=10 --target-org $YOUR_ORG_ALIAS
+```
+_Replace `$YOUR_ORG_ALIAS` with the alias of your target org_
+
 ## Extensions pack contents
 These features are offered in this extension package:
 
@@ -113,4 +124,3 @@ Thank you for your donations!
 | Package version                               | Package ID         | Description                    |
 |-----------------------------------------------|--------------------|--------------------------------|
 | 0.1.0-2                                       | 04tJ8000000kaKVIAY | Created on 26/03/2026 20:07:07 |
-|0.2.0-1-bugfix/pipelineBug (BETA) | 04tJ8000000kaKaIAI | Created on 30/03/2026 10:28:11 |
