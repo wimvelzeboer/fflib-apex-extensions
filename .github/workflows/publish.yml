@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -85,8 +86,8 @@ jobs:
 
       - name: Committing and pushing changes
         run: |
-          git config --global user.name 'WimVelzeboer'
-          git config --global user.email 'wim@velzeboer.nl'
+          git config --local user.name github-actions
+          git config --local user.email github-actions@github.com
           git add sfdx-project.json
           git add README.md
           git commit -am "Update package version to $NEW_PACKAGE_VERSION"

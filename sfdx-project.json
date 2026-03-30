@@ -1,8 +1,8 @@
 {
   "packageDirectories": [
     {
-      "versionName": "ver 0.4",
-      "versionNumber": "0.4.0.NEXT",
+      "versionName": "ver 0.5",
+      "versionNumber": "0.5.0.NEXT",
       "path": "sfdx-source",
       "default": true,
       "package": "fflibApexExtensions",
@@ -19,6 +19,7 @@
     "fflibApexExtensions@0.1.0-2-feature/UnlockedManagedPackage": "04tJ8000000kaKVIAY",
     "fflibApexExtensions@0.2.0-1-bugfix/pipelineBug": "04tJ8000000kaKaIAI",
     "fflibApexExtensions@0.3.0-1-bugfix/pipelineFix2": "04tJ8000000kaKfIAI",
-    "fflibApexExtensions@0.4.0-1": "04tJ8000000kaKkIAI"
+    "fflibApexExtensions@0.4.0-1": "04tJ8000000kaKkIAI",
+    "fflibApexExtensions@0.5.0-1": "04tJ8000000kaKpIAI"
   }
 }
