@@ -84,9 +84,15 @@ jobs:
           echo "NEW_PACKAGE_VERSION_NAME=$NEW_PACKAGE_VERSION_NAME" >> "$GITHUB_ENV"
           echo "NEW_PACKAGE_VERSION=$NEW_PACKAGE_VERSION" >> "$GITHUB_ENV"
 
-      - name: Updating Package Version Log
+      - name: Appending to package version log
         run: |
-          sed -i "s/ (BETA) | $$PACKAGE_VERSION_ID/| $PACKAGE_VERSION_ID/g" README.md
+          DT=$(date '+%d/%m/%Y %H:%M:%S');
+          echo "| $PACKAGE_VERSION | $PACKAGE_VERSION_ID | Created on $DT |" >> README.md
+          REPLACEMENT="sf package install --package $PACKAGE_VERSION_I0--wait=10 --target-org YOUR_ORG_ALIAS"
+          sed -i 's|^sf package install.*|sf package install --package '$PACKAGE_VERSION_ID' --wait=10 --target-org $YOUR_ORG_ALIAS|' README.md 
+          sed -i 's|^Either clone the repository.*|Either clone the repository and import the package manually, use the [Package Installation URL](https://login.salesforce.com/packaging/installPackage.apexp?p0='$PACKAGE_VERSION_ID')|' README.md 
+          git add README.md
+          git commit -am "Update Package Version Log with $PACKAGE_VERSION"
 
       - name: Committing and pushing changes
         run: |

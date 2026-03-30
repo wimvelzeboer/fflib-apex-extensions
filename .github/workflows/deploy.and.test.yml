@@ -80,13 +80,6 @@ jobs:
           echo "PACKAGE_ID=$VERSION_ID" >> "$GITHUB_ENV"
           echo "PACKAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
 
-      - name: Appending to package version log
-        run: |
-          DT=$(date '+%d/%m/%Y %H:%M:%S');
-          echo "|$PACKAGE_VERSION (BETA) | $PACKAGE_ID | Created on $DT |" >> README.md
-          git add README.md
-          git commit -am "Update Package Version Log with $PACKAGE_VERSION-Beta"
-
       - name: Push changes to GIT
         run: |
           git push
