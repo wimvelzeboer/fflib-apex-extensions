@@ -21,7 +21,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install Salesforce CLI with NPM
         run: npm install @salesforce/cli --global
@@ -69,11 +69,15 @@ jobs:
         run: |
           echo "Increasing package versionName"
           NEW_PACKAGE_VERSION_NAME=`echo "ver $(echo "$PACKAGE_VERSION" | cut -d ' ' -f2 | cut -d '.' -f1).$(expr "$(echo "$PACKAGE_VERSION" | cut -d ' ' -f2 | cut -d '.' -f2)" + 1)"`
+          echo "Current package version name: $PACKAGE_VERSION"
+          echo "New package version name: $NEW_PACKAGE_VERSION_NAME"
           cat sfdx-project.json | jq -r  --arg VERSION "$NEW_PACKAGE_VERSION_NAME" '.packageDirectories |= map(select(.package == "fflibApexExtensions").versionName = $VERSION)' > tmp.json
           mv tmp.json sfdx-project.json
           
           echo "Increasing package versionNumber"
           NEW_PACKAGE_VERSION=`echo "$(echo "$NEW_PACKAGE_VERSION_NAME" | cut -d ' ' -f2).0.NEXT"`
+          echo "Current package version name: $PACKAGE_VERSION"
+          echo "New package version name: $NEW_PACKAGE_VERSION"          
           cat sfdx-project.json | jq -r  --arg VERSION "$NEW_PACKAGE_VERSION" '.packageDirectories |= map(select(.package == "fflibApexExtensions").versionNumber = $VERSION)' > tmp.json
           mv tmp.json sfdx-project.json
           
@@ -91,5 +95,5 @@ jobs:
           git add sfdx-project.json
           git add README.md
           git commit -am "Update package version to $NEW_PACKAGE_VERSION"
-          git tag -a "v$PACKAGE_VERSION" -m "Release Version $PACKAGE_VERSION\n\nPackage Version Id: $PACKAGE_VERSION_ID"   
+          git tag -a "v$PACKAGE_VERSION" -m "Release Version $PACKAGE_VERSION" -m "" -m "Package Version Id: $PACKAGE_VERSION_ID"   
           git push --tags

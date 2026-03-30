@@ -113,3 +113,4 @@ Thank you for your donations!
 | Package version                               | Package ID         | Description                    |
 |-----------------------------------------------|--------------------|--------------------------------|
 | 0.1.0-2                                       | 04tJ8000000kaKVIAY | Created on 26/03/2026 20:07:07 |
+|0.2.0-1-bugfix/pipelineBug (BETA) | 04tJ8000000kaKaIAI | Created on 30/03/2026 10:28:11 |
