@@ -33,33 +33,23 @@ jobs:
         run: |
           sf config set target-dev-hub SFDX-ENV --global
 
-      - name: Get branch name
-        id: get-branch-name
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "Branch name: ${{ github.head_ref }}"
-            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
-          else
-            echo "Branch name: ${GITHUB_REF#refs/heads/}"
-            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          fi
-
       - name: Fetching Latest Package Version Id
         run: |
-          DATA=`sf package version list --packages "fflibApexExtensions" --target-dev-hub SFDX-ENV --branch $BRANCH_NAME --json`
-          LATEST_VERSION=`echo "$DATA" | jq '.result[-1]'`
-         
-          VERSION=`echo "$LATEST_VERSION" | jq -r '.Version'`
-          VERSION_NAME=`echo "$LATEST_VERSION" | jq -r '.Name'`
-          VERSION_ID=`echo "$LATEST_VERSION" | jq -r '.SubscriberPackageVersionId'`
-          
-          echo "Version: $VERSION"
-          echo "Version Name: $VERSION_NAME"
+          VERSION_ID=`cat sfdx-project.json | jq -r '.packageAliases | to_entries | [last] | .[0].value '`
           echo "Version ID: $VERSION_ID"
           
+          JSON=`sf package version list --packages "fflibApexExtensions" --target-dev-hub SFDX-ENV --json`
+          DATA=`echo "$JSON" | jq -r --arg VERSION "$VERSION_ID" '.result | .[] | select(.SubscriberPackageVersionId == $VERSION)'`
+          
+          VERSION_NUMBER=`echo "$DATA" | jq -r '.Version'`
+          echo "Version: $VERSION_NUMBER"
+          
+          VERSION_NAME=`echo "$DATA" | jq -r '.Name'`
+          echo "Version Name: $VERSION_NAME"
+          
           echo "PACKAGE_VERSION_ID=$VERSION_ID" >> "$GITHUB_ENV"
-          echo "PACKAGE_VERSION_NAME=$VERSION_ID" >> "$GITHUB_ENV"
-          echo "PACKAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "PACKAGE_VERSION_NAME=$VERSION_NAME" >> "$GITHUB_ENV"          
+          echo "PACKAGE_VERSION=$VERSION_NUMBER" >> "$GITHUB_ENV"
 
       - name: Promoting BETA Package Version
         run: |
