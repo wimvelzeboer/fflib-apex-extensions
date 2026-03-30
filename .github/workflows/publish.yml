@@ -1,7 +1,7 @@
 name: Publish a new package version
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - main
     types:
@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout main branch
+        uses: actions/checkout@v6
         with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
+          ref: main
 
       - name: Install Node.js
         uses: actions/setup-node@v4
