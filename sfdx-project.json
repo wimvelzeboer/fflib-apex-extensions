@@ -15,6 +15,7 @@
   "sourceApiVersion": "66.0",
   "packageAliases": {
     "fflibApexExtensions": "0HoJ8000000KyjfKAC",
-    "fflibApexExtensions@0.7.0-1": "04tJ8000000kaKzIAI"
+    "fflibApexExtensions@0.7.0-1": "04tJ8000000kaKzIAI",
+    "fflibApexExtensions@0.8.0-1-apiUpgrade": "04tJ8000000kaL4IAI"
   }
 }
