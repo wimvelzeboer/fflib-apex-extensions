@@ -22,10 +22,9 @@ jobs:
           fetch-depth: 0
 
       - name: Install Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: 'npm'
+          node-version: 24
 
       - name: Install Salesforce CLI with NPM
         run: npm install @salesforce/cli --global

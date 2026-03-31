@@ -34,8 +34,8 @@ jobs:
 
       - name: Setup Git Configuration
         run: |
-          git config --global user.name 'WimVelzeboer'
-          git config --global user.email 'wim@velzeboer.nl'        
+          git config --local user.name github-actions
+          git config --local user.email github-actions@github.com  
 
       - name: Fetch required dependency framework fflib-apex-mocks
         run: |
