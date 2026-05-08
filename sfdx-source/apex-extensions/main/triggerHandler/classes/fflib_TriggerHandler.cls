@@ -132,6 +132,7 @@ public virtual with sharing class fflib_TriggerHandler
 
 	protected void execute(fflib_ITriggerContext ctx)
 	{
+		ctx.clearRelated();
 		fflib_UnitOfWork unitOfWork = new fflib_UnitOfWork();
 		for (fflib_ITriggerActionConfig triggerActionConfig : configs)
 		{
@@ -147,6 +148,7 @@ public virtual with sharing class fflib_TriggerHandler
 
 			triggerAction.setContext(ctx);
 			triggerAction.setSequence(triggerActionConfig.getSequence());
+			triggerAction.onBeforeWork();
 
 			// Queueable only makes sense in an onAfter context.
 			if (triggerActionConfig.isQueued() && ctx.isAfter())
@@ -156,7 +158,10 @@ public virtual with sharing class fflib_TriggerHandler
 
 			unitOfWork.addWork(triggerAction);
 		}
+		ctx.fetchRelated();
+		ctx.initializeUnitOfWork();
 		unitOfWork.doWork();
+		ctx.commitWork();
 	}
 
 	private Boolean isValidExecutionContext(fflib_ITriggerContext ctx, fflib_ITriggerActionConfig config)
