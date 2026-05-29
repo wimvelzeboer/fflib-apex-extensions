@@ -68,15 +68,14 @@ private class fflib_TriggerContextTest
 		fflib_MultiSObjectsSelector selectorMock = (fflib_MultiSObjectsSelector) mocks.mock(fflib_MultiSObjectsSelector.class);
 
 		mocks.startStubbing();
-		mocks.when(selectorMock.query()).thenReturn(
-				new Map<SObjectType, List<SObject>> {
-						Schema.Account.SObjectType => new List<SObject>{
-								new Account(Id = accountId)
-						},
-						Schema.Case.SObjectType => new List<SObject>{
-								new Case(ContactId = contactId)
-						}
-				}
+		// Lazy fetch queries each SObjectType on first getRelated() call via queryForType()
+		mocks.when(selectorMock.hasQueriesFor(Schema.Account.SObjectType)).thenReturn(true);
+		mocks.when(selectorMock.queryForType(Schema.Account.SObjectType)).thenReturn(
+				new List<SObject>{ new Account(Id = accountId) }
+		);
+		mocks.when(selectorMock.hasQueriesFor(Schema.Case.SObjectType)).thenReturn(true);
+		mocks.when(selectorMock.queryForType(Schema.Case.SObjectType)).thenReturn(
+				new List<SObject>{ new Case(ContactId = contactId) }
 		);
 		mocks.stopStubbing();
 		fflib_MultiSObjectsSelector.replaceWith(selectorMock);
@@ -126,7 +125,11 @@ private class fflib_TriggerContextTest
 						new Set<Id> {UserInfo.getUserId()}
 				);
 
-		((fflib_MultiSObjectsSelector) mocks.verify(selectorMock, 1)).query();
+		// Lazy fetch: only the SObjectTypes actually requested via getRelated() are queried.
+		// User was registered via interestedIn() but never requested, so it is never queried.
+		((fflib_MultiSObjectsSelector) mocks.verify(selectorMock, 1)).queryForType(Schema.Account.SObjectType);
+		((fflib_MultiSObjectsSelector) mocks.verify(selectorMock, 1)).queryForType(Schema.Case.SObjectType);
+		((fflib_MultiSObjectsSelector) mocks.verify(selectorMock, 0)).queryForType(Schema.User.SObjectType);
 		ctx.clearRelated();
 		System.Assert.areEqual(0, ctx.getRelated(Schema.Account.SObjectType).size(), 'Expected no Account records');
 		System.Assert.areEqual(0, ctx.getRelated(Schema.Case.SObjectType).size(), 'Expected no Case records');

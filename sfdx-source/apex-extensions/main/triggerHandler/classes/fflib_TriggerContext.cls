@@ -88,10 +88,21 @@ public virtual inherited sharing class fflib_TriggerContext
 	}
 
 	/**
-	 * Provides access to related records which are queried before the action is run
+	 * Provides access to related records which are queried lazily on first getRelated() call per SObjectType.
+	 * This ensures no SOQL is spent on SObjectTypes that no TA actually consumes.
 	 */
 	@TestVisible
 	protected Map<SObjectType, List<SObject>> relatedRecords = new Map<SObjectType, List<SObject>>();
+
+	/**
+	 * Tracks which SObjectTypes have already been fetched (lazy loading)
+	 */
+	private Set<SObjectType> fetchedTypes = new Set<SObjectType>();
+
+	/**
+	 * Whether onBeforeWork registration phase is complete (fetchRelated has been called)
+	 */
+	private Boolean registrationComplete = false;
 
 	/**
 	 * A multi SObject selector that is able to batch execute queries for the Trigger Actions
@@ -135,6 +146,8 @@ public virtual inherited sharing class fflib_TriggerContext
 	 */
 	public void clearRelated() {
 		this.relatedRecords.clear();
+		this.fetchedTypes.clear();
+		this.registrationComplete = false;
 		this.selector.clear();
 	}
 
@@ -144,6 +157,8 @@ public virtual inherited sharing class fflib_TriggerContext
 	 */
 	public void commitWork()
 	{
+		if (this.unitOfWork == null) return;
+
 		this.unitOfWork.commitWork();
 
 		// Clear work after its executed
@@ -152,14 +167,15 @@ public virtual inherited sharing class fflib_TriggerContext
 	}
 
 	/**
-	 * Method used by the framework to run the batched queries
+	 * Method called by the framework after onBeforeWork() registration is complete.
+	 * Marks the context as ready for lazy fetching — actual SOQL runs on first getRelated() call per SObjectType.
+	 * This ensures no SOQL is spent on SObjectTypes that no TA's action method actually consumes.
 	 *
-	 * @see fflib_TriggerContext.selector
+	 * @see fflib_TriggerContext.getRelated
 	 */
 	public void fetchRelated()
 	{
-		this.relatedRecords = this.selector.query();
-		System.debug(this.relatedRecords);
+		this.registrationComplete = true;
 	}
 
 	/**
@@ -299,6 +315,26 @@ public virtual inherited sharing class fflib_TriggerContext
      * }
 	 */
 	public List<SObject> getRelated(SObjectType sObjectType) {
+		// Warn if called before registration is complete but queries exist (likely a timing bug)
+		if (!this.registrationComplete && this.selector.hasQueriesFor(sObjectType))
+		{
+			System.debug(LoggingLevel.WARN, 'fflib_TriggerContext.getRelated(' + sObjectType + ') called before registration complete. Data will be empty.');
+		}
+
+		// Lazy fetch: query this SObjectType on first access, cache for subsequent calls
+		if (!this.fetchedTypes.contains(sObjectType) && this.registrationComplete)
+		{
+			this.fetchedTypes.add(sObjectType);
+			if (this.selector.hasQueriesFor(sObjectType))
+			{
+				List<SObject> results = this.selector.queryForType(sObjectType);
+				if (results != null)
+				{
+					this.relatedRecords.put(sObjectType, results);
+				}
+			}
+		}
+
 		if (this.relatedRecords.containsKey(sObjectType)) {
 			return this.relatedRecords.get(sObjectType);
 		}
@@ -334,6 +370,37 @@ public virtual inherited sharing class fflib_TriggerContext
 		this.selector.registerQuery(
 				sObjectType,
 				fields,
+				sObjectType.getDescribe().fields.getMap().get('Id'),
+				getIdFieldValues(idField, false)
+		);
+		return this;
+	}
+
+	/**
+	 * Declares its interest into a related parent record, including relationship traversal fields
+	 *
+	 * @param idField The SObjectField holding the Id of the parent record
+	 * @param fields a set of SObjectFields on the parent record (direct fields)
+	 * @param relationshipFieldPaths a set of relationship traversal paths as strings
+	 *        e.g. 'Country__r.ClearingHouse__r.APIValue__c'
+	 *
+	 * @return Returns an instance of itself to allow for method chaining
+	 *
+	 * @example
+	 * // QUERY: SELECT Name, Owner.Profile.Name FROM Account WHERE Id IN :contacts.getAccountIds()
+	 * new fflib_TriggerContext()
+	 * 		.interestedIn(
+	 * 			Schema.Contact.AccountId,
+	 * 			new Set<SObjectField>{ Schema.Account.Name },
+	 * 			new Set<String>{ 'Owner.Profile.Name' });
+	 */
+	public fflib_ITriggerContext interestedIn(SObjectField idField, Set<SObjectField> fields, Set<String> relationshipFieldPaths)
+	{
+		SObjectType sObjectType = idField.getDescribe().getReferenceTo().get(0);
+		this.selector.registerQuery(
+				sObjectType,
+				fields,
+				relationshipFieldPaths,
 				sObjectType.getDescribe().fields.getMap().get('Id'),
 				getIdFieldValues(idField, false)
 		);
@@ -498,6 +565,8 @@ public virtual inherited sharing class fflib_TriggerContext
 	 * with the registered SObjectTypes by the trigger actions
 	 */
 	public void initializeUnitOfWork() {
+		if (this.unitOfWorkHierarchy.isEmpty()) return;
+
 		List<SortableSObjectType> sortableSObjectTypes = this.unitOfWorkHierarchy.values();
 		sortableSObjectTypes.sort();
 
@@ -528,6 +597,7 @@ public virtual inherited sharing class fflib_TriggerContext
 		public SortableSObjectType(SObjectType sObjectType, Set<SObjectType> parentSObjectTypes)
 		{
 			this.sObjectType = sObjectType;
+			this.parentSObjectTypes = parentSObjectTypes;
 		}
 
 		public SortableSObjectType addParent( Set<SObjectType> sObjectTypes)
