@@ -120,6 +120,26 @@ public interface fflib_ITriggerContext
 	fflib_ITriggerContext interestedIn(SObjectField idField, Set<SObjectField> fields);
 
 	/**
+	 * Declares its interest into a related parent record, including relationship traversal fields
+	 *
+	 * @param idField The SObjectField holding the Id of the parent record
+	 * @param fields a set of SObjectFields on the parent record (direct fields)
+	 * @param relationshipFieldPaths a set of relationship traversal paths as strings
+	 *        e.g. 'Country__r.ClearingHouse__r.APIValue__c'
+	 *
+	 * @return Returns an instance of itself to allow for method chaining
+	 *
+	 * @example
+	 * // QUERY: SELECT Name, Owner.Profile.Name FROM Account WHERE Id IN :contacts.getAccountIds()
+	 * new fflib_TriggerContext()
+	 * 		.interestedIn(
+	 * 			Schema.Contact.AccountId,
+	 * 			new Set<SObjectField>{ Schema.Account.Name },
+	 * 			new Set<String>{ 'Owner.Profile.Name' });
+	 */
+	fflib_ITriggerContext interestedIn(SObjectField idField, Set<SObjectField> fields, Set<String> relationshipFieldPaths);
+
+	/**
 	 * Declares its interest into a related child record
 	 *
 	 * @param relationshipName The SObject Relation Name Field holding the Id of the parent record

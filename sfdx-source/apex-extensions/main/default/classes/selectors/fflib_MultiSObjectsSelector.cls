@@ -84,6 +84,9 @@ public without sharing class fflib_MultiSObjectsSelector
 			Set<Id> idFieldValues
 	)
 	{
+		Set<Id> safeValues = stripNulls(idFieldValues);
+		if (safeValues.isEmpty()) return this;
+
 		if (this.queries.containsKey(sObjectType) == false) {
 			this.queries.put(sObjectType, new Map<SObjectField, QueryInfo>());
 		}
@@ -93,45 +96,121 @@ public without sharing class fflib_MultiSObjectsSelector
 			this.queries.get(sObjectType)
 					.get(idField)
 					.addFields(fieldsToFetch)
-					.addValues(idFieldValues);
+					.addValues(safeValues);
 		} else {
 			this.queries.get(sObjectType)
-				.put(idField, new QueryInfo(sObjectType, fieldsToFetch, idField, idFieldValues));
+				.put(idField, new QueryInfo(sObjectType, fieldsToFetch, idField, safeValues));
 		}
 
 		return this;
 	}
 
+	public fflib_MultiSObjectsSelector registerQuery(
+			SObjectType sObjectType,
+			Set<SObjectField> fieldsToFetch,
+			Set<String> relationshipFieldPaths,
+			SObjectField idField,
+			Set<Id> idFieldValues
+	)
+	{
+		registerQuery(sObjectType, fieldsToFetch, idField, idFieldValues);
+		if (relationshipFieldPaths != null && !relationshipFieldPaths.isEmpty())
+		{
+			Set<String> safePaths = validateFieldPaths(relationshipFieldPaths);
+			if (!this.queries.containsKey(sObjectType)) return this;
+			if (!this.queries.get(sObjectType).containsKey(idField)) return this;
+			this.queries.get(sObjectType).get(idField).addFieldPaths(safePaths);
+		}
+		return this;
+	}
 
+	/**
+	 * Convenience method that queries all registered SObjectTypes.
+	 * The lazy fetch pattern (used by fflib_TriggerContext) calls queryForType() directly
+	 * to avoid querying SObjectTypes that no trigger action actually consumes.
+	 */
 	public Map<SObjectType, List<SObject>> query() {
 		Map<SObjectType, List<SObject>> result = new Map<SObjectType, List<SObject>>();
-
 		for (SObjectType sObjectType : this.queries.keySet())
 		{
-			Set<String> fields = new Set<String>();
-			String condition = '';
-
-			for (SObjectField idField : this.queries.get(sObjectType).keySet())
+			List<SObject> records = queryForType(sObjectType);
+			if (records != null)
 			{
-				QueryInfo queryInfo = this.queries.get(sObjectType).get(idField);
-				fields.addAll(queryInfo.fieldsToFetch);
-				condition +=
-						(String.isBlank(condition) ? '' : ' OR ') +
-						idField.getDescribe().getName()
-								+ ' IN (' + '\'' + String.join(queryInfo.idFieldValues, '\',\'') + '\')';
+				result.put(sObjectType, records);
 			}
-
-			String query = 'SELECT Id,' + String.join(fields,',')
-					+ ' FROM ' + sObjectType.getDescribe().getName()
-					+ ' WHERE ' + condition
-					+ ' WITH ' + (this.accessLevel == System.AccessLevel.SYSTEM_MODE ? 'SYSTEM_MODE' : 'USER_MODE')
-			;
-
-			List<SObject> sObjects = Database.query(query);
-			result.put(sObjectType, sObjects);
 		}
 		return result;
 	}
+
+	public List<SObject> queryForType(SObjectType sObjectType) {
+		if (!this.queries.containsKey(sObjectType)) return null;
+
+		fflib_QueryFactory qf = new fflib_QueryFactory(sObjectType);
+		qf.setEnforceFLS(this.accessLevel == System.AccessLevel.USER_MODE);
+
+		List<String> conditions = new List<String>();
+
+		for (SObjectField idField : this.queries.get(sObjectType).keySet())
+		{
+			QueryInfo queryInfo = this.queries.get(sObjectType).get(idField);
+			if (queryInfo.idFieldValues.isEmpty()) continue;
+
+			// Add fields to QueryFactory (Id is included automatically)
+			for (String fieldPath : queryInfo.fieldsToFetch)
+			{
+				qf.selectField(fieldPath);
+			}
+
+			List<String> escapedIds = new List<String>();
+			for (Id idVal : queryInfo.idFieldValues)
+			{
+				escapedIds.add(String.escapeSingleQuotes(String.valueOf(idVal)));
+			}
+			conditions.add(
+				idField.getDescribe().getName()
+					+ ' IN (\'' + String.join(escapedIds, '\',\'') + '\')'
+			);
+		}
+
+		if (conditions.isEmpty()) return null;
+
+		qf.setCondition(String.join(conditions, ' OR '));
+		return Database.query(qf.toSOQL());
+	}
+
+	public Boolean hasQueriesFor(SObjectType sObjectType) {
+		return this.queries.containsKey(sObjectType);
+	}
+
+	private static Set<Id> stripNulls(Set<Id> ids)
+	{
+		Set<Id> result = new Set<Id>();
+		if (ids == null) return result;
+		for (Id idVal : ids)
+		{
+			if (idVal != null) result.add(idVal);
+		}
+		return result;
+	}
+
+	private static final Pattern FIELD_PATH_PATTERN = Pattern.compile('^[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)*$');
+
+	private static Set<String> validateFieldPaths(Set<String> paths)
+	{
+		Set<String> safe = new Set<String>();
+		for (String path : paths)
+		{
+			if (String.isBlank(path)) continue;
+			if (!FIELD_PATH_PATTERN.matcher(path.trim()).matches())
+			{
+				throw new SelectorException('Invalid field path: ' + path);
+			}
+			safe.add(path.trim());
+		}
+		return safe;
+	}
+
+	public class SelectorException extends Exception {}
 
 
 	/**
@@ -157,9 +236,7 @@ public without sharing class fflib_MultiSObjectsSelector
 
 	private class QueryInfo {
 
-//		private final SObjectType sObjectType;
 		private final Set<String> fieldsToFetch;
-//		private final SObjectField idField;
 		private final Set<Id> idFieldValues;
 
 		public QueryInfo(SObjectType sObjectType,
@@ -171,9 +248,7 @@ public without sharing class fflib_MultiSObjectsSelector
 			{
 				this.fieldsToFetch.add(sObjectField.getDescribe().getName());
 			}
-//			this.idField = idField;
 			this.idFieldValues = idFieldValues;
-//			this.sObjectType = sObjectType;
 		}
 
 		public QueryInfo addFields(Set<SObjectField> fieldsToFetch) {
@@ -181,6 +256,11 @@ public without sharing class fflib_MultiSObjectsSelector
 			{
 				this.fieldsToFetch.add(sObjectField.getDescribe().getName());
 			}
+			return this;
+		}
+
+		public QueryInfo addFieldPaths(Set<String> fieldPaths) {
+			this.fieldsToFetch.addAll(fieldPaths);
 			return this;
 		}
 
