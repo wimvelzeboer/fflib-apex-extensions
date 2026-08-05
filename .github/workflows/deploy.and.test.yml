@@ -32,7 +32,7 @@ jobs:
           echo "$SFDX_AUTH_URL" | wc -c
           echo "${{ secrets.SFDX_AUTH_URL }}" | wc -c
           echo "$Env:SFDX_AUTH_URL" | wc -c
-          echo "$SFDX_AUTH_URL" | sf org login sfdx-url --alias SFDX-ENV --set-default-dev-hub --sfdx-url-stdin
+          echo "${{ secrets.SFDX_AUTH_URL }}" | sf org login sfdx-url --alias SFDX-ENV --set-default-dev-hub --sfdx-url-stdin
 
       - name: Setup the config parameters needed
         run: |
