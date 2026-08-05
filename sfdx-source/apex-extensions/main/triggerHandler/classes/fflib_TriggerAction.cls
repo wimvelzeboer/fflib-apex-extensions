@@ -68,13 +68,19 @@ public abstract inherited sharing class fflib_TriggerAction
 	 **/
 	public virtual void onBeforeUpdate() { }
 
+	/**
+	 * Override this to perform logic before the work is started of all the trigger actions
+	 * Note: this gets executed twice, once (before) on the before and once (before) the after
+ 	 **/
+	public virtual void onBeforeWork() {}
+
 	public void doWork()
 	{
 		switch on this.triggerContext.getTriggerOperation()
 		{
 			when AFTER_DELETE { onAfterDelete(); }
 			when AFTER_INSERT { onAfterInsert(); }
-			when AFTER_UNDELETE { onAfterUndelete(); }
+			when AFTER_UNDELETE { onAfterUnDelete(); }
 			when AFTER_UPDATE { onAfterUpdate(); }
 			when BEFORE_DELETE { onBeforeDelete(); }
 			when BEFORE_INSERT { onBeforeInsert(); }

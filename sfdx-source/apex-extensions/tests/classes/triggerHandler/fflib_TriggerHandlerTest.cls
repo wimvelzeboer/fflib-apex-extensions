@@ -104,8 +104,8 @@ private class fflib_TriggerHandlerTest
 		// THEN it should only return the changed records
 		Map<Id, SObject> resultMap = new Map<Id, SObject>(result);
 		System.Assert.areEqual(2, result.size());
-		System.Assert.istrue(resultMap.containsKey(idLuke));
-		System.Assert.istrue(resultMap.containsKey(idHan));
+		System.Assert.isTrue(resultMap.containsKey(idLuke));
+		System.Assert.isTrue(resultMap.containsKey(idHan));
 	}
 
 	@IsTest
@@ -185,8 +185,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.AFTER_DELETE;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isAfter());
-		System.Assert.istrue(ctx.isDelete());
+		System.Assert.isTrue(ctx.isAfter());
+		System.Assert.isTrue(ctx.isDelete());
 	}
 
 	@IsTest
@@ -201,8 +201,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.AFTER_INSERT;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isAfter());
-		System.Assert.istrue(ctx.isInsert());
+		System.Assert.isTrue(ctx.isAfter());
+		System.Assert.isTrue(ctx.isInsert());
 	}
 
 	@IsTest
@@ -217,8 +217,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.AFTER_UNDELETE;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isAfter());
-		System.Assert.istrue(ctx.isUndelete());
+		System.Assert.isTrue(ctx.isAfter());
+		System.Assert.isTrue(ctx.isUndelete());
 	}
 
 	@IsTest
@@ -233,8 +233,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.AFTER_UPDATE;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isAfter());
-		System.Assert.istrue(ctx.isUpdate());
+		System.Assert.isTrue(ctx.isAfter());
+		System.Assert.isTrue(ctx.isUpdate());
 	}
 
 	@IsTest
@@ -249,8 +249,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.BEFORE_DELETE;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isBefore());
-		System.Assert.istrue(ctx.isDelete());
+		System.Assert.isTrue(ctx.isBefore());
+		System.Assert.isTrue(ctx.isDelete());
 	}
 
 	@IsTest
@@ -265,8 +265,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.BEFORE_INSERT;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isBefore());
-		System.Assert.istrue(ctx.isInsert());
+		System.Assert.isTrue(ctx.isBefore());
+		System.Assert.isTrue(ctx.isInsert());
 	}
 
 	@IsTest
@@ -281,8 +281,8 @@ private class fflib_TriggerHandlerTest
 		ctx.triggerOperation = System.TriggerOperation.BEFORE_UPDATE;
 		new MyTriggerAction().setContext(ctx).doWork();
 
-		System.Assert.istrue(ctx.isBefore());
-		System.Assert.istrue(ctx.isUpdate());
+		System.Assert.isTrue(ctx.isBefore());
+		System.Assert.isTrue(ctx.isUpdate());
 	}
 
 	@IsTest

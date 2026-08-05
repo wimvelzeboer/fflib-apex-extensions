@@ -1,6 +1,7 @@
 /**
- * File Name: fflib_ALogAppenderFilter
- * Description: Log Appender that includes a filter for logginglevel
+ * File Name: fflib_MultiSObjectsSelectorTest
+ *
+ * Test class for fflib_MultiSObjectsSelector
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
@@ -27,55 +28,33 @@
  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @see fflib_MultiSObjectsSelector
  */
-public interface fflib_ITriggerAction extends fflib_IDoWork
+@IsTest
+private class fflib_MultiSObjectsSelectorTest
 {
-	/**
-	 * Perform logic during the after delete phase
-	 **/
-	void onAfterDelete();
+	@IsTest
+	static void testBehavior()
+	{
+		Id accountIdA = fflib_IDGenerator.generate(Schema.Account.SObjectType);
+		Id accountIdB = fflib_IDGenerator.generate(Schema.Account.SObjectType);
 
-	/**
-	 * Perform logic during the after Insert phase
-	 **/
-	void onAfterInsert();
-
-	/**
-	 * Perform logic during the after Undelete phase
-	 **/
-	void onAfterUnDelete();
-
-	/**
-	 * Perform logic during the after update phase
-	 **/
-	void onAfterUpdate();
-
-	/**
-	 * Perform logic during the before delete phase
-	 **/
-	void onBeforeDelete();
-
-	/**
-	 * Perform logic during the before insert phase
-	 **/
-	void onBeforeInsert();
-
-	/**
-	 * Perform logic during the before update phase
-	 **/
-	void onBeforeUpdate();
-
-	/**
-	 * Perform logic before the onBeforeXXX and onAfterXXX events
-	 **/
-	void onBeforeWork();
-
-	/**
-	 * Method used by the TriggerHandler and us to pass in the trigger context
-	 *
-	 * @param ctx Instance of fflib_ITriggerContext
-	 *
-	 * @return Instance of itself to allow for method chaining
-	 */
-	fflib_ITriggerAction setContext(fflib_ITriggerContext ctx);
+		fflib_MultiSObjectsSelector.newInstance();
+		fflib_MultiSObjectsSelector selector = fflib_MultiSObjectsSelector.newElevatedInstance();
+		selector.registerQuery(
+				Schema.Account.SObjectType,
+				new Set<SObjectField>{ Account.Name },
+				Schema.Account.Id,
+				new Set<Id> { accountIdA }
+		);
+		selector.registerQuery(
+				Schema.Account.SObjectType,
+				new Set<SObjectField>{ Account.Rating },
+				Schema.Account.Id,
+				new Set<Id> { accountIdB }
+		);
+		selector.query();
+		selector.clear();
+	}
 }

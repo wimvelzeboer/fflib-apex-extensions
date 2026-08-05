@@ -6,6 +6,7 @@ public virtual with sharing class fflib_SObjectUnitOfWork2
 	{
 		super(sObjectTypes);
 	}
+
 	public fflib_SObjectUnitOfWork2(List<SObjectType> sObjectTypes, IDML dml)
 	{
 		super(sObjectTypes, dml);
@@ -15,6 +16,7 @@ public virtual with sharing class fflib_SObjectUnitOfWork2
 	{
 		registerNew(domain.getRecords(), relatedToParentField, relatedToParentRecord);
 	}
+
 	/**
 	 * Register newly created records to be inserted when commitWork is called,
 	 * it also provides a reference to the single parent record instance (should also be registered as new separately)
@@ -52,6 +54,7 @@ public virtual with sharing class fflib_SObjectUnitOfWork2
 	{
 		registerDirty(domain.getRecords(), relatedToParentField, relatedToParentRecord);
 	}
+
 	/**
 	 * Register existing records to be updated when commitWork is called,
 	 * it provide a reference to the parent record instance (should also be registered as new separately)
