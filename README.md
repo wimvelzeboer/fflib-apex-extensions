@@ -123,7 +123,7 @@ Thank you for your donations!
 
 | Package version                               | Package ID         | Description                    |
 |-----------------------------------------------|--------------------|--------------------------------|
-| 0.1.0-2                                       | 04tJ8000000kaKVIAY | Created on 26/03/2026 20:07:07 || 0.7.0.1 | 04tJ8000000kaKzIAI | Created on 30/03/2026 13:49:28 |
+| 0.1.0-2                                       | 04tJ8000000kaKVIAY | Created on 26/03/2026 20:07:07 |
+| 0.7.0.1 | 04tJ8000000kaKzIAI | Created on 30/03/2026 13:49:28 |
 | 0.8.0.1 | 04tJ8000000kaL4IAI | Created on 31/03/2026 11:51:16 |
-| 0.9.0.1 | 04tJ8000000kaPHIAY | Created on 13/04/2026 14:46:02 |
 | 0.9.0.1 | 04tJ8000000kaPHIAY | Created on 05/08/2026 08:36:21 |
