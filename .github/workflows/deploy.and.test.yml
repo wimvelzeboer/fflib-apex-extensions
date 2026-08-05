@@ -28,7 +28,11 @@ jobs:
       - name: Authorize with the dev hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-        run: 'echo "$SFDX_AUTH_URL" | sf org login sfdx-url --alias SFDX-ENV --set-default-dev-hub --sfdx-url-stdin'
+        run: |
+          echo "$SFDX_AUTH_URL" | wc -c
+          echo "${{ secrets.SFDX_AUTH_URL }}" | wc -c
+          echo "$Env:SFDX_AUTH_URL" | wc -c
+          echo "$SFDX_AUTH_URL" | sf org login sfdx-url --alias SFDX-ENV --set-default-dev-hub --sfdx-url-stdin
 
       - name: Setup the config parameters needed
         run: |
