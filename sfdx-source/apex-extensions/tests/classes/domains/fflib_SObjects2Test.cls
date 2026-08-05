@@ -680,6 +680,30 @@ private class fflib_SObjects2Test
 	}
 
 	@IsTest
+	static void itShouldReturnRecordsWithNonNullNumericField()
+	{
+		DomainAccounts domain = generateDomain();
+
+		System.Assert.areEqual(4, domain.selectWithAnnualRevenue().size());
+	}
+
+	@IsTest
+	static void itShouldReturnRecordsWithNonNullDatetimeField()
+	{
+		Datetime now = Datetime.now();
+		DomainAccounts domain = new DomainAccounts(
+				new List<Account>
+				{
+						(Account) fflib_MockSObjectUtil.addFieldValue(new Account(Name = 'A'), Account.CreatedDate, now),
+						(Account) fflib_MockSObjectUtil.addFieldValue(new Account(Name = 'B'), Account.CreatedDate, now),
+						new Account(Name = 'C')
+				}
+		);
+
+		System.Assert.areEqual(2, domain.selectWithCreatedDate().size());
+	}
+
+	@IsTest
 	static void itShouldReturnRecordsWithAllFieldValues()
 	{
 		DomainAccounts domain = generateDomain();
@@ -845,8 +869,22 @@ private class fflib_SObjects2Test
 
 		public List<Account> selectWithShippingCountry()
 		{
-			return getRecordsWithNotBlankFieldValues(
+			return getRecordsWithNonBlankFieldValues(
 					Schema.Account.ShippingCountry
+			);
+		}
+
+		public List<Account> selectWithAnnualRevenue()
+		{
+			return getRecordsWithNonBlankFieldValues(
+					Schema.Account.AnnualRevenue
+			);
+		}
+
+		public List<Account> selectWithCreatedDate()
+		{
+			return getRecordsWithNonBlankFieldValues(
+					Schema.Account.CreatedDate
 			);
 		}
 
