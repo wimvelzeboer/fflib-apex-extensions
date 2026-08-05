@@ -1088,12 +1088,12 @@ public virtual class fflib_SObjects2
 	 *
 	 * @return The records whose value for `field` is non-null (and, for Strings, non-blank).
 	 */
-	protected override List<SObject> getRecordsWithNonBlankFieldValues(Schema.SObjectField field)
+	protected override List<SObject> getRecordsWithNonBlankFieldValues(Schema.SObjectField sObjectField)
 	{
 		List<SObject> result = new List<SObject>();
 		for (SObject record : getRecords())
 		{
-			Object value = record.get(field);
+			Object value = record.get(sObjectField);
 			if (value == null) continue;
 			if (value instanceof String && String.isBlank((String) value)) continue;
 			result.add(record);
