@@ -869,21 +869,21 @@ private class fflib_SObjects2Test
 
 		public List<Account> selectWithShippingCountry()
 		{
-			return getRecordsWithNotBlankFieldValues(
+			return getRecordsWithNonBlankFieldValues(
 					Schema.Account.ShippingCountry
 			);
 		}
 
 		public List<Account> selectWithAnnualRevenue()
 		{
-			return getRecordsWithNotBlankFieldValues(
+			return getRecordsWithNonBlankFieldValues(
 					Schema.Account.AnnualRevenue
 			);
 		}
 
 		public List<Account> selectWithCreatedDate()
 		{
-			return getRecordsWithNotBlankFieldValues(
+			return getRecordsWithNonBlankFieldValues(
 					Schema.Account.CreatedDate
 			);
 		}
