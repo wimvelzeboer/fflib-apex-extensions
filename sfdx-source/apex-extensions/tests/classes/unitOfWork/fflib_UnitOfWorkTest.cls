@@ -151,7 +151,7 @@ private class fflib_UnitOfWorkTest
         public virtual void doWork()
         {
             this.didWork = true;
-            insert new fflib_LogEntry__c(LogLevel__c = 'INFO', Message__c = 'Work got executed');
+            insert as system new fflib_LogEntry__c(LogLevel__c = 'INFO', Message__c = 'Work got executed');
         }
     }
 
