@@ -55,6 +55,6 @@ public with sharing class fflib_LogEventStoreListener extends fflib_LogEventDoma
 					)
 			);
 		}
-		insert logEntryRecords;
+		insert as system logEntryRecords;
 	}
 }
