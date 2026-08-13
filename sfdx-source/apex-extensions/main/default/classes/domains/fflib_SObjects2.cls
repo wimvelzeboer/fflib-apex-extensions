@@ -1079,15 +1079,15 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
-	 * Overrides the fflib_SObjects base implementation, which casts every value to `String` and
-	 * uses `String.isNotBlank` — that throws a TypeException on Date / Datetime / Number / Lookup
-	 * fields. This override generalises to "any non-null value, and for Strings also non-blank",
-	 * so the helper works for every field type.
-	 *
-	 * @param field The field to check.
-	 *
-	 * @return The records whose value for `field` is non-null (and, for Strings, non-blank).
-	 */
+         * Overrides the fflib_SObjects base implementation, which casts every value to `String` and
+         * uses `String.isNotBlank` — that throws a TypeException on Date / Datetime / Number / Lookup
+         * fields. This override generalises to "any non-null value, and for Strings also non-blank",
+         * so the helper works for every field type.
+         *
+         * @param sObjectField The field to check.
+         *
+         * @return The records whose value for `field` is non-null (and, for Strings, non-blank).
+         */
 	protected List<SObject> getRecordsWithNonBlankFieldValues(Schema.SObjectField sObjectField)
 	{
 		List<SObject> result = new List<SObject>();

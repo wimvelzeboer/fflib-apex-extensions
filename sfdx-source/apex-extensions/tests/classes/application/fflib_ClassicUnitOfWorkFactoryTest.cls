@@ -10,10 +10,27 @@ private class fflib_ClassicUnitOfWorkFactoryTest
 	@IsTest
 	static void testUnitOfWorkMock()
 	{
-		fflib_ApexMocks mocks = new fflib_ApexMocks();
-		fflib_ISObjectUnitOfWork unitOfWorkMock = new fflib_SObjectMocks.SObjectUnitOfWork(mocks);
-
 		new fflib_ClassicUnitOfWorkFactory()
-				.setMock(unitOfWorkMock);
+				.setMock(newUnitOfWorkStub());
+	}
+
+	private static fflib_ISObjectUnitOfWork newUnitOfWorkStub() {
+		return (fflib_ISObjectUnitOfWork) Test.createStub(
+				fflib_ISObjectUnitOfWork.class,
+				new UnitOfWorkStubProvider()
+		);
+	}
+
+	private class UnitOfWorkStubProvider implements System.StubProvider {
+		public Object handleMethodCall(
+				Object stubbedObject,
+				String stubbedMethodName,
+				System.Type returnType,
+				List<System.Type> listOfParamTypes,
+				List<String> listOfParamNames,
+				List<Object> listOfArgs
+		) {
+			return null;
+		}
 	}
 }
