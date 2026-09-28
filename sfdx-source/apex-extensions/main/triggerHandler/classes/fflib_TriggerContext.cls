@@ -52,7 +52,8 @@ public virtual inherited sharing class fflib_TriggerContext
 	 * Provides access to the Trigger.new and allowing it to be mocked in unit-tests
 	 */
 	@TestVisible
-	protected List<SObject> records {
+	protected List<SObject> records
+	{
 		get
 		{
 			if (records == null)
@@ -88,8 +89,10 @@ public virtual inherited sharing class fflib_TriggerContext
 	}
 
 	/**
-     * Provides access to the data represented by this Trigger Context
-     **/
+	 * Provides access to the data represented by this Trigger Context
+	 *
+	 * @return
+	 **/
 	public System.TriggerOperation getTriggerOperation()
 	{
 		return triggerOperation;
@@ -131,18 +134,26 @@ public virtual inherited sharing class fflib_TriggerContext
 	}
 
 	/**
-     * Detects whether any values in context records have changed for given field as string
-     * Returns list of SObject records that have changes in the specified fields
-     **/
+	 * Detects whether any values in context records have changed for given field as string
+	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldName
+	 *
+	 * @return
+	 **/
 	public List<SObject> getChangedRecords(String fieldName)
 	{
 		return getChangedRecords(new Set<String> {fieldName});
 	}
 
 	/**
-     * Detects whether any values in context records have changed for given fields as strings
-     * Returns list of SObject records that have changes in the specified fields
-     **/
+	 * Detects whether any values in context records have changed for given fields as strings
+	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldNames
+	 *
+	 * @return
+	 **/
 	public List<SObject> getChangedRecords(Set<String> fieldNames)
 	{
 		List<SObject> changedRecords = new List<SObject>();
@@ -167,6 +178,10 @@ public virtual inherited sharing class fflib_TriggerContext
 	/**
 	 * Detects whether any values in context records have changed for given field as token
 	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldToken
+	 *
+	 * @return
 	 **/
 	public List<SObject> getChangedRecords(Schema.SObjectField fieldToken)
 	{
@@ -176,6 +191,10 @@ public virtual inherited sharing class fflib_TriggerContext
 	/**
 	 * Detects whether any values in context records have changed for given fields as tokens
 	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldTokens
+	 *
+	 * @return
 	 **/
 	public List<SObject> getChangedRecords(Set<Schema.SObjectField> fieldTokens)
 	{
@@ -200,6 +219,8 @@ public virtual inherited sharing class fflib_TriggerContext
 
 	/**
 	 * Provides access to Trigger.oldMap or the mock when configured in a unit-test
+	 *
+	 * @return
 	 **/
 	public Map<Id, SObject> getExistingRecords()
 	{

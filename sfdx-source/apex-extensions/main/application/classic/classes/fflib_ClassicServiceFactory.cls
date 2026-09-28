@@ -1,7 +1,4 @@
 /**
- * File Name: fflib_ClassicServiceFactory 
- * @description
- *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,
@@ -35,7 +32,9 @@ public virtual class fflib_ClassicServiceFactory
 	/**
 	 * Constructs a simple Service Factory
 	 **/
-	public fflib_ClassicServiceFactory() {}
+	public fflib_ClassicServiceFactory()
+	{
+	}
 
 	/**
 	 * Constructs a simple Service Factory,

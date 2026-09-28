@@ -32,6 +32,8 @@ public with sharing class fflib_LogEventStoreListener extends fflib_LogEventDoma
 {
 	/**
 	 * Class constructor
+	 *
+	 * @param records
 	 */
 	public fflib_LogEventStoreListener(List<SObject> records)
 	{

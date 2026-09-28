@@ -34,7 +34,7 @@ public virtual with sharing class fflib_TriggerHandler
 
 	/**
 	 * Retains the trigger tracking configuration used for each domain
-     **/
+	 **/
 	private static Map<Type, fflib_SObjectDomain.TriggerEvent> triggerEventByClass;
 	private static Boolean disabled = false;
 
@@ -90,7 +90,7 @@ public virtual with sharing class fflib_TriggerHandler
 
 	public static fflib_SObjectDomain.TriggerEvent getTriggerEvent(Type triggerActionClass)
 	{
-		if(!triggerEventByClass.containsKey(triggerActionClass))
+		if (!triggerEventByClass.containsKey(triggerActionClass))
 		{
 			triggerEventByClass.put(triggerActionClass, new fflib_SObjectDomain.TriggerEvent());
 		}
@@ -191,7 +191,7 @@ public virtual with sharing class fflib_TriggerHandler
 
 		for (fflib_TriggerAction__mdt action : selector.selectAllActive())
 		{
-			configs.add( new fflib_TriggerActionConfig(action));
+			configs.add(new fflib_TriggerActionConfig(action));
 		}
 	}
 

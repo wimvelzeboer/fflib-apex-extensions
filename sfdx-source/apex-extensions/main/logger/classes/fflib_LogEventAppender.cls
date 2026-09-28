@@ -48,9 +48,8 @@ public virtual without sharing class fflib_LogEventAppender extends fflib_ALogAp
 	}
 
 	/**
-	 * publishEvents
+	 * Publish the given fflib_LogEvent__e events and report if there are any errors
 	 *
-	 * @description Publish the given fflib_LogEvent__e events and report if there are any errors
 	 * @param events The Platform events to publish
 	 */
 	protected virtual void publishEvents(List<fflib_LogEvent__e> events)
@@ -61,9 +60,8 @@ public virtual without sharing class fflib_LogEventAppender extends fflib_ALogAp
 
 
 	/**
-	 * checkAndReportErrors
+	 * Iterate over the given Database.SaveResults and report any errors
 	 *
-	 * @description Iterate over the given Database.SaveResults and report any errors
 	 * @param saveResults
 	 */
 	protected void checkAndReportErrors(List<Database.SaveResult> saveResults)
@@ -79,9 +77,8 @@ public virtual without sharing class fflib_LogEventAppender extends fflib_ALogAp
 	}
 
 	/**
-	 * reportError
+	 * Construct the error message for the failing Database.SaveResult and throws an exception
 	 *
-	 * @description Construct the error message for the failing Database.SaveResult and throws an exception
 	 * @param saveResult
 	 *
 	 * @throws fflib_LogEventAppender.fflib_LogEventAppenderException

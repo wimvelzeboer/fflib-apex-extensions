@@ -37,9 +37,8 @@ public abstract with sharing class fflib_ALogAppenderFilter implements fflib_ILo
 	protected System.LoggingLevel minLogLevel = DEFAULT_LEVEL;
 
 	/**
-	 * setLoggingLevel
+	 * Change the current minimum logging level
 	 *
-	 * @description Change the current minimum logging level
 	 * @param logLevel
 	 */
 	public void setLoggingLevel(System.LoggingLevel logLevel)
@@ -48,9 +47,8 @@ public abstract with sharing class fflib_ALogAppenderFilter implements fflib_ILo
 	}
 
 	/**
-	 * isValidLogLevel
+	 * Compares the Organisation, User and Apex logging level settings
 	 *
-	 * @description Compares the Organisation, User and Apex logging level settings
 	 * @param logLevel
 	 *
 	 * @return Returns true if one of the settings is equal or higher than the given loglevel
@@ -59,33 +57,31 @@ public abstract with sharing class fflib_ALogAppenderFilter implements fflib_ILo
 	{
 		return (
 				isValidOrganisationLogLevel(logLevel) ||
-				isValidUserLogLevel(logLevel) ||
-				isValidApexClassLogLevel(logLevel)
+						isValidUserLogLevel(logLevel) ||
+						isValidApexClassLogLevel(logLevel)
 		);
 	}
 
 	/**
-	 * isValidLogLevel
+	 * Compares the given log level valueToCompare against the compareTo
 	 *
-	 * @description Compares the given log level valueToCompare against the compareTo
 	 * @param compareTo The log level to compare against
 	 * @param valueToCompare The log level to compare
 	 *
 	 * @return Returns true if the valueToCompare is equal of higher then the compareTo
 	 */
-	private Boolean isValidLogLevel(System.LoggingLevel compareTo, System.LoggingLevel valueToCompare)
+	private static Boolean isValidLogLevel(System.LoggingLevel compareTo, System.LoggingLevel valueToCompare)
 	{
 		return compareTo != System.LoggingLevel.NONE
-					&&
+				&&
 				valueToCompare != System.LoggingLevel.NONE
-					&&
+				&&
 				valueToCompare.ordinal() >= compareTo.ordinal();
 	}
 
 	/**
-	 * isValidApexClassLogLevel
+	 * Compare the given loglevel against the current Apex setting stored in this.minLogLevel
 	 *
-	 * @description Compare the given loglevel against the current Apex setting stored in this.minLogLevel
 	 * @param logLevel The log level to compare
 	 *
 	 * @return Returns true if the given log level is equal of higher then the Apex setting
@@ -96,9 +92,8 @@ public abstract with sharing class fflib_ALogAppenderFilter implements fflib_ILo
 	}
 
 	/**
-	 * isValidOrganisationLogLevel
+	 * Compare the given loglevel against the Organisation setting stored in a Custom Setting
 	 *
-	 * @description Compare the given loglevel against the Organisation setting stored in a Custom Setting
 	 * @param logLevel The log level to compare
 	 *
 	 * @return Returns true if the given log level is equal of higher then the Organisation setting
@@ -112,9 +107,8 @@ public abstract with sharing class fflib_ALogAppenderFilter implements fflib_ILo
 	}
 
 	/**
-	 * isValidUserLogLevel
+	 * Compare the given loglevel against the User setting stored in a Custom Setting
 	 *
-	 * @description Compare the given loglevel against the User setting stored in a Custom Setting
 	 * @param logLevel The log level to compare
 	 *
 	 * @return Returns true if the given log level is equal of higher then the User setting
@@ -158,20 +152,19 @@ public abstract with sharing class fflib_ALogAppenderFilter implements fflib_ILo
 	}
 
 	/**
-	 * hasSettingsValue
+	 * Validates if the Custom Setting has a value stored in the given field
 	 *
-	 * @description Validates if the Custom Setting has a value stored in the given field
 	 * @param setting The Custom Setting to validate
 	 * @param sObjectField The field to check
 	 *
 	 * @return Returns true is the given field is set in the Custom Setting
 	 */
-	private Boolean hasSettingsValue(fflib_LogLevelFilter__c setting, SObjectField sObjectField)
+	private static Boolean hasSettingsValue(fflib_LogLevelFilter__c setting, SObjectField sObjectField)
 	{
 		return (
 				null != setting
 						&&
-				setting.getPopulatedFieldsAsMap().containsKey(sObjectField.getDescribe().getName())
+						setting.getPopulatedFieldsAsMap().containsKey(sObjectField.getDescribe().getName())
 		);
 	}
 

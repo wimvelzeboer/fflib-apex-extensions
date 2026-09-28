@@ -60,6 +60,10 @@ You can also have a look at the open items in the [project(s)](./projects), feel
 # Change Log
 Some of the changes that have major impact are listed here;
 
+### Updated September 2026
+- **fflib_SObjects2** <br/>
+  _getIdFieldValues_ **IMPORTANT BRACKING CHANGE** The method overload `Set<Id> getIdFieldValues(Schema.SObjectField field, Boolean omitNulls)` is now added to the fflib-apex-commons (and removed from the extensions), with the second parameter is flipped from `omitNulls` to `includeNulls`. So, when upgrading make sure to modify the `true` to `false` in your project!!!!
+
 ### Updates January 2026
 - **fflib_ArrayUtils** <br/>
   _copyFields_,<br/>Add method that copies field values in bulk from one domain to another related domain<br/>

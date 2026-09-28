@@ -78,15 +78,15 @@ public virtual without sharing class fflib_TriggerActionConfigSelector
 						}
 				)
 
-	/* Please replace the above String.format method call for that below,
-	   when the following issue in fflib-apex-commons is resolved:
-	   https://github.com/apex-enterprise-patterns/fflib-apex-common/issues/208
+				/* Please replace the above String.format method call for that below,
+				   when the following issue in fflib-apex-commons is resolved:
+				   https://github.com/apex-enterprise-patterns/fflib-apex-common/issues/208
 
-				newQueryFactory()
-						.selectField('ObjectType__r.QualifiedApiName')
-						.toSOQL()
+							newQueryFactory()
+									.selectField('ObjectType__r.QualifiedApiName')
+									.toSOQL()
 
-	 */
+				 */
 		);
 	}
 }
