@@ -1,8 +1,8 @@
 {
   "packageDirectories": [
     {
-      "versionName": "ver 0.11",
-      "versionNumber": "0.11.0.NEXT",
+      "versionName": "ver 0.12",
+      "versionNumber": "0.12.0.NEXT",
       "path": "sfdx-source",
       "default": true,
       "package": "fflibApexExtensions",

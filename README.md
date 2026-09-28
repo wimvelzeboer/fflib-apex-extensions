@@ -10,10 +10,10 @@ This extension package is dependent on the following packages:
 
 The package is available as an Unlocked Managed Package (2GP) with package ID `0HoJ8000000KyjfKAC`.
 
-Either clone the repository and import the package manually, use the [Package Installation URL](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tJ9000000YW1CIAW)
+Either clone the repository and import the package manually, use the [Package Installation URL](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000ZbKrIAK)
 or execute the following SFDX CLI command in your terminal:
 ```bash
-sf package install --package 04tJ9000000YW1CIAW --wait=10 --target-org $YOUR_ORG_ALIAS
+sf package install --package 04tQy000000ZbKrIAK --wait=10 --target-org $YOUR_ORG_ALIAS
 ```
 _Replace `$YOUR_ORG_ALIAS` with the alias of your target org_
 
@@ -132,3 +132,4 @@ Thank you for your donations!
 | 0.8.0.1 | 04tJ8000000kaL4IAI | Created on 31/03/2026 11:51:16 |
 | 0.9.0.1 | 04tJ8000000kaPHIAY | Created on 05/08/2026 08:36:21 |
 | 0.10.0.1 | 04tJ9000000YW1CIAW | Created on 13/08/2026 11:06:34 |
+| 0.11.0.3 | 04tQy000000ZbKrIAK | Created on 28/09/2026 09:30:49 |
