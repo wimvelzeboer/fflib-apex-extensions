@@ -868,26 +868,6 @@ public virtual class fflib_SObjects2
 	}
 
 	/**
-	 * Gets the Id values, but with the option to omit null values
-	 *
-	 * @param field The Schema.SObjectField to get their Id values
-	 * @param omitNulls If set to TRUE, null values will be removed from the result
-	 *
-	 * @return The Id values of the given sObjectField, null values are omitted
-	 */
-	@TestVisible
-	protected Set<Id> getIdFieldValues(Schema.SObjectField field, Boolean omitNulls)
-	{
-		Set<Id> result = getIdFieldValues(field);
-
-		if (omitNulls)
-		{
-			result.remove(null);
-		}
-		return result;
-	}
-
-	/**
 	 * @param sObjectField The Schema.SObjectField to get their Id values
 	 * @param criteria The criteria condition that must be met to include the value in the return
 	 *
