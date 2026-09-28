@@ -30,31 +30,49 @@
 public interface fflib_ITriggerContext
 {
 	/**
-     * Detects whether any values in context records have changed for given field as string
-     * Returns list of SObject records that have changes in the specified fields
-     **/
+	 * Detects whether any values in context records have changed for given field as string
+	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldName
+	 *
+	 * @return
+	 **/
 	List<SObject> getChangedRecords(String fieldName);
 
 	/**
-     * Detects whether any values in context records have changed for given fields as strings
-     * Returns list of SObject records that have changes in the specified fields
-     **/
+	 * Detects whether any values in context records have changed for given fields as strings
+	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldNames
+	 *
+	 * @return
+	 **/
 	List<SObject> getChangedRecords(Set<String> fieldNames);
 
 	/**
 	 * Detects whether any values in context records have changed for given field as token
 	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldToken
+	 *
+	 * @return
 	 **/
-	 List<SObject> getChangedRecords(Schema.SObjectField fieldToken);
+	List<SObject> getChangedRecords(Schema.SObjectField fieldToken);
 
 	/**
-     * Detects whether any values in context records have changed for given fields as tokens
+	 * Detects whether any values in context records have changed for given fields as tokens
 	 * Returns list of SObject records that have changes in the specified fields
+	 *
+	 * @param fieldTokens
+	 *
+	 * @return
 	 **/
 	List<SObject> getChangedRecords(Set<Schema.SObjectField> fieldTokens);
 
 	/**
 	 * Provides access to Trigger.oldMap or the mock when configured in a unit-test
+	 *
+	 * @return
 	 **/
 	Map<Id, SObject> getExistingRecords();
 
@@ -64,8 +82,10 @@ public interface fflib_ITriggerContext
 	System.TriggerOperation getTriggerOperation();
 
 	/**
-     * Provides access to the data represented by this Trigger Context
-     **/
+	 * Provides access to the data represented by this Trigger Context
+	 *
+	 * @return
+	 **/
 	List<SObject> getRecords();
 
 	/**

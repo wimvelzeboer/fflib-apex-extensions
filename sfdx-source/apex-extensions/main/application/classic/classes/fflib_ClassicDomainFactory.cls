@@ -1,6 +1,5 @@
 /**
- * File Name: fflib_ClassicDomainFactory 
- * @description Domain Factory for creating instances of Domain classes
+ * Domain Factory for creating instances of Domain classes
  *              using a static map for linking the SObjectType to its Domain Constructor implementation class
  *
  * @author architect ir. Wilhelmus G.J. Velzeboer
@@ -38,7 +37,7 @@ public virtual class fflib_ClassicDomainFactory
 	/**
 	 * Constructs a Domain factory
 	 **/
-	public fflib_ClassicDomainFactory()	{}
+	public fflib_ClassicDomainFactory(){ }
 
 	/**
 	 * Constructs a Domain factory, based on a map linking the ObjectType to the
@@ -46,7 +45,7 @@ public virtual class fflib_ClassicDomainFactory
 	 * Note: this will not check if the Apex classes actually implements the
 	 *       interfaces since this is not possible in the Apex runtime at present
 	 *
-	 * @param selectorFactory, A reference to the Selector Factory instance, an instance of fflib_ISelectorFactory
+	 * @param selectorFactory A reference to the Selector Factory instance, an instance of fflib_ISelectorFactory
 	 * @param constructorTypeByObject Map of Domain classes by Object Type
 	 **/
 	public fflib_ClassicDomainFactory(
@@ -84,7 +83,8 @@ public virtual class fflib_ClassicDomainFactory
 	 * @param recordIds A list of Id's of the same type
 	 *
 	 * @return Instance of a Domain containing the queried records
-	 * @exception Throws an exception via the Selector Factory if the Ids are not all of the same SObjectType
+	 *
+	 * @throws DeveloperException If the Ids are not all of the same SObjectType
 	 **/
 	public virtual override fflib_IDomain newInstance(Set<Id> recordIds)
 	{
@@ -100,12 +100,13 @@ public virtual class fflib_ClassicDomainFactory
 	 * @param sObjectType The SObjectType of the given record Ids
 	 *
 	 * @return Instance of a Domain containing the queried records
-	 * @exception Throws an exception via the Selector Factory if the Ids are not all of the same SObjectType
+	 *
+	 * @throws DeveloperException If the Ids are not all of the same SObjectType
 	 **/
 	public virtual fflib_IDomain newInstance(Set<Id> recordIds, Schema.SObjectType sObjectType)
 	{
 		// Avoid unexpected exceptions when the recordIds contains incorrect data
-		if (recordIds.isEmpty() || new List<Id>(recordIds).get(0) == null )
+		if (recordIds.isEmpty() || new List<Id>(recordIds).get(0) == null)
 			return newInstance(new List<SObject>(), sObjectType);
 
 		return newInstance(selectorFactory.selectById(recordIds));

@@ -1,7 +1,4 @@
 /**
- * File Name: fflib_ClassicSelectorFactory 
- * @description
- *
  * @author architect ir. Wilhelmus G.J. Velzeboer
  *
  * Copyright (c), W.G.J. Velzeboer,

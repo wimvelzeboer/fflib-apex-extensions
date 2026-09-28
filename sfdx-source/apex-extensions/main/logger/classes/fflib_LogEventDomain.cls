@@ -35,6 +35,8 @@ public abstract with sharing class fflib_LogEventDomain extends fflib_PlatformEv
 
 	/**
 	 * Class constructor
+	 *
+	 * @param records
 	 */
 	public fflib_LogEventDomain(List<SObject> records)
 	{

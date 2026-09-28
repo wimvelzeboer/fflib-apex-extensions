@@ -68,8 +68,8 @@ public virtual inherited sharing class fflib_TriggerActionConfig
 		// Get SObjectType
 		String ObjectTypeApiName =
 				String.isNotBlank(triggerAction.ObjectType__c)
-					? triggerAction.ObjectType__r?.QualifiedApiName?.toLowerCase().trim()
-					: triggerAction.ObjectTypeAlternate__c.toLowerCase().trim();
+						? triggerAction.ObjectType__r?.QualifiedApiName?.toLowerCase().trim()
+						: triggerAction.ObjectTypeAlternate__c.toLowerCase().trim();
 		this.sObjectType = Schema.describeSObjects(new List<String> {ObjectTypeApiName}).get(0).getSObjectType();
 	}
 

@@ -206,7 +206,7 @@ public with sharing class fflib_Logger implements fflib_ILogger
 	{
 		public void append(fflib_LogEntry logEntry)
 		{
-			System.debug(logEntry.className + ' #' + logEntry.lineNumber + ' @'+ logEntry.methodName + ' ' + logEntry.message);
+			System.debug(logEntry.className + ' #' + logEntry.lineNumber + ' @' + logEntry.methodName + ' ' + logEntry.message);
 		}
 	}
 
