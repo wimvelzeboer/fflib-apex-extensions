@@ -73,7 +73,7 @@ public class fflib_RecordTypeId
 		cache.put(sObjectName, recordTypeInfosByName);
 
 		if (recordTypeInfosByName.containsKey(recordTypeName) == false)
-			throwUnableToFindException(sObjectName, recordTypeName);
+			throwUnableToFindException(recordTypeName, sObjectName);
 
 		return recordTypeInfosByName.get(recordTypeName).getRecordTypeId();
 	}
